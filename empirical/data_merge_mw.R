@@ -1,11 +1,12 @@
 
 # setup -------------------------------------------------------------------
 
-  setwd(paste0(getwd(), "/empirical"))
   library(tidyverse)
   library(sf)
   library(iNEXT)
   library(foreach)
+  library(here)
+  setwd(here("empirical"))
 
 # read gis data -----------------------------------------------------------
 
@@ -41,14 +42,24 @@
 
 # merge fish and gis data -------------------------------------------------
 
-  fishdata <- list.files(path = "data_org_mw", full.names = TRUE) %>% 
+  fishdata <- list.files(path = "data_org_mw", full.names = TRUE) %>%
     lapply(read_csv)
 
-  d0 <- do.call(what = bind_rows, args = fishdata) %>% 
-    st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>% 
+  d0 <- do.call(what = bind_rows, args = fishdata)
+  
+  d0_ia <- d0 %>% 
+    filter(State == "IA") %>% 
+    st_as_sf(coords = c("Lon", "Lat"), crs = 4326)
+  
+  d0_wi_mn_il <- d0 %>% 
+    filter(State %in% c("MN", "IL", "WI")) %>% 
+    st_as_sf(coords = c("Lon", "Lat"), crs = 4269) %>% 
+    st_transform(crs = st_crs(d0_ia))
+  
+  d0 <- bind_rows(d0_ia, d0_wi_mn_il) %>% 
     st_transform(crs = st_crs(watershed)) %>% 
     st_join(watershed)
-
+  
   ## watershed ID with more than 10 sampling sites
   wsd10 <- d0 %>% 
     group_by(watershedID) %>% 
