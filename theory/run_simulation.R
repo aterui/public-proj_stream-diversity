@@ -1,6 +1,8 @@
 
 # library -----------------------------------------------------------------
-
+  
+  rm(list = ls(all.names = TRUE))
+  library(here)
   library(tidyverse)
   library(foreach)
   library(mcbrnet)
@@ -14,18 +16,15 @@
   
 # parameter setup ---------------------------------------------------------
   
-  para <- expand.grid(n_species = 30,
-                      n_patch = seq(from = 10, to = 150, by = 20),
-                      p_branch = seq(from = 0, to = 0.9, by = 0.1),
+  para <- expand.grid(n_species = 50,
                       mean_env_source = 0,
                       sd_env_source = c(0.01, 1),
                       rho = 1,
-                      asymmetry_factor = c(1, 1.5),
+                      asymmetry_factor = 1,
                       min_optim = -1,
                       max_optim = 1,
                       sd_env_lon = c(0.01, 1),
                       theta = 1,
-                      K_type = c("variable", "equal"),
                       K0 = 100,
                       sd_env = 0.1,
                       spatial_env_cor = TRUE,
@@ -33,13 +32,17 @@
                       min_niche_width = 0.1,
                       max_niche_width = 1,
                       niche_cost = 1,
-                      p_dispersal = c(0.001, 0.01),
+                      p_dispersal = c(0.01, 0.1),
                       min_alpha = 0,
-                      max_alpha = c(0.5, 1.5))
+                      max_alpha = c(0.75, 1.5))
   
   n_set <- nrow(para)
-  n_rep <- 50
-  z <- 0.78 # a power parameter for the discharge-watershed-area relationship
+  n_rep <- 1000
+  repeat {
+    n_patch <- round(runif(n_rep, 10, 150))
+    p_branch <- runif(n_rep, 0.001, 0.999)
+    if(min(n_patch) == 10 & max(n_patch) == 150) break    
+  }
   
 # run simulation ----------------------------------------------------------
 
@@ -55,8 +58,8 @@
                       df_set <- foreach(j = seq_len(n_rep), .combine = "bind_rows") %do% {
                                             
                         ## network generation
-                        net <- brnet(n_patch = x$n_patch,
-                                     p_branch = x$p_branch,
+                        net <- brnet(n_patch = n_patch[j],
+                                     p_branch = p_branch[j],
                                      mean_env_source = x$mean_env_source,
                                      sd_env_source = x$sd_env_source,
                                      rho = x$rho,
@@ -64,14 +67,10 @@
                                      asymmetry_factor = x$asymmetry_factor,
                                      plot = FALSE)
                         
-                        if (x$K_type == "variable") {
-                          K <- x$K0 * net$df_patch$n_patch_upstream^z
-                        } else {
-                          K <- rep(x = sum(x$K0 *net$df_patch$n_patch_upstream^z) / x$n_patch, times = x$n_patch)
-                        }
+                        K <- x$K0 * net$df_patch$n_patch_upstream
                                             
                         ## metacommunity simulation                                                 
-                        mc <- mcsim(n_patch = x$n_patch,
+                        mc <- mcsim(n_patch = n_patch[j],
                                     n_species = x$n_species,
                                     
                                     distance_matrix = net$distance_matrix,
@@ -97,6 +96,8 @@
                          
                         df <- tibble(n_rep = j,
                                      mc_capacity = sum(K),
+                                     n_patch = n_patch[j],
+                                     p_branch = p_branch[j],
                                      x,
                                      mc$df_diversity)
                         return(df)
@@ -105,12 +106,9 @@
                     return(df_set)
                     }
       
-  close(pb)
-  
 
 # return ------------------------------------------------------------------
   
   stopCluster(cl)
-  result <- 2
-  write.csv(result, file = paste0("theory/result/result_sim", Sys.Date(), ".csv"))
+  write.csv(result, file = paste0(here("theory/result/result_sim"), Sys.Date(), ".csv"))
   
