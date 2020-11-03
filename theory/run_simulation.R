@@ -39,8 +39,8 @@
   n_set <- nrow(para)
   n_rep <- 1000
   repeat {
-    n_patch <- round(runif(n_rep, 10, 150))
-    p_branch <- runif(n_rep, 0.001, 0.999)
+    n_patch <- round(runif(n = n_rep, min = 10, max = 150))
+    p_branch <- runif(n = n_rep, min = 0.001, max = 0.999)
     if(min(n_patch) == 10 & max(n_patch) == 150) break    
   }
   

@@ -1,11 +1,10 @@
 
 # setup -------------------------------------------------------------------
 
-  library(tidyverse)
-  library(here)
-  library(MuMIn)
+  rm(list = ls(all.names = TRUE))
+  pacman::p_load(tidyverse, MuMIn)
   options(na.action = "na.fail")
-  setwd(here("empirical"))
+  setwd(here::here("empirical"))
 
 # read data ---------------------------------------------------------------
 
@@ -15,32 +14,29 @@
     rename(gamma = Estimator,
            gamma_lower = '95% Lower',
            gamma_upper = '95% Upper') %>% 
-    mutate(beta = gamma - mu_alpha,
-           beta_lower = gamma_lower - mu_alpha,
-           beta_upper = gamma_upper - mu_alpha)
+    mutate(beta = gamma/mu_alpha,
+           beta_lower = gamma_lower/mu_alpha,
+           beta_upper = gamma_upper/mu_alpha)
   
-  fit <- lm(log(gamma) ~ log(area)*region + p_branch*region + p_branch*log(area) +
-                         I(p_urban + p_agri) + scale(mu_temp) + scale(mu_prec), dat)
-  
-  fit_upper <- lm(log(gamma_upper) ~ log(area)*region + p_branch*region + p_branch*log(area) +
-                                     I(p_urban + p_agri) + scale(mu_temp) + scale(mu_prec), dat)
-  
-  fit_lower <- lm(log(gamma_lower) ~ log(area)*region + p_branch*region + p_branch*log(area) +
-                                     I(p_urban + p_agri) + scale(mu_temp) + scale(mu_prec), dat)
-  
-  m <- dredge(fit)
+  ## gamma
+  fit <- lm(log(gamma) ~ log(area)*region + log(p_branch)*region +
+                         scale(mean_temp) + scale(mean_ppt) + frac_forest, dat)
+  m <- dredge(fit, rank = "AIC")
   re <- model.avg(object = m, subset = delta < 2)
   summary(re)
   
-  ggplot(dat) +
-    geom_point(aes(x = p_branch, y = log(gamma), color = region))
+  ## alpha
+  fit <- lm(log(mu_alpha) ~ log(area)*region + log(p_branch)*region +
+              scale(mean_temp) + scale(mean_ppt) + frac_forest, dat)
+  m <- dredge(fit, rank = "AIC")
+  re <- model.avg(object = m, subset = delta < 2)
+  summary(re)
   
-  ggplot(dat) +
-    geom_point(aes(x = log(area), y = log(gamma), color = region))
+  ## beta
+  fit <- lm(log(beta) ~ log(area)*region + log(p_branch)*region +
+              scale(mean_temp) + scale(mean_ppt) + frac_forest, dat)
+  m <- dredge(fit, rank = "AIC")
+  re <- model.avg(object = m, subset = delta < 2)
+  summary(re)
   
-  ggplot(dat) +
-    geom_point(aes(x = p_branch, y = log(beta), color = region))
-
-  ggplot(dat) +
-    geom_point(aes(x = log(area), y = log(beta), color = region))
   

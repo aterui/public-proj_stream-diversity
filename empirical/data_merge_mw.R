@@ -1,116 +1,91 @@
 
 # setup -------------------------------------------------------------------
-
-  library(tidyverse)
-  library(sf)
-  library(iNEXT)
-  library(foreach)
-  library(here)
-  setwd(here("empirical"))
+  
+  rm(list = ls(all.names = TRUE))
+  setwd(here::here("empirical"))
+  pacman::p_load(tidyverse, tidyverse, sf, iNEXT, foreach, tmap)  
 
 # read gis data -----------------------------------------------------------
 
-  channel <- st_read(dsn = 'data_gis', layer = 'albers_mw_arcgis_channel')
-  watershed <- st_read(dsn = 'data_gis', layer = 'albers_mw_watershed')
-
-  watershed <- watershed %>% 
-    select(
-      mu_elev = Elevationm,
-      mu_temp = AirTempera,
-      mu_prec = Precipitat,
-      p_forest = Percent_Fo,
-      p_agri = Percent_Ag,
-      p_urban = Percent_Ur,
-      p_wetland = Percent_we
-    ) %>% 
-    mutate(watershedID = paste0("w", seq_len(nrow(watershed))),
-           area = units::set_units(st_area(watershed), km^2))
-  
-  channel <- st_join(x = channel, y = watershed, join = st_within)
-  channel <- channel %>%
-    mutate(length = units::set_units(st_length(channel), km)) %>% 
-    select(watershedID, length)
-  
-  p_branch <- channel %>% 
-    group_by(watershedID) %>% 
-    mutate(n_branch = n()) %>% 
-    filter(n_branch > 1) %>% 
-    mutate(rate = fitdistrplus::fitdist(as.numeric(length), "exp")$estimate) %>% 
-    summarise(rate = unique(rate), n_branch = unique(n_branch)) %>% 
-    mutate(p_branch = pexp(q = 1, rate = rate)) %>% 
-    as_tibble()
+  watershed <- st_read(dsn = 'data_gis/albers_watershed_mw_final.gpkg') %>% 
+    rename(watershed_id = id) %>% 
+    arrange(watershed_id)
 
 # merge fish and gis data -------------------------------------------------
-
+  
   fishdata <- list.files(path = "data_org_mw", full.names = TRUE) %>%
     lapply(read_csv)
-
-  d0 <- do.call(what = bind_rows, args = fishdata)
   
-  d0_ia <- d0 %>% 
-    filter(State == "IA") %>% 
-    st_as_sf(coords = c("Lon", "Lat"), crs = 4326)
-  
-  d0_wi_mn_il <- d0 %>% 
-    filter(State %in% c("MN", "IL", "WI")) %>% 
-    st_as_sf(coords = c("Lon", "Lat"), crs = 4269) %>% 
-    st_transform(crs = st_crs(d0_ia))
-  
-  d0 <- bind_rows(d0_ia, d0_wi_mn_il) %>% 
-    st_transform(crs = st_crs(watershed)) %>% 
+  d0 <- do.call(what = bind_rows, args = fishdata) %>% 
+    st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>% 
+    st_transform(crs = st_crs(watershed)$wkt) %>% 
     st_join(watershed)
   
-  ## watershed ID with more than 10 sampling sites
-  wsd10 <- d0 %>% 
-    group_by(watershedID) %>% 
+  ## watershed ID with more than X sampling sites
+  wsd_subset <- d0 %>% 
+    group_by(watershed_id) %>% 
     summarise(n_site = n_distinct(SiteID)) %>% 
     filter(n_site >= 10) %>% 
-    drop_na(watershedID) %>% 
-    pull(watershedID)
+    drop_na(watershed_id) %>% 
+    pull(watershed_id)
   
   dat_fish <- d0 %>% 
-    filter(watershedID %in% wsd10) %>% 
+    filter(watershed_id %in% wsd_subset) %>% 
     as_tibble()
-
+  
   dat_alpha <- dat_fish %>% 
-    group_by(watershedID, SiteID) %>% 
+    group_by(watershed_id, SiteID) %>% 
     summarise(alpha_div = n_distinct(Species)) %>% 
-    group_by(watershedID) %>% 
+    group_by(watershed_id) %>% 
     summarise(mu_alpha = mean(alpha_div))
+
+  ## export point data
+  albers_point <- d0 %>% 
+    filter(watershed_id %in% wsd_subset) %>% 
+    group_by(SiteID) %>% 
+    distinct(SiteID)
+  
+  st_write(albers_point, "data_gis/albers_point_subset_mw.gpkg", append = FALSE)
+  
   
 # rarefaction -------------------------------------------------------------
 
   dat_freq <- dat_fish %>% 
-    group_by(watershedID, Species) %>% 
+    group_by(watershed_id, Species) %>% 
     summarise(freq = n()) %>% 
-    pivot_wider(id_cols = watershedID,
+    pivot_wider(id_cols = watershed_id,
                 names_from = Species,
                 values_from = freq,
                 values_fill = list(freq = 0))
-  watershedID <- pull(dat_freq, watershedID) 
+  watershed_id <- pull(dat_freq, watershed_id) 
   
   dat_freq <- dat_fish %>% 
-    group_by(watershedID) %>% 
+    group_by(watershed_id) %>% 
     summarise(n_site = n_distinct(SiteID)) %>% 
-    left_join(dat_freq, by = "watershedID") %>% 
-    select(-watershedID)
+    left_join(dat_freq, by = "watershed_id") %>% 
+    select(-watershed_id)
   
   list_freq <- foreach(i = seq_len(nrow(dat_freq))) %do% {
     x <- as.vector(sort(dat_freq[i,], decreasing = T))
     return(x[x > 0])
   }
   
-  names(list_freq) <- watershedID
+  names(list_freq) <- watershed_id
   
-  div_est <- ChaoRichness(list_freq, datatype = "incidence_freq")
-  div_est <- mutate(div_est, watershedID = rownames(div_est))
+  div_est <- ChaoRichness(list_freq, datatype = "incidence_freq") %>% 
+    mutate(watershed_id = as.numeric(rownames(.)))
 
 # final data --------------------------------------------------------------
 
   dat_mw <- div_est %>%
-    left_join(as_tibble(watershed), by = "watershedID") %>% 
-    left_join(p_branch, by = "watershedID") %>% 
-    left_join(dat_alpha, by = "watershedID") %>% 
-    select(-geometry.x, -geometry.y)
+    left_join(as_tibble(watershed), by = "watershed_id") %>% 
+    left_join(dat_alpha, by = "watershed_id") %>% 
+    select(-geom)
   
   write_csv(dat_mw, "data_out/data_mw.csv")
+
+  albers_wsd_subset <- watershed %>% 
+    filter(watershed_id %in% wsd_subset)
+  
+  st_write(albers_wsd_subset, "data_gis/albers_wsd_subset_mw.gpkg", append = FALSE)
+  
