@@ -2,16 +2,15 @@
 
 # setup -------------------------------------------------------------------
 
-  library(tidyverse)
-  library(broom)
-  library(here)
-  setwd(here("theory"))
+  rm(list = ls(all.names = TRUE))
+  pacman::p_load(tidyverse, broom)
+  setwd(here::here("theory"))
 
 # read data ---------------------------------------------------------------
 
-  dat <- read_csv("result/result_sim2020-10-24.csv") %>% 
+  dat <- read_csv("result/result_sim2020-11-03.csv") %>% 
     select(-beta_div) %>% 
-    filter(alpha_div > 0 & gamma_div > 0,
+    filter(alpha_div >= 1 & gamma_div >= 1,
            sd_env_source == 1,
            sd_env_lon == 0.01) %>% 
     mutate(beta_div = gamma_div/alpha_div) %>% 
@@ -58,7 +57,7 @@
   dat %>% 
     ggplot(aes(x = n_patch, y = value, color = metric, fill = metric)) +
     geom_smooth(method = "loess", size = 0.3) +
-    geom_point(alpha = 0.075, size = 0.3) +
+    geom_point(alpha = 0.2, size = 0.75) +
     scale_y_continuous(trans = "log10") +
     scale_x_continuous(trans = "log10") +
     scale_color_hue(name = NULL, labels = labels) +
@@ -75,7 +74,7 @@
   dat %>% 
     ggplot(aes(x = p_branch, y = value, color = metric, fill = metric)) +
     geom_smooth(method = "loess", size = 0.3) +
-    geom_point(alpha = 0.075, size = 0.3) +
+    geom_point(alpha = 0.2, size = 0.75) +
     scale_y_continuous(trans = "log10") +
     scale_x_continuous(trans = "log10") +
     scale_color_hue(name = NULL, labels = labels) +

@@ -10,7 +10,11 @@
   watershed <- st_read(dsn = 'data_gis/albers_watershed_hkd_final.gpkg') %>% 
     rename(watershed_id = id) %>% 
     arrange(watershed_id)
-
+  
+  watershed <- watershed %>%
+    mutate(lon = st_coordinates(st_transform(st_centroid(.), 4326))[,1],
+           lat = st_coordinates(st_transform(st_centroid(.), 4326))[,2])
+  
 # merge fish and gis data -------------------------------------------------
 
   d0 <- read_csv('data_org_hkd/data_fmt_hkd_latest.csv') %>% 
@@ -20,7 +24,9 @@
     st_join(watershed)
 
   ## watershed ID with more than X sampling sites
+  ## with > 5 branches
   wsd_subset <- d0 %>% 
+    filter(n_branch >= 3) %>% 
     group_by(watershed_id) %>% 
     summarise(n_site = n_distinct(SiteID)) %>% 
     filter(n_site >= 10) %>% 
@@ -77,8 +83,7 @@
   dat_hkd <- div_est %>%
     left_join(as_tibble(watershed), by = "watershed_id") %>% 
     left_join(dat_alpha, by = "watershed_id") %>% 
-    select(-geom) %>% 
-    na.omit()
+    select(-geom)
   
   write_csv(dat_hkd, "data_out/data_hkd.csv")
   

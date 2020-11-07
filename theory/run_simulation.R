@@ -2,14 +2,10 @@
 # library -----------------------------------------------------------------
   
   rm(list = ls(all.names = TRUE))
-  library(here)
-  library(tidyverse)
-  library(foreach)
-  library(mcbrnet)
-  library(doParallel)
-  library(doSNOW)
+  pacman::p_load(here, tidyverse, foreach, mcbrnet, doParallel, doSNOW)
 
-# parallel set up ---------------------------------------------------------
+
+# parallel setup ----------------------------------------------------------
 
   cl <- makeCluster(detectCores())
   registerDoSNOW(cl)
@@ -40,7 +36,7 @@
   n_rep <- 1000
   repeat {
     n_patch <- round(runif(n = n_rep, min = 10, max = 150))
-    p_branch <- runif(n = n_rep, min = 0.001, max = 0.999)
+    p_branch <- runif(n = n_rep, min = 0.01, max = 0.99)
     if(min(n_patch) == 10 & max(n_patch) == 150) break    
   }
   

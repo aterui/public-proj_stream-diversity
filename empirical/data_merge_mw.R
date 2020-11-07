@@ -3,14 +3,18 @@
   
   rm(list = ls(all.names = TRUE))
   setwd(here::here("empirical"))
-  pacman::p_load(tidyverse, tidyverse, sf, iNEXT, foreach, tmap)  
+  pacman::p_load(tidyverse, sf, iNEXT, foreach, tmap)  
 
 # read gis data -----------------------------------------------------------
 
   watershed <- st_read(dsn = 'data_gis/albers_watershed_mw_final.gpkg') %>% 
     rename(watershed_id = id) %>% 
     arrange(watershed_id)
-
+  
+  watershed <- watershed %>%
+    mutate(lon = st_coordinates(st_transform(st_centroid(.), 4326))[,1],
+           lat = st_coordinates(st_transform(st_centroid(.), 4326))[,2])
+  
 # merge fish and gis data -------------------------------------------------
   
   fishdata <- list.files(path = "data_org_mw", full.names = TRUE) %>%
@@ -22,7 +26,9 @@
     st_join(watershed)
   
   ## watershed ID with more than X sampling sites
+  ## with > 5 branches
   wsd_subset <- d0 %>% 
+    filter(n_branch >= 3) %>% 
     group_by(watershed_id) %>% 
     summarise(n_site = n_distinct(SiteID)) %>% 
     filter(n_site >= 10) %>% 

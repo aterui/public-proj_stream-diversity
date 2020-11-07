@@ -20,10 +20,15 @@
   
   ## gamma
   fit <- lm(log(gamma) ~ log(area)*region + log(p_branch)*region +
-                         scale(mean_temp) + scale(mean_ppt) + frac_forest, dat)
+            scale(mean_temp)*region + scale(mean_ppt)*region + scale(frac_forest)*region,
+            dat)
   m <- dredge(fit, rank = "AIC")
   re <- model.avg(object = m, subset = delta < 2)
   summary(re)
+  
+  weight <- 1/dist(cbind(d0$lat, d0$lon), diag = TRUE, upper = TRUE)
+  diag(weight) <- 0
+  Moran.I(resid(fit), data.matrix(weight))
   
   ## alpha
   fit <- lm(log(mu_alpha) ~ log(area)*region + log(p_branch)*region +
