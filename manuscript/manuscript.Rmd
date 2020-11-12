@@ -8,8 +8,9 @@ author:
 - name: Seoghyun Kim
   email: s_kim53@uncg.edu
   affiliation: Department of Biology, University of North Carolina at Greensboro
-address:
-- address: Department of Biology, Greensboro, NC
+- name: Christy Dolph
+  email: XXX
+  affiliation: XXX
 output: html_notebook
 bibliography: reference.bib
 csl: nature.csl

@@ -20,7 +20,7 @@
                       min_optim = -1,
                       max_optim = 1,
                       sd_env_lon = c(0.01, 1),
-                      theta = 1,
+                      theta = c(0.1, 1),
                       K0 = 100,
                       sd_env = 0.1,
                       spatial_env_cor = TRUE,

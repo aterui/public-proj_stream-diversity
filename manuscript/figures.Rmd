@@ -1,0 +1,44 @@
+---
+title: "Figures"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+
+```
+
+```{r, fig.height=7, fig.width=8, fig.cap="(A) Example of theoretical branching river networks. Branching river networks are dipicted as a network of connected habitat patches, in which the number of habitat patches $N$ and branching probability $P_{b}$ dictate the ecosystem size and complexity ($N = 50$ and $P_{b} = \\{0.2, 0.5, 0.8\\}$ in this example). Environmental conditions at the headwaters (the most upstream patches) are generated randomly and propagate downstream with local noises. Habitat patches are colored in proportion to environmental values (similarly-colored habitat patches have similar environmental values). (B) Map of study regions (left, Midwest, US; right, Hokkaido, Japan). Watersheds (i.e., metacommunities) are colored in propotion to the number of sites for fish surveys."}
+
+source(normalizePath("../empirical/figure_map.R"))
+
+```
+
+\newpage
+
+```{r, fig.height=5, fig.width=7}
+
+source(normalizePath("../theory/figure_n_patch.R"))
+
+```
+
+\newpage
+
+```{r, fig.height=5, fig.width=7}
+
+source(normalizePath("../theory/figure_p_branch.R"))
+
+```
+
+\newpage
+
+```{r, fig.height=6, fig.width=8}
+
+source(normalizePath("../empirical/figure_diversity.R"))
+
+```
+

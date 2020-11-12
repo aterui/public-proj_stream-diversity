@@ -1,33 +1,38 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Tables"
+output:
+  pdf_document: default
 ---
+
 ```{r setup, include=FALSE}
-# setup -------------------------------------------------------------------
-
-  rm(list = ls(all.names = TRUE))
-  pacman::p_load(tidyverse, MuMIn, gt)
-  options(na.action = "na.fail")
-  setwd(here::here("empirical"))
-
-# read data ---------------------------------------------------------------
-
-  dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
-  dat_mw <- read_csv("data_out/data_mw.csv") %>% mutate(region = "midwest")
-  dat <- bind_rows(dat_hkd, dat_mw) %>% 
-    rename(gamma = Estimator,
-           gamma_lower = '95% Lower',
-           gamma_upper = '95% Upper') %>% 
-    mutate(beta = gamma/mu_alpha,
-           beta_lower = gamma_lower/mu_alpha,
-           beta_upper = gamma_upper/mu_alpha,
-           logit_forest = log(frac_forest) - log(1 - frac_forest))
   
-  ## gamma
-  fit <- lm(log(gamma) ~ log(area)*region + log(p_branch)*region + scale(mean_temp) + scale(mean_ppt) + scale(logit_forest), dat)
-  m <- dredge(fit, rank = "AIC")
-  re <- model.avg(object = m, subset = delta < 2)
-  x <- summary(re)
-  knitr::kable(x$coefmat.subset)
-  predict(re$call)
+  knitr::opts_knit$set(root.dir = here::here("empirical"))
+
 ```
+
+
+```{r, echo = FALSE, message=FALSE, results='asis'}
+
+source(normalizePath("../empirical/analysis_lm.R"))
+
+stargazer::stargazer(m_alpha$model, m_beta$model, m_gamma$model,
+                     header = FALSE,
+                     title = "Estimated parameters of robust linear regression models explaining fish species richness in Hokkaido (Japan) and Midwest (US) regions. Dependent variables were log-10 transformed. Environmental variables (air temperature, precipitation, logit \\% forest) are deviations from the regional averages and were standardized to a mean of zero and a standard deviation of one.",
+                     type = "latex",
+                     ci = TRUE,
+                     covariate.labels = c("$log_{10}$ Watershed area",
+                                          "$log_{10}$ Branching probability",
+                                          "Region (Midwest vs. Hokkaido)",
+                                          "Air temperature",
+                                          "Precipitation",
+                                          "Logit \\% forest",
+                                          "Intercept"),
+                     single.row = FALSE,
+                     digits = 2,
+                     dep.var.labels.include = FALSE,
+                     column.labels = c("$\\alpha$ richness", "$\\beta$ richness", "$\\gamma$ richness"),
+                     keep.stat = c("rsq"),
+                     model.numbers = FALSE)
+
+```
+
