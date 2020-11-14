@@ -57,7 +57,7 @@
 
   g <- dat %>% 
     ggplot(aes(x = p_branch, y = value, color = metric, fill = metric)) +
-    geom_smooth(method = "loess", size = 0.3) +
+    geom_smooth(method = "loess", size = 0.5) +
     scale_y_continuous(trans = "log10") +
     scale_x_continuous(trans = "log10", breaks = c(0.01, 0.1, 0.5, 1.0)) +
     scale_color_hue(name = NULL, labels = labels) +
