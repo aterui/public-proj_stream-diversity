@@ -23,21 +23,21 @@
 
 # model selection ---------------------------------------------------------
 
-  m_compare <- function(response, data) {
+  m_compare <- function(response, data, rank) {
     
     fit <<- list(NULL)
-    fit[[1]] <<- lm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
-                                        scale(resid_temp) + scale(resid_ppt) + scale(resid_forest),
-                    data = data)
+    fit[[1]] <<- rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
+                                         scale(resid_temp) + scale(resid_ppt) + scale(resid_forest),
+                     data = data, method = "M", psi = psi.huber)
     
-    fit[[2]] <<- lm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
-                                        scale(resid_temp) + scale(resid_ppt) + scale(resid_forest),
-                    data = data)
+    fit[[2]] <<- rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
+                                         scale(resid_temp) + scale(resid_ppt) + scale(resid_forest),
+                     data = data, method = "M", psi = psi.huber)
     
-    fit[[3]] <<- lm(log(response, 10) ~ 1,
-                    data = data)
+    fit[[3]] <<- rlm(log(response, 10) ~ 1,
+                     data = data, method = "M", psi = psi.huber)
     
-    m <- fit[[which.min(sapply(fit, FUN = BIC))]]
+    m <- fit[[which.min(sapply(fit, FUN = rank))]]
     df <- tibble(model = c("global", "region-specific", "null"),
                  AIC = sapply(fit, FUN = AIC),
                  AICc = sapply(fit, FUN = AICc),
