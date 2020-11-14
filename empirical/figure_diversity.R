@@ -34,7 +34,7 @@
 # read data ---------------------------------------------------------------
   
   ## model estimate
-  source(normalizePath("../empirical/analysis_lm.R"))
+  source(normalizePath("../empirical/analysis_rlm.R"))
   
   ## redefine data.frame
   dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
@@ -102,5 +102,7 @@
     scale_x_continuous(trans='log10')
   
   print(  
-    ((g1 + theme(legend.position = "none") + ylab("Species richness")))/(g2 + ylab("Species richness")) + plot_layout(guides = "collect")
+    (g1 + theme(legend.position = "none") + ylab("Species richness"))/
+    (g2 + ylab("Species richness")) + plot_layout(guides = "collect") +
+    plot_annotation(tag_levels = 'A')
   )  
