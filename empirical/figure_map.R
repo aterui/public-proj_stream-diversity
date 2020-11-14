@@ -67,6 +67,7 @@
   filename <- list.files(path = 'data_gis', full.names = T)
   wsd_subset <- lapply(filename[str_detect(filename, "wsd_subset")], st_read, quiet = TRUE)
   point_subset <- lapply(filename[str_detect(filename, "point_subset")], st_read, quiet = TRUE)
+  channel_hkd <- st_read("data_gis/albers_channel_hkd.gpkg", quiet = TRUE)
   shape <- lapply(filename[str_detect(filename, "shape")], st_read, quiet = TRUE)
   shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]])) %>% 
     st_cast("POLYGON") %>% 
@@ -92,6 +93,22 @@
     return(re)
   }
   
+  ## example channel
+  channel_eg <- channel_hkd %>% 
+    filter(id == 1012)
+  
+  polygon_eg <- wsd_subset[[1]] %>% 
+    filter(watershed_id == 1012)
+  
+  point_eg <- st_join(point_subset[[1]], wsd_subset[[1]]) %>% 
+    filter(watershed_id == 1012)
+  
+  eg <- ggplot() +
+    geom_sf(data = polygon_eg, fill = grey(0.99)) +
+    geom_sf(data = channel_eg, size = 0.05) +
+    geom_sf(data = point_eg, color = alpha("salmon", 0.8), size = 0.001) +
+    theme(axis.text = element_blank(), axis.ticks = element_blank())
+  
   ## hokkaido
   hkd <- ggplot() +
     geom_sf(data = shape[[1]], fill = grey(0.99), size = 0.1) +
@@ -99,10 +116,11 @@
             aes(fill = category),
             color = grey(0.65),
             size = 0.1) +
+    geom_sf(data = polygon_eg, color = "salmon", fill = alpha("white", 0), size = 0.3) +
     scale_fill_manual(values = c(grey(0.2), grey(0.5), grey(0.8))) +
     labs(subtitle = paste0("Hokkaido, Japan\n", eval(nrow(wsd_subset[[1]])), " watersheds"),
          fill = "Number of sites") +
-    theme_bw()
+    theme_bw() + theme(axis.text = element_text(size = 7))
   
   ## midwest
   mw <- ggplot() +
@@ -114,13 +132,11 @@
     scale_fill_manual(values = c(grey(0.2), grey(0.5), grey(0.8))) +
     labs(subtitle = paste0("Midwest, US\n", eval(nrow(wsd_subset[[2]])), " watersheds"),
          fill = "Number of sites") +
-    theme_bw() +
-    theme(legend.position = "none")
+    theme_bw() + theme(axis.text = element_text(size = 7))
   
-
 # plot assembly -----------------------------------------------------------
 
   patch <- (ng[[1]] + labs(title = "A")) + ng[[2]] + ng[[3]]
-  print(patch / ((mw + labs(title = "B")) + hkd))
+  print(patch / ((eg + labs(title = "B")) + (hkd + theme(legend.position = "none") + labs(title = "C")) + mw))
   
   
