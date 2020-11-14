@@ -1,0 +1,147 @@
+---
+title: "Figures"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+
+```
+
+```{r, fig.height=6, fig.width=8, fig.cap="(A) Framework of generating theoretical branching river networks. Branching river networks are dipicted as a network of connected habitat patches, in which the number of habitat patches $N$ and branching probability $P_{b}$ dictate the ecosystem size and complexity ($N = 50$ and $P_{b} = \\{0.2, 0.5, 0.8\\}$ in this example). Environmental conditions at headwaters (i.e., the most upstream patches) are generated randomly as a realization of a normal distribution and propagate downstream with local environmental noises (a spatially autoregressive process with a white noise; Methods). Habitat patches are colored in proportion to environmental values (similar colors have similar environmental values). (B) Example of intesively surveyed watersheds in Hokkaido, Japan (the red-colored watershed in C). Red dots indicate sampling sites for fish surveys. (C) Map of study regions (left, Midwest, US; right, Hokkaido, Japan). Watersheds (i.e., metacommunities) are gray-shaded in propotion to the number of sampling sites."}
+
+source(normalizePath("../empirical/figure_map.R"))
+
+```
+
+\newpage
+
+```{r, fig.height=6, fig.width=8, fig.cap="Theoretical predictions for ecosystem size influences (the number of habitat patches) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different compeition strength. Competitive coefficients ($\\alpha_{c}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). In this simulation, environmental vairiability among headwaters (i.e., the most upstream patches), which is expressed as the standard deviation of a normal distribution ($\\sigma_{h} = 1.0$), was greater than that of local environmental noises occurring at each habitat patch ($\\sigma_{l} = 0.01$). Dispersal probability $p_{d}$ was 0.01 for all the scenarios."}
+
+source(normalizePath("../theory/figure_n_patch.R"))
+```
+
+\newpage
+
+```{r, fig.height=6, fig.width=8, fig.cap="Theoretical predictions for ecosystem complexity influences (branching probability) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. See Figure 2 for details."}
+
+source(normalizePath("../theory/figure_p_branch.R"))
+```
+
+\newpage
+
+```{r, fig.height=6, fig.width=8, fig.cap="Influences of ecosystem size (A, watershed area) and complexity (B, branching probability) on $\\alpha$ (left), $\\beta$ (middle), and $\\gamma$ diversity (right) in Hokkaido and Midwest regions. Dots represent watershed replicates (i.e., metacommunities) and lines are predicted values from the linear regression models."}
+
+source(normalizePath("../empirical/figure_diversity.R"))
+```
+
+
+<!--chapter:end:figures.Rmd-->
+
+---
+title: "Ecosystem size and complexity dictate riverine biodiversity"
+author:
+- name: Akira Terui
+  email: hanabi0111@gmail.com
+  affiliation: Department of Biology, University of North Carolina at Greensboro
+  footnote: Corresponding Author
+- name: Seoghyun Kim
+  email: s_kim53@uncg.edu
+  affiliation: Department of Biology, University of North Carolina at Greensboro
+- name: Christy Dolph
+  email: XXX
+  affiliation: XXX
+output: html_notebook
+bibliography: reference.bib
+csl: nature.csl
+abstract: |
+  This is the abstract.
+  It consists of two paragraphs.
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(tidyverse, sf)
+setwd(here::here("empirical"))
+
+## read gis files
+filename <- list.files(path = 'data_gis', full.names = T)
+wsd_subset <- lapply(filename[str_detect(filename, "wsd_subset")], st_read)
+point_subset <- lapply(filename[str_detect(filename, "point_subset")], st_read)
+shape <- lapply(filename[str_detect(filename, "shape")], st_read)
+shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]]))
+
+```
+
+
+Ecologists have long sought to understand the general drivers of biodiversity. One of the most robust empirical generalizations in ecology is the positive relationship between species richness and area (the species-area relationship; SAR). In 1921, XXX formulated the SAR as a power-law $S = cA^z$ ($S$ is the number of species observed in a given geographic area $A$), the equation currently known as the Arrhenius species-area relationship. Since then, the spatial scaling of species richness has been observed in nearly all taxonomic groups, although the underlying mechanisms are still hotly debated. The SAR is general because multiple mechanisms produce an apparently similar pattern. Larger ecosystems typically support more diverse communities due to increased habitat diversity, larger (meta)community size, and/or enhanced colonization dynamics. Importantly, the SAR provides the foundation for global conservation efforts. For example, conservation ecologists have used the SAR estimates to design marine and terrestrial protected areas, which currently encompass more than ~ km² globally.
+
+However, many ecosystems possess a dimension of spatial complexity that cannot be described by area (i.e., the scale-invariant complexity). Such spatial complexity is evident in branching ecosystems, such as rivers, trees, and mountain ranges, to name just a few. Geomorphic or biological processes generate a pronounced self-similarity in complex branching structure so that the part and the whole look alike. Even though the branching structure is independent of spatial scale, it forms a physical template that determines habitat diversity and dispersal corridors for living organisms. Evidence suggests that ecological dynamics driven by branching structure cannot be predicted by scale-dependent theories; this recognition has led to recent developments of spatial theories devoted to complex branching ecosystems. However, most research either has explored the consequences of branching complexity for local biodiversity patterns or relied on theoretical arguments with limited replicates of artificial branching networks. At present, no studies have integrated theoretical and empirical approaches to link branching complexity and $\gamma$ diversity (i. e., the total species richness in a metacommunity). This knowledge gap significantly limits our ability to guide biodiversity conservation in spatially complex ecosystems.
+
+Here, we hypothesize that ecosystem size and complexity dictate $\gamma$ diversity in rivers, a prime example of complex branching ecosystems. In branching river networks, streams with diverse geological backgrounds recurrently join to form a larger, ecologically distinct channel. As such, the complexity of branching structure, which we define here as the probability of branching per unit river distance [@teruiMetapopulationStabilityBranching2018; @yeakelSynchronisationStabilityRiver2014], should control the habitat heterogeneity of the ecosystem (habitat diversity per unit area). Meanwhile, ecosystem size (watershed area) should determine the metacommunity size and total habitat diversity (area x heterogeneity). We predict that ecosystem size and branching complexity increase $\gamma$ diversity. The present study combines theory and statistical analysis of extensive community data to provide crucial insights into how ecological communities are structured in complex branching networks.
+
+First, we theoretically analyzed the influences of ecosystem size and branching complexity on $\gamma$ diversity. We constructed a general simulation model of metacommunity dynamics [@thompsonProcessbasedMetacommunityFramework2020], in which 50 competing species disperse and spatially interact in a random branching network. Simulated species with different niche in abiotic conditions (optimum and width) compete for resources with varied strengths. For simplicity, other ecological traits are assumed to be identical among species (e.g., dispersal probability). Here, branching networks are depicted as a spatial network of connected habitat patches (or a discretized river section) where mean environmental conditions at each habitat patch are determined by two factors: (1) environments of headwaters (the most upstream habitat patch) and (2) local environmental noises. Environmental values at headwaters are produced randomly and propagate downstream with local environmental noises (i.e., the spatial autoregressive process with  a white noise). These values recurrently 'mix' at confluences considering the relative size of joining tributaries (see Methods). Therefore, our simulation resembles ecological processes of how branching river networks create diverse habitats in a metacommunity. We prepared 16 simulation scenarios with varied ecological (dispersal and competition strength) and landscape contexts (environmental variation at headwaters and the degree of local environmental noises). Under each scenario, we simulated metacommunity dynamics in 1000 branching networks that have different ecosystem size (the number of habitat patches in a network) and complexity (branching probability) to examine their effects on $\gamma$ diversity.
+
+Our theoretical analysis yielded results consistent with our prediction. Ecosystem size and complexity both increased $\gamma$ diversity under realistic landscape contexts, where the environmental variation at headwaters ($\sigma_h$) is greater than the degree of local environmental noises ($\sigma_l$) [@petersonModellingDendriticEcological2013; @teruiMetapopulationStabilityBranching2018]. The relationships had a characteristic of power-law (i.e., linear in a log-log scale) and were consistent under various ecological scenarios: the strength of competition and dispersal probability did not change the form of the relationships between $\gamma$ diversity and ecosystem properties. The effect of ecosystem size on $\gamma$ diversity was largely driven by the spatial turnover of species composition among habitat patches ($\beta$ diversity) regardless of ecological scenarios. $\beta$ diversity increased significantly with increasing ecosystem size, while local diversity (average species richness in a single habitat patch; $\alpha$ diversity) remained almost unchanged.
+
+In contrast, the relative importance of $\alpha$ and $\beta$ diversity in the complexity-$\gamma$ diversity relationship was dependent on the dispersal probability of constituent species. When dispersal probability of species was low, the positive effect of branching complexity on $\gamma$ diversity was driven mainly by increased $\beta$ diversity, reflecting significant spatial turnover of species composition. However, with higher dispersal probability, the relationship between $\beta$ diversity and branching complexity became a hump-shaped form. A clear increase in $\alpha$ diversity compensated for the slight decrease in $\beta$ diversity at high branching probabilities, maintaining the positive complexity-$\gamma$ diversity relationship. This likely occurred through the increased connectivity of highly branched networks. The average network distance between a pair of habitat patches decreases with increasing branching probability because highly branched networks have a compressed form compared to less branched networks. Therefore, increased dispersal readily homogenizes community composition while increasing $\alpha$ diversity through enhanced immigration from suitable habitat patches (i.e., mass effects). This result highlights how different mechanisms can generate an apparently similar pattern in the complexity-$\gamma$ diversity relationship.
+
+It is important to note that the effect of branching complexity diminished when the environmental variation at headwaters is smaller or equal to the degree of local environmental noises ($\sigma_h \le \sigma_l$). When local environmental noises are very large relative to environmental variation among headwaters, the net habitat diversity should be correlated with ecosystem size but not with branching complexity. This simulation setup decouples the intimate relationship between branching structure and habitat diversity, thereby eliminating the positive effect of branching complexity on $\gamma$ diversity. This theoretical prediction may not apply to natural river networks because streams originating from different sources are known to show distinct environmental conditions, including water temperature, water chemistry, substrate, and flow/sediment regimes. Yet, this result illustrates the crucial role of habitat diversity produced by branching structure, rather than branching structure itself, in the emerging complexity-$\gamma$ diversity relationship.
+
+## Empirical evidence
+We tested our theoretical predictions using a large data set of fish communities in two geographic regions: the Hokkaido island in Japan and the Midwest in the US. These regions are located in comparable ranges of latitude but support distinct fish communities. Therefore, this data set provides an excellent opportunity to examine the generality of our theoretical predictions. Our data set comprised presence-absence of fish species at XXX sites, which encompassed the majority of the two geographic regions. We estimated $\gamma$ diversity using a method of incidence-based extrapolation (i.e., the asymptotic species richness; see Methods) at `r nrow(wsd_subset[[1]]) + nrow(wsd_subset[[2]])` watersheds (`r nrow(wsd_subset[[1]])` in Hokkaido and `r nrow(wsd_subset[[2]])` in Midwest). Individual watersheds, i.e., metacommunity replicates in our analysis, were considered as independent if they flow into one of the following: the ocean, a large lake ($\ge$ 10 km² in the areal area) or a large river that may represent lentic habitats ($\ge$ 5000 km² in the watershed area).
+
+Our empirical data analysis provided a strong support for theoretical predictions. Our theory predicts that $\gamma$ diversity increases with increasing ecosystem size and complexity. This is exactly what was observed in nature. The estimated $\gamma$ diversity increased with increasing watershed area (ecosystem size) and branching probability (ecosystem complexity) of the studied river networks. Importantly, the patterns were consistent across two geographic regions (i.e., non-significant effects of interactions with region) that support distinct fish communities. Moreover, the effects of watershed area and branching probability remained significant even after accounting for the potential influences of other environmental factors (precipitation, temperature, and land use). As predicted by theory, the scaling of $\gamma$ diversity by ecosystem size or complexity was a power-law. Given the uncertainty of estimated $\gamma$ diversity, we repeated our analysis with lower (5%) and upper (95%) confidence intervals of $\gamma$ diversity estimates. Overall, we found qualitatively similar results, implying the robustness of our findings. Our results, therefore, provides strong empirical evidence that ecosystem complexity, not only ecosystem size, represents a dimension of ecosystem properties that scale riverine biodiversity.
+
+Detailed analysis of $\alpha$ and $\beta$ diversity patterns provides deeper insights into underlying ecological mechanisms. 
+ 
+
+# Methods
+
+
+<!--chapter:end:manuscript.Rmd-->
+
+---
+title: "Tables"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+  
+  knitr::opts_knit$set(root.dir = here::here("empirical"))
+
+```
+
+
+```{r, echo = FALSE, message=FALSE, results='asis'}
+
+source(normalizePath("../empirical/analysis_lm.R"))
+
+stargazer::stargazer(m_alpha$model, m_beta$model, m_gamma$model,
+                     header = FALSE,
+                     title = "Estimated parameters of robust linear regression models explaining fish species richness in Hokkaido (Japan) and Midwest (US) regions. Dependent variables were log-10 transformed. Environmental variables (air temperature, precipitation, logit \\% forest) are deviations from the regional averages and were standardized to a mean of zero and a standard deviation of one.",
+                     type = "latex",
+                     ci = TRUE,
+                     covariate.labels = c("$log_{10}$ Watershed area",
+                                          "$log_{10}$ Branching probability",
+                                          "Region (Midwest vs. Hokkaido)",
+                                          "Air temperature",
+                                          "Precipitation",
+                                          "Logit \\% forest",
+                                          "Intercept"),
+                     single.row = FALSE,
+                     digits = 2,
+                     dep.var.labels.include = FALSE,
+                     column.labels = c("$\\alpha$ richness", "$\\beta$ richness", "$\\gamma$ richness"),
+                     keep.stat = c("rsq"),
+                     model.numbers = FALSE)
+
+```
+
+
+<!--chapter:end:table.Rmd-->
+
