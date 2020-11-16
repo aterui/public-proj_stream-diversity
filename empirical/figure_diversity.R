@@ -34,7 +34,7 @@
 # read data ---------------------------------------------------------------
   
   ## model estimate
-  source(normalizePath("../empirical/analysis_rlm.R"))
+  source(normalizePath("../empirical/analysis_lm_bf.R"))
   
   ## redefine data.frame
   dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
@@ -50,36 +50,42 @@
     pivot_longer(cols = c(alpha, beta, gamma),
                  names_to = "metric")
   
-  ## data.frame for prediction
-  f_area <- 10^mean(log(dat$area, 10))
-  x_area <- rep(seq(min(dat$area), max(dat$area), length = 100), times = 2)
-  
-  f_p_branch = 10^mean(log(dat$p_branch, 10))
-  x_p_branch = rep(seq(min(dat$p_branch), max(dat$p_branch), length = 100), times = 2)
-  
   dat_base <- data.frame(region = factor(rep(c("hokkaido", "midwest"), each = 100)),
                          resid_temp = mean(dat$resid_temp),
                          resid_ppt = mean(dat$resid_ppt),
                          resid_forest = mean(dat$resid_forest))
+
+# data frame for prediction -----------------------------------------------
   
-  dat_area <- data.frame(area = x_area, p_branch = f_p_branch, dat_base)
-  dat_bp <- data.frame(area = f_area, p_branch = x_p_branch, dat_base)
+  f_area <- 10^mean(log(dat$area, 10))
+  f_p_branch = 10^mean(log(dat$p_branch, 10))
+  
+  ## area prediction
+  dat_area <- dat %>% 
+    group_by(region) %>% 
+    summarise(area = seq(min(area), max(area), length = 100)) %>% 
+    left_join(dat_base, by = "region") %>% 
+    mutate(p_branch = f_p_branch)
+  
+  dat_bp <- dat %>% 
+    group_by(region) %>% 
+    summarise(p_branch = seq(min(p_branch), max(p_branch), length = 100)) %>% 
+    left_join(dat_base, by = "region") %>% 
+    mutate(area = f_area)
   
   ### area
-  dat_area$alpha <- 10^predict(m_alpha$model, dat_area)
-  dat_area$beta <- 10^predict(m_beta$model, dat_area)
-  dat_area$gamma <- 10^predict(m_gamma$model, dat_area)
+  dat_area$alpha <- 10^predict(fit$alpha$model, newdata = dat_area)
+  dat_area$beta <- 10^predict(fit$beta$model, dat_area)
+  dat_area$gamma <- 10^predict(fit$gamma$model, dat_area)
   dat_area <- dat_area %>%  
-    pivot_longer(cols = c(alpha, beta, gamma),
-                 names_to = "metric")
+    pivot_longer(cols = c(alpha, beta, gamma), names_to = "metric")
   
   ### p_branch
-  dat_bp$alpha <- 10^predict(m_alpha$model, dat_bp)
-  dat_bp$beta <- 10^predict(m_beta$model, dat_bp)
-  dat_bp$gamma <- 10^predict(m_gamma$model, dat_bp)
+  dat_bp$alpha <- 10^predict(fit$alpha$model, dat_bp)
+  dat_bp$beta <- 10^predict(fit$beta$model, dat_bp)
+  dat_bp$gamma <- 10^predict(fit$gamma$model, dat_bp)
   dat_bp <- dat_bp %>%  
-    pivot_longer(cols = c(alpha, beta, gamma),
-                 names_to = "metric")
+    pivot_longer(cols = c(alpha, beta, gamma), names_to = "metric")
   
 # fig ---------------------------------------------------------------------
   

@@ -95,13 +95,13 @@
   
   ## example channel
   channel_eg <- channel_hkd %>% 
-    filter(id == 1012)
+    filter(id == 1009)
   
   polygon_eg <- wsd_subset[[1]] %>% 
-    filter(watershed_id == 1012)
+    filter(watershed_id == 1009)
   
   point_eg <- st_join(point_subset[[1]], wsd_subset[[1]]) %>% 
-    filter(watershed_id == 1012)
+    filter(watershed_id == 1009)
   
   eg <- ggplot() +
     geom_sf(data = polygon_eg, fill = grey(0.99)) +

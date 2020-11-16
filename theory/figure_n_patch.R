@@ -6,7 +6,7 @@
 
 # read data ---------------------------------------------------------------
 
-  dat <- read_csv(normalizePath("../theory/result/result_sim2020-11-10.csv")) %>% 
+  dat <- read_csv(here::here("theory/result/result_sim2020-11-10.csv")) %>% 
     select(-beta_div) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
            p_dispersal == 0.01,
@@ -19,8 +19,8 @@
                                 `0.75` = sprintf('"Weak competition"~(alpha[max]=="%.2f")', max_alpha),
                                 `1.5` = sprintf('"Strong competition"~(alpha[max]=="%.2f")', max_alpha)),
            dispersal = recode(theta,
-                              `0.1` = sprintf('"Long-distance dispersal "(theta=="%.2f")', theta),
-                              `1.0` = sprintf('"Short-distance dispersal "(theta=="%.2f")', theta)))
+                              `0.1` = sprintf('"Long-distance dispersal"~(theta=="%.2f")', theta),
+                              `1.0` = sprintf('"Short-distance dispersal"~(theta=="%.2f")', theta)))
   
   labels <- c(expression(alpha~"diversity"),
               expression(beta~"diversity"),
