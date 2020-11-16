@@ -11,10 +11,6 @@
     rename(watershed_id = id) %>% 
     arrange(watershed_id)
   
-  watershed <- watershed %>%
-    mutate(lon = st_coordinates(st_transform(st_centroid(., quiet = TRUE), 4326))[,1],
-           lat = st_coordinates(st_transform(st_centroid(., quiet = TRUE), 4326))[,2])
-  
 # merge fish and gis data -------------------------------------------------
   
   fishdata <- list.files(path = "data_org_mw", full.names = TRUE) %>%
@@ -49,7 +45,8 @@
     group_by(watershed_id) %>% 
     summarise(mu_alpha = mean(alpha_div))
 
-# rarefaction -------------------------------------------------------------
+
+# iNEXT -------------------------------------------------------------------
   
   ## convert data to frequency
   dat_freq <- dat_fish %>% 
