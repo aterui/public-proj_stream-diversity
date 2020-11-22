@@ -1,14 +1,12 @@
 
 # setup -------------------------------------------------------------------
 
-  rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse)
-  setwd(here::here("empirical"))
 
 # read data ---------------------------------------------------------------
   
-  dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
-  dat_mw <- read_csv("data_out/data_mw.csv") %>% mutate(region = "midwest")
+  dat_hkd <- read_csv(here::here("empirical/data_out/data_hkd.csv")) %>% mutate(region = "hokkaido")
+  dat_mw <- read_csv(here::here("empirical/data_out/data_mw.csv")) %>% mutate(region = "midwest")
   
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator,

@@ -9,7 +9,7 @@
   dat <- read_csv(here::here("theory/result/result_sim2020-11-10.csv")) %>% 
     select(-beta_div) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
-           p_dispersal == 0.1,
+           p_dispersal == 0.01,
            sd_env_source == 1,
            sd_env_lon == 1) %>% 
     mutate(beta_div = gamma_div/alpha_div) %>% 
