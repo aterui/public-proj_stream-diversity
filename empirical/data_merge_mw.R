@@ -106,6 +106,14 @@
   
   write_csv(dat_mw, "data_out/data_mw.csv")
 
+  ## export species list
+  splist <- d0 %>% 
+    filter(watershed_id %in% wsd_subset) %>% 
+    as_tibble() %>% 
+    distinct(Species)
+  
+  write_csv(splist, "data_out/data_mw_splist.csv")
+  
   ## export watershed polygon
   albers_wsd_subset <- watershed %>% 
     filter(watershed_id %in% wsd_subset)
