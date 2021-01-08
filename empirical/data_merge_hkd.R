@@ -93,6 +93,7 @@
   ## export species list
   splist <- d0 %>% 
     filter(watershed_id %in% wsd_subset) %>% 
+    arrange(Species) %>% 
     as_tibble() %>% 
     distinct(Species)
     
