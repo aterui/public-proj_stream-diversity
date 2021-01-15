@@ -1,17 +1,23 @@
 
 # setup -------------------------------------------------------------------
 
-  rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse)
+  
+  param <- expand.grid(sigma_l = c(0.01, 1), sigma_h = c(1, 0.01), p_d = c(0.1, 0.01)) %>% 
+    filter(!(p_d == 0.01 & sigma_h > sigma_l))
+  
+  f <- list(NULL)
 
+for(i in seq_len(nrow(param))){
+  
 # read data ---------------------------------------------------------------
 
   dat <- read_csv(here::here("theory/result/result_sim2020-11-10.csv")) %>% 
     select(-beta_div) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
-           p_dispersal == 0.01,
-           sd_env_source == 0.01,
-           sd_env_lon == 0.01) %>% 
+           p_dispersal == param$p_d[i],
+           sd_env_source == param$sigma_h[i],
+           sd_env_lon == param$sigma_l[i]) %>%
     mutate(beta_div = gamma_div/alpha_div) %>% 
     pivot_longer(cols = c("alpha_div", "beta_div", "gamma_div"),
                  names_to = "metric") %>% 
@@ -55,7 +61,7 @@
 
 # ecosystem size effect ---------------------------------------------------
 
-  g <- dat %>% 
+  f[[i]] <- dat %>% 
     ggplot(aes(x = n_patch, y = value, color = metric, fill = metric)) +
     geom_smooth(method = "loess", size = 0.5) +
     scale_y_continuous(trans = "log10") +
@@ -66,6 +72,5 @@
          y = "Species richness") +
     guides(color = guide_legend(override.aes = list(fill = NA)),
            fill = FALSE)
-  
-  print(g)
-  
+
+}
