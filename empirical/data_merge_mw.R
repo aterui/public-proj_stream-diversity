@@ -60,7 +60,6 @@
     group_by(watershed_id) %>% 
     summarise(mu_alpha = mean(alpha_div))
 
-
 # iNEXT -------------------------------------------------------------------
   
   ## convert data to frequency
@@ -99,6 +98,7 @@
 
 # final data --------------------------------------------------------------
 
+  ## export diversity estimates
   dat_mw <- div_est %>%
     left_join(as_tibble(watershed), by = "watershed_id") %>% 
     left_join(dat_alpha, by = "watershed_id") %>% 
@@ -106,6 +106,11 @@
   
   write_csv(dat_mw, "data_out/data_mw.csv")
 
+  ## export site data
+  dat_fish %>% 
+    filter(watershed_id %in% wsd_subset) %>% 
+    write_csv('data_out/dat_mw_site.csv')
+  
   ## export species list
   splist <- d0 %>% 
     filter(watershed_id %in% wsd_subset) %>% 

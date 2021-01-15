@@ -43,7 +43,6 @@
     summarise(alpha_div = n_distinct(Species)) %>% 
     group_by(watershed_id) %>% 
     summarise(mu_alpha = mean(alpha_div))
-  
 
 # iNEXT -------------------------------------------------------------------
 
@@ -83,12 +82,18 @@
   
 # final data --------------------------------------------------------------
   
+  ## export diversity estimates
   dat_hkd <- div_est %>%
     left_join(as_tibble(watershed), by = "watershed_id") %>% 
     left_join(dat_alpha, by = "watershed_id") %>% 
     select(-geom)
   
   write_csv(dat_hkd, "data_out/data_hkd.csv")
+  
+  ## export site data
+  dat_fish %>% 
+    filter(watershed_id %in% wsd_subset) %>% 
+    write_csv('data_out/dat_hkd_site.csv')
   
   ## export species list
   splist <- d0 %>% 
