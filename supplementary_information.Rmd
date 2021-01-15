@@ -1,7 +1,7 @@
 ---
 title: |
-  | Ecosystem size and complexity dictate riverine biodiversity
   | Supplementary Information for:
+  | Ecosystem size and complexity dictate riverine biodiversity
 author:
 - Akira Terui^[Department of Biology, University of North Carolina at Greensboro]
 - Seoghyun Kim\footnotemark[1]
@@ -25,12 +25,10 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE)
 
 # Hokkaido data
-dat_hkd <- read_csv(here::here('/empirical/data_org_hkd/data_fmt_hkd_latest.csv')) %>% 
-  filter(Year >= 1990)
+dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
 
 # Midwest data
-fishdata <- list.files(path = here::here("/empirical/data_org_mw"), full.names = TRUE) %>% lapply(read_csv)
-dat_mw <- do.call(what = bind_rows, args = fishdata)
+dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
 
 ```
 
@@ -56,25 +54,51 @@ We assembled fish community data collected by the Iowa Department of Natural Res
 
 # Tables
 
-## Table S1 Species list in Hokkaido, Japan
+## Table S1 List of fish species in Hokkaido, Japan
 
-Species list in Hokkaido, Japan. Species are ordered alphabetically.
+List of fish species in Hokkaido, Japan that are included in our statistical analysis. `r n_distinct(dat_hkd$Species)` species are ordered alphabetically with the number of sites present and % occupancy out of `r n_distinct(dat_hkd$SiteID)` sites.
 
 ```{r chunk_table1}
 
 dat_hkd %>% 
-  filter(Year >= 1990) %>% 
-  mutate(Species = str_replace_all(str_to_title(OTU), "_", " ")) %>% 
+  mutate(n_site = n_distinct(SiteID)) %>% 
+  mutate(Species = str_replace_all(str_to_title(Species), "_", " ")) %>% 
   mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
   mutate(Species = str_replace_all(Species, "(sp$)", "sp\\.")) %>% 
   mutate(Species = str_replace_all(Species, "(subsp)", "subsp\\. ")) %>% 
   mutate(Species = str_replace_all(Species, "(sp\\sme$)", "sp\\. ME")) %>% 
   group_by(Species) %>% 
-  summarise('Number of sites present' = n_distinct(SiteID)) %>% 
+  summarise('Number of sites present' = n_distinct(SiteID),
+            'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
   kable(format = 'markdown')
   
 ```
 
+
+\newpage
+
+## Table S2 List of fish species in Midwest, US
+
+List of fish species in Midwest, US that are included in our statistical analysis. `r n_distinct(dat_mw$Species)` species are ordered alphabetically with the number of sites present and % occupancy out of `r n_distinct(dat_mw$SiteID)` sites.
+
+```{r chunk_table2}
+
+sp_mw_latin <- read_csv(here::here('/empirical/data_out/data_mw_splist_latin.csv'))
+
+dat_mw %>% 
+  mutate(n_site = n_distinct(SiteID)) %>% 
+  rename(Common_name = Species) %>% 
+  group_by(Common_name) %>% 
+  summarise('Number of sites present' = n_distinct(SiteID),
+            'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
+  left_join(sp_mw_latin, by = "Common_name") %>% 
+  select(Species = Latin_name,
+         'Number of sites present',
+         'Occupancy (%)') %>% 
+  arrange(Species) %>% 
+  kable(format = 'markdown')
+
+```
 
 
 \newpage
