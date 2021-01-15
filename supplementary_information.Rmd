@@ -1,0 +1,150 @@
+---
+title: |
+  | Ecosystem size and complexity dictate riverine biodiversity
+  | Supplementary Information for:
+author:
+- Akira Terui^[Department of Biology, University of North Carolina at Greensboro]
+- Seoghyun Kim\footnotemark[1]
+- Christine L. Dolph^[Department of Ecology, Evolution and Behavior, University of
+  Minnesota]
+- Taku Kadoya^[National Institute for Environmental Studies]
+- Yusuke Miyazaki^[Shiraume Gakuen University]
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+bibliography: reference.bib
+csl: nature.csl
+---
+
+```{r setup, include=FALSE}
+
+pacman::p_load(tidyverse, knitr, kableExtra)
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+
+# Hokkaido data
+dat_hkd <- read_csv(here::here('/empirical/data_org_hkd/data_fmt_hkd_latest.csv')) %>% 
+  filter(Year >= 1990)
+
+# Midwest data
+fishdata <- list.files(path = here::here("/empirical/data_org_mw"), full.names = TRUE) %>% lapply(read_csv)
+dat_mw <- do.call(what = bind_rows, args = fishdata)
+
+```
+
+# Fish community data
+
+## Hokkaido, Japan
+We used data from the Hokkaido Freshwater Fish Database HFish[@fukushimaModellingEffectsDams2007], monitoring data at protected watersheds[@comteRivFishTIMEGlobalDatabase2021; @teruiMetapopulationStabilityBranching2018], and primary data collected from literature[@teruiThreeEcologicalFactors2016], which collectively cover the entire Hokkaido island. Data were collected from summer to fall. We screened data through the following procedure:
+
+1. We listed recorded fish species and re-organized species names to be consistent across the data sets.
+1. We selected sampling sites based on the following criteria: (1) surveys were conducted with netting and/or electrofishing, (2) surveys were designed to collect a whole fish community, (3) sites contained reliable coordinates (sites with coordinates identical at 3 decimal degrees were treated as the same site), and (4) sites did not involve unidentified species that are rarely observed in the data set (< 100 sites occurrence).
+1. For sites with multiple visits (i.e., temporal replicates), we used the latest-year observation at each sampling site to minimize variation in sampling efforts among sites. Surveys that occurred in the same year were aggregated into a single observation.
+1. We confined sites to those with the latest observation year of $\ge$ 1990. Although the data set contained observations from 1953, we added this restriction to align the observation period with the data set in the Midwest, US.
+1. Four genera (Lethenteron, Pungitius, Rhinogobius, and Tribolodon) were treated as species groups (i.e., spp.) as taxonomic resolutions varied greatly among data sources.
+
+## Midwest, US
+We assembled fish community data collected by the Iowa Department of Natural Resources, Illinois Environmental Protection Agency and Illinois Department of Natural Resources, Minnesota Pollution Control Agency, and Wisconsin Department of Natural Resources. These data sets cover most of Upper Mississippi (HUC 2, region 07) and the part of Great Lakes (HUC 2, region 04), Missouri (HUC 2, region 10), and Ohio (HUC 2, region 05). Data were collected from summer to fall with electrofishing (backpack, barge-type, or boat-mounted) and supplemental netting at some locations. We screened data through the following procedure:
+
+1. We used data of the Upper Mississippi (HUC 2, region 07) and Great Lakes basins (HUC 2, region 04) as most sites are included in these regions.
+1. We removed records of unidentified species, hybrid species, and commercial species that are apparently absent in the wild (e.g., goldfish).
+1. We used the latest observation at each sampling site to minimize variation in sampling efforts among sites.
+
+\newpage
+
+# Tables
+
+## Table S1 Species list in Hokkaido, Japan
+
+Species list in Hokkaido, Japan. Species are ordered alphabetically.
+
+```{r chunk_table1}
+
+dat_hkd %>% 
+  filter(Year >= 1990) %>% 
+  mutate(Species = str_replace_all(str_to_title(OTU), "_", " ")) %>% 
+  mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
+  mutate(Species = str_replace_all(Species, "(sp$)", "sp\\.")) %>% 
+  mutate(Species = str_replace_all(Species, "(subsp)", "subsp\\. ")) %>% 
+  mutate(Species = str_replace_all(Species, "(sp\\sme$)", "sp\\. ME")) %>% 
+  group_by(Species) %>% 
+  summarise('Number of sites present' = n_distinct(SiteID)) %>% 
+  kable(format = 'markdown')
+  
+```
+
+
+
+\newpage
+
+# Figures
+
+```{r chunk_fig1}
+
+source(here::here("/theory/figure_n_patch_si.R"))
+
+figure_cap <- conditional_text <- NULL
+
+for(i in seq_len(nrow(param))){
+  if(param$sigma_h[i] > param$sigma_l[i]){
+    conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) exceeds local environmental noise ($\\sigma_{l}$)."
+  }else{
+    if(param$sigma_h[i] == param$sigma_l[i]){
+      conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) is equal to local environmental noise ($\\sigma_{l}$)."
+    }else{
+      conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) is less than local environmental noise ($\\sigma_{l}$)."
+    }
+  }
+  
+  figure_cap[i] <- paste0("Theoretical predictions for ecosystem size influences (the number of habitat patches) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and its 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). Other parameters are as follows: dispersal probability $p_{d} = `r param$p_d[",i,"]`$; environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$.")
+}
+
+figure_size <- NULL
+for(i in seq_len(nrow(param))){
+  knit_chunk <- paste0("## Figure S", i, " Influence of ecosystem size ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+                       "\n```{r fig", i,", fig.width = 8, fig.height = 6}\n\n f[[",i,"]] \n\n```\n",
+                       "\n **Figure S", i, "** ", figure_cap[i], "\n\\pagebreak\n")
+  figure_size <- c(figure_size, knit_chunk)
+}
+
+```
+
+`r paste(knit(text = figure_size), collapse = '\n')`
+
+
+```{r chunk_fig2}
+
+source(here::here("/theory/figure_p_branch_si.R"))
+
+figure_cap <- conditional_text <- NULL
+
+for(i in seq_len(nrow(param))){
+  if(param$sigma_h[i] > param$sigma_l[i]){
+    conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) exceeds local environmental noise ($\\sigma_{l}$)."
+  }else{
+    if(param$sigma_h[i] == param$sigma_l[i]){
+      conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) is equal to local environmental noise ($\\sigma_{l}$)."
+    }else{
+      conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) is less than local environmental noise ($\\sigma_{l}$)."
+    }
+  }
+  
+  figure_cap[i] <- paste0("Theoretical predictions for ecosystem complexity influences (branching probability) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and its 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). Other parameters are as follows: dispersal probability $p_{d} = `r param$p_d[",i,"]`$; environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$.")
+}
+
+figure_complex <- NULL
+for(i in seq_len(nrow(param))){
+  j <- i + 7
+  knit_chunk <- paste0("## Figure S", j, " Influence of ecosystem complexity ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+                       "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n g[[",i,"]] \n\n```\n",
+                       "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
+  figure_complex <- c(figure_complex, knit_chunk)
+}
+
+```
+
+`r paste(knit(text = figure_complex), collapse = '\n')`
+
+# References 
