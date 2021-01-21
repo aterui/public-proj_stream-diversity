@@ -32,16 +32,23 @@ dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
 
 ```
 
+# Theoretical predictions for longitudinal gradients of local species richness
+
+Local biodiversity patterns have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns', in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios as described in the maintext (a set of parameters is described in **Table SXX**). Under each simulation scenario, we generated 10 replicates of branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
+
+The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability. Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios are capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
+
+
 # Fish community data
 
 ## Hokkaido, Japan
 We used data from the Hokkaido Freshwater Fish Database HFish[@fukushimaModellingEffectsDams2007], monitoring data at protected watersheds[@comteRivFishTIMEGlobalDatabase2021; @teruiMetapopulationStabilityBranching2018], and primary data collected from literature[@teruiThreeEcologicalFactors2016], which collectively cover the entire Hokkaido island. Data were collected from summer to fall. We screened data through the following procedure:
 
-1. We listed recorded fish species and re-organized species names to be consistent across the data sets. Species that are identified at the family-level were removed.
+1. We listed recorded fish species and re-organized species names to be consistent across data sources. Species that are identified at the family-level were removed.
 1. We selected sampling sites based on the following criteria: (1) surveys were conducted with netting and/or electrofishing, (2) surveys were designed to collect a whole fish community, (3) sites contained reliable coordinates (sites with coordinates identical at 3 decimal degrees were treated as the same site), and (4) sites did not involve unidentified species that are rarely observed in the data set (< 100 sites occurrence).
 1. For sites with multiple visits (i.e., temporal replicates), we used the latest-year observation at each sampling site to minimize variation in sampling efforts among sites. Surveys that occurred in the same year were aggregated into a single observation.
 1. We confined sites to those with the latest observation year of $\ge$ 1990. Although the data set contained observations from 1953, we added this restriction to align the observation period with the data set in the Midwest, US.
-1. Four genera (Lethenteron, Pungitius, Rhinogobius, and Tribolodon) were treated as species groups (i.e., spp.) as they are difficult to identify and taxonomic resolutions varied greatly among data sources.
+1. Four genera (*Lethenteron*, *Pungitius*, *Rhinogobius*, and *Tribolodon*) were treated as species groups (i.e., spp.) as they are difficult to identify and taxonomic resolutions varied greatly among data sources.
 
 ## Midwest, US
 We assembled fish community data collected by the Iowa Department of Natural Resources, Illinois Environmental Protection Agency and Illinois Department of Natural Resources, Minnesota Pollution Control Agency, and Wisconsin Department of Natural Resources. These data sets cover most of Upper Mississippi (HUC 2, region 07) and the part of Great Lakes (HUC 2, region 04), Missouri (HUC 2, region 10), and Ohio (HUC 2, region 05). Data were collected from summer to fall with electrofishing (backpack, barge-type, or boat-mounted) and supplemental netting at some locations. We screened data through the following procedure:
@@ -55,7 +62,7 @@ We assembled fish community data collected by the Iowa Department of Natural Res
 
 # Tables
 
-## Table S1 List of fish species in Hokkaido, Japan
+## Table SXX List of fish species in Hokkaido, Japan
 
 List of fish species in Hokkaido, Japan that are included in our statistical analysis. `r n_distinct(dat_hkd$Species)` species are ordered alphabetically with the number of sites present and % occupancy out of `r n_distinct(dat_hkd$SiteID)` sites.
 
@@ -78,7 +85,7 @@ dat_hkd %>%
 
 \newpage
 
-## Table S2 List of fish species in Midwest, US
+## Table SXX List of fish species in Midwest, US
 
 List of fish species in Midwest, US that are included in our statistical analysis. `r n_distinct(dat_mw$Species)` species are ordered alphabetically with the number of sites present and % occupancy out of `r n_distinct(dat_mw$SiteID)` sites.
 
@@ -106,7 +113,41 @@ dat_mw %>%
 
 # Figures
 
-```{r chunk_fig1}
+```{r chunk_fig_set1}
+
+source(here::here("/theory/figure_alpha_pattern.R"))
+
+figure_cap <- conditional_text <- NULL
+
+for(i in seq_len(nrow(param))){
+  if(param$sigma_h[i] > param$sigma_l[i]){
+    conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) exceeds local environmental noise ($\\sigma_{l}$)."
+  }else{
+    if(param$sigma_h[i] == param$sigma_l[i]){
+      conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) is equal to local environmental noise ($\\sigma_{l}$)."
+    }else{
+      conditional_text[i] <- "In this simulation, environmental variation at headwaters ($\\sigma_{h}$) is less than local environmental noise ($\\sigma_{l}$)."
+    }
+  }
+  
+  figure_cap[i] <- paste0("Theoretical predictions for longitudinal gradients of local species richness in branching networks. The longitudinal position of each habitat patch (x axis) was expressed as the number of upstream contributing patches. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns and lines represent different dispersal scenarios (dispersal distance and probability). Left and right columns show long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$) scenarios repectively. Red and blue lines show low ($p_d = 0.01$) and high dispersal probabilities ($p_d = 0.10$). Other parameters are as follows: environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$; ecosystem size $N_{p} = 100$; ecosystem complexity $P_{b} = 0.5$.")
+}
+
+figure_alpha_pattern <- NULL
+for(i in seq_len(nrow(param))){
+  j <- i
+  knit_chunk <- paste0("## Figure S", j, " Longitudinal gradient of local species richness ($\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+                       "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n h[[",i,"]] \n\n```\n",
+                       "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
+  figure_alpha_pattern <- c(figure_alpha_pattern, knit_chunk)
+}
+
+```
+
+`r paste(knit(text = figure_alpha_pattern), collapse = '\n')`
+
+
+```{r chunk_fig_set2}
 
 source(here::here("/theory/figure_n_patch_si.R"))
 
@@ -123,14 +164,15 @@ for(i in seq_len(nrow(param))){
     }
   }
   
-  figure_cap[i] <- paste0("Theoretical predictions for ecosystem size influences (the number of habitat patches) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and its 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). Other parameters are as follows: dispersal probability $p_{d} = `r param$p_d[",i,"]`$; environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$.")
+  figure_cap[i] <- paste0("Theoretical predictions for ecosystem size influences (the number of habitat patches) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). Other parameters are as follows: dispersal probability $p_{d} = `r param$p_d[",i,"]`$; environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$.")
 }
 
 figure_size <- NULL
 for(i in seq_len(nrow(param))){
-  knit_chunk <- paste0("## Figure S", i, " Influence of ecosystem size ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
-                       "\n```{r fig", i,", fig.width = 8, fig.height = 6}\n\n f[[",i,"]] \n\n```\n",
-                       "\n **Figure S", i, "** ", figure_cap[i], "\n\\pagebreak\n")
+  j <- i + 4
+  knit_chunk <- paste0("## Figure S", j, " Influence of ecosystem size ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+                       "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n f[[",i,"]] \n\n```\n",
+                       "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
   figure_size <- c(figure_size, knit_chunk)
 }
 
@@ -139,7 +181,7 @@ for(i in seq_len(nrow(param))){
 `r paste(knit(text = figure_size), collapse = '\n')`
 
 
-```{r chunk_fig2}
+```{r chunk_fig_set3}
 
 source(here::here("/theory/figure_p_branch_si.R"))
 
@@ -156,12 +198,12 @@ for(i in seq_len(nrow(param))){
     }
   }
   
-  figure_cap[i] <- paste0("Theoretical predictions for ecosystem complexity influences (branching probability) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and its 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). Other parameters are as follows: dispersal probability $p_{d} = `r param$p_d[",i,"]`$; environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$.")
+  figure_cap[i] <- paste0("Theoretical predictions for ecosystem complexity influences (branching probability) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. `r conditional_text[",i,"]` Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). Other parameters are as follows: dispersal probability $p_{d} = `r param$p_d[",i,"]`$; environmental variation at headwaters $\\sigma_{h} = `r param$sigma_h[",i,"]`$; local environmental noise $\\sigma_{l} = `r param$sigma_l[",i,"]`$.")
 }
 
 figure_complex <- NULL
 for(i in seq_len(nrow(param))){
-  j <- i + 7
+  j <- i + 11
   knit_chunk <- paste0("## Figure S", j, " Influence of ecosystem complexity ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
                        "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n g[[",i,"]] \n\n```\n",
                        "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
@@ -171,5 +213,6 @@ for(i in seq_len(nrow(param))){
 ```
 
 `r paste(knit(text = figure_complex), collapse = '\n')`
+
 
 # References 
