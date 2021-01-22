@@ -24,6 +24,9 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       warning = FALSE)
 
+# simulation data
+dat_sim <- read_csv(here::here('/theory/result/result_sim2020-11-10.csv'))
+
 # Hokkaido data
 dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
 
@@ -32,12 +35,13 @@ dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
 
 ```
 
-# Theoretical predictions for longitudinal gradients of local species richness
+# Sensitivity analysis
 
-Local biodiversity patterns have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns', in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios as described in the maintext (a set of parameters is described in **Table SXX**). Under each simulation scenario, we generated 10 replicates of branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
+# Longitudinal gradients of local species richness
+
+Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns', in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios as described in the maintext (a set of parameters is described in **Table SXX**). Under each simulation scenario, we generated 10 replicates of branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
 
 The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability. Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios are capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
-
 
 # Fish community data
 
@@ -61,6 +65,73 @@ We assembled fish community data collected by the Iowa Department of Natural Res
 \newpage
 
 # Tables
+
+## Table S1 Simulation parameter
+
+Values and interpretation of parameters used in our simulation model. Refer to the maintext for model details.
+
+```{r}
+
+dat_sim %>% 
+  select(sd_env_source,
+         sd_env_lon,
+         sd_env,
+         rho,
+         phi,
+         niche_cost,
+         max_alpha,
+         theta,
+         p_dispersal
+         ) %>% 
+  summarise(across(everything(), unique)) %>% 
+  mutate(r0 = 4) %>% 
+  pivot_longer(cols = everything(),
+               names_to = "Parameter",
+               values_to = "Value") %>% 
+  group_by(Parameter) %>% 
+  summarize(Value = list(unique(Value))) %>% 
+  mutate(id = case_when(Parameter == 'sd_env_source' ~ 'a',
+                        Parameter == 'sd_env_lon' ~ 'b',
+                        Parameter == 'sd_env' ~ 'c',
+                        Parameter == 'rho' ~ 'd',
+                        Parameter == 'phi' ~ 'e',
+                        Parameter == 'niche_cost' ~ 'f',
+                        Parameter == 'max_alpha' ~ 'g',
+                        Parameter == 'theta' ~ 'h',
+                        Parameter == 'p_dispersal' ~ 'i',
+                        Parameter == 'r0' ~ 'j',
+                        TRUE ~ as.character(Parameter)),
+         Interpretation = case_when(Parameter == 'sd_env_source' ~ 'Environmental variation at headwaters',
+                                    Parameter == 'sd_env_lon' ~ 'Degree of local environmental noise',
+                                    Parameter == 'sd_env' ~ 'Temporal environmental variability',
+                                    Parameter == 'rho' ~ 'Strength of spatial autocorrelation in mean environmental condition',
+                                    Parameter == 'phi' ~ 'Extent of spatial autocorrelation in temporal environmental variation',
+                                    Parameter == 'niche_cost' ~ 'Cost of a wider niche',
+                                    Parameter == 'max_alpha' ~ 'Maximum value of interspecific competition coefficient',
+                                    Parameter == 'theta' ~ 'Rate parameter of an exponential dispersal kernel',
+                                    Parameter == 'p_dispersal' ~ 'Dispersal probability',
+                                    Parameter == 'r0' ~ 'Maxiumum reproductive rate',
+                                    TRUE ~ as.character(Parameter)),
+         Parameter = case_when(Parameter == 'sd_env_source' ~ '$\\sigma_{h}$',
+                               Parameter == 'sd_env_lon' ~ '$\\sigma_{l}$',
+                               Parameter == 'sd_env' ~ '$\\sigma_{z}$',
+                               Parameter == 'rho' ~ '$\\rho$',
+                               Parameter == 'phi' ~ '$\\phi$',
+                               Parameter == 'niche_cost' ~ '$\\nu$',
+                               Parameter == 'max_alpha' ~ '$\\alpha_{max}$',
+                               Parameter == 'theta' ~ '$\\theta$',
+                               Parameter == 'p_dispersal' ~ '$p_{d}$',
+                               Parameter == 'r0' ~ '$r_{0,i}$',
+                               TRUE ~ as.character(Parameter))
+         ) %>% 
+  arrange(id) %>% 
+  select(-id) %>% 
+  kable(format = 'markdown')
+
+```
+
+
+\newpage
 
 ## Table SXX List of fish species in Hokkaido, Japan
 
