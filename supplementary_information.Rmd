@@ -271,7 +271,7 @@ by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources C
 
 \newpage
 
-## Table S3 Sensitivity analysis for the effect of ecosystem size
+## Table S3 Sensitivity analysis for ecosystem size effects
 
 **Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Dependent variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
 
@@ -284,7 +284,7 @@ by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources C
 \newpage
 
 
-## Table S4 Sensitivity analysis for the effect of ecosystem complexity
+## Table S4 Sensitivity analysis for ecosystem complexity effects
 
 **Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Dependent variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
 
@@ -457,7 +457,7 @@ source(here::here('empirical/figure_correlation.R'))
 
 ```
 
-**Figure S19 ** Correlation structure of potential explanatory variables for riverine diversity metrics. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from regional averages to remove any regional effects.
+**Figure S19 ** Correlation structure of potential explanatory variables for riverine diversity metrics. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
 
 \newpage
 
