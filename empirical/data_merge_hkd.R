@@ -3,7 +3,7 @@
   
   rm(list = ls(all.names = TRUE))
   setwd(here::here("empirical"))
-  pacman::p_load(tidyverse, tidyverse, sf, iNEXT, foreach, magrittr)  
+  pacman::p_load(tidyverse, sf, iNEXT, foreach, magrittr)  
   
 # read gis data -----------------------------------------------------------
 
