@@ -19,46 +19,140 @@ csl: nature.csl
 
 ```{r setup, include=FALSE}
 
-pacman::p_load(tidyverse, knitr, kableExtra)
-knitr::opts_chunk$set(echo = FALSE,
-                      message = FALSE,
-                      warning = FALSE)
+  pacman::p_load(tidyverse, knitr, kableExtra)
+  knitr::opts_chunk$set(echo = FALSE,
+                        message = FALSE,
+                        warning = FALSE)
+  
+  # simulation data main
+  dat_sim <- read_csv(here::here('/theory/result/result_sim2020-11-10.csv'))
+  
+  # sensitivity analysis  
+  source(here::here("/theory/analysis_sensitivity.R"))
+  
+  # Hokkaido data
+  dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
+  
+  # Midwest data
+  dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
 
-# simulation data
-dat_sim <- read_csv(here::here('/theory/result/result_sim2020-11-10.csv'))
+  # sensitivity tables
+  
+  ## ecosystem size
+  m_area <- fit_sense %>% 
+    mutate(area = str_detect(response, "area")) %>% 
+    filter(area == TRUE)
+  
+  star_area <- stargazer::stargazer(m_area$fit[1],
+                                    m_area$fit[2],
+                                    m_area$fit[3],
+                                    header = FALSE,
+                                    type = "latex",
+                                    covariate.labels = c("$\\sigma_{h}$",
+                                                         "$\\sigma_{l}$",
+                                                         "$\\sigma_{z}$",
+                                                         "$\\phi$",
+                                                         "$\\nu$",
+                                                         "$\\alpha_{max}$",
+                                                         "$\\theta$",
+                                                         "$p_{d}$",
+                                                         "Intercept"),
+                                    single.row = FALSE,
+                                    digits = 3,
+                                    dep.var.labels.include = FALSE,
+                                    column.labels = c("Effect of $N_{p}$ on $\\alpha$ diversity",
+                                                      "Effect of $N_{p}$ on $\\beta$ diversity",
+                                                      "Effect of $N_{p}$ on $\\gamma$ diversity"),
+                                    keep.stat = c("rsq"),
+                                    model.numbers = FALSE)
+  
+  star_area <- sub('^.+\\caption.+$','', star_area)
+  
+  ## Ecosystem complexity
+  m_bp <- fit_sense %>% 
+    mutate(area = str_detect(response, "area")) %>% 
+    filter(area == FALSE)
+  
+  star_bp <- stargazer::stargazer(m_bp$fit[1],
+                                  m_bp$fit[2],
+                                  m_bp$fit[3],
+                                  header = FALSE,
+                                  type = "latex",
+                                  covariate.labels = c("$\\sigma_{h}$",
+                                                       "$\\sigma_{l}$",
+                                                       "$\\sigma_{z}$",
+                                                       "$\\phi$",
+                                                       "$\\nu$",
+                                                       "$\\alpha_{max}$",
+                                                       "$\\theta$",
+                                                       "$p_{d}$",
+                                                       "Intercept"),
+                                  single.row = FALSE,
+                                  digits = 3,
+                                  dep.var.labels.include = FALSE,
+                                  column.labels = c("Effect of $P_{b}$ on $\\alpha$ diversity",
+                                                    "Effect of $P_{b}$ on $\\beta$ diversity",
+                                                    "Effect of $P_{b}$ on $\\gamma$ diversity"),
+                                  keep.stat = c("rsq"),
+                                  model.numbers = FALSE)
+  
+    star_bp <- sub('^.+\\caption.+$','', star_bp)
 
-# Hokkaido data
-dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
-
-# Midwest data
-dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
-
+  
 ```
 
-# Sensitivity analysis
+# Theory
 
-# Longitudinal gradients of local species richness
+## Sensitivity analysis
 
-Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns', in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios as described in the maintext (a set of parameters is described in **Table SXX**). Under each simulation scenario, we generated 10 replicates of branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
+We performed a sensitivity analysis of the metacommunity simulation to identify key simulation parameters that strongly affect the relationships between diversity metrics ($\alpha$, $\beta$, and $\gamma$) and ecosystem properties (the number of habitat patches $N_{p}$ and branching probability $P_{b}$). We generated 500 sets of parameter combinations by randomly drawing values of 8 simulation parameters from uniform distributions (**Table S1**). For each parameter combination, we generated 100 branching networks with the gradients of ecosystem size ($N_p \sim Unif(10, 150)$) and complexity ($P_b \sim Unif(0.01, 0.99)$). This results in a total of 50000 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of $\alpha$, $\beta$, and $\gamma$ diversity for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods.
 
-The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability. Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios are capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
+For each parameter combination, we regressed log-transformed $\alpha$, $\beta$, and $\gamma$ diversity ($log_{10}~y_j$ for network replicate $j$) on the number of habitat patches $N_{p}$ and branching probability $P_{b}$ as:
 
-# Fish community data
+$$
+\begin{aligned}
+log_{10}~y_j &\sim Normal(\mu_j, \sigma^2)\\
+       \mu_j &= \psi_0 + \psi_1~log_{10}~N_{p,j} + \psi_2~log_{10}~P_{b,j}
+\end{aligned}
+$$
 
-## Hokkaido, Japan
-We used data from the Hokkaido Freshwater Fish Database HFish[@fukushimaModellingEffectsDams2007], monitoring data at protected watersheds[@comteRivFishTIMEGlobalDatabase2021; @teruiMetapopulationStabilityBranching2018], and primary data collected from literature[@teruiThreeEcologicalFactors2016], which collectively cover the entire Hokkaido island. Data were collected from summer to fall. We screened data through the following procedure:
+where $\psi_q$ ($q = 0-2$) are the intercept ($\psi_0$) and regression coefficients ($\psi_1$ and $\psi_2$). We extracted 500 estimates of $\psi_1$ and $\psi_2$, which represent the effects of $N_{p}$ and $P_{b}$ on diversity metrics under a given parameter combination. To examine influences of simulation parameters (**Table S1**) on $\psi_1$ and $\psi_2$, we developed the following regression model taking $\psi_1$ or $\psi_2$ as a dependent variable $u_k$ (parameter combination $k$):
 
-1. We listed recorded fish species and re-organized species names to be consistent across data sources. Species that are identified at the family-level were removed.
-1. We selected sampling sites based on the following criteria: (1) surveys were conducted with netting and/or electrofishing, (2) surveys were designed to collect a whole fish community, (3) sites contained reliable coordinates (sites with coordinates identical at 3 decimal degrees were treated as the same site), and (4) sites did not involve unidentified species that are rarely observed in the data set (< 100 sites occurrence).
+$$
+\begin{aligned}
+u_{k} &\sim Normal(\mu_k, \sigma^2)\\
+\mu_k &= \zeta_0 + \zeta_1 \sigma_{h,k} + \zeta_2 \sigma_{l,k} + \zeta_3 \sigma_{z,k} + \zeta_4 \phi_k + \zeta_5 \nu_k + \zeta_6 \alpha_{max, k} + \zeta_7 \theta_k + \zeta_8 p_{d,k} 
+\end{aligned}
+$$
+where $\zeta_q$ ($q = 0-8$) are the intercept and regression coefficients. Explanatory variables were standardized to a mean of zero and a standard deviation of one, so that regression coefficients are comparable.
+
+The sensitivity analysis revealed key simulation parameters. For the effects of $N_p$, the following simulation parameters were influential: the degree of local environmental noise ($\sigma_l$; influenced the effects on $\alpha$ and $\gamma$ diversity), the maximum value of interspecific competition coefficient ($\alpha_{max}$; influenced the effects on $\alpha$, $\beta$, and $\gamma$ diversity), dispersal distance ($\theta$; influenced the effects on $\alpha$ and $\beta$ diversity), and dispersal probability ($p_d$; influenced the effect on $\alpha$ diversity) (**Table S3**). For the effects of $P_b$, the following simulation parameters were influential: environmental variation at headwaters ($\sigma_h$; influenced the effect on $\gamma$ diversity), the degree of local environmental noise ($\sigma_l$; influenced the effects on $\alpha$ and $\beta$ diversity), and dispersal distance ($\theta$; influenced the effects on $\alpha$ and $\beta$ diversity) (**Table S4**).
+
+Based on the results, we identified $\sigma_h$, $\sigma_l$, $\alpha_{max}$, $\theta$, and $p_d$ as key parameters. We changed the values of these parameters in the main analysis and examined the relationships between diversity metrics and ecosystem properties.
+
+## Longitudinal gradients of local species richness
+
+Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns,' in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing the previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios, as described in the main text (a set of parameters is described in **Table S2**). Under each simulation scenario, we generated 10 branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). This results in a total of 320 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of local species richness at each habitat patch for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods. We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
+
+The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability (**Figure S1**). Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios were capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
+
+# Empirical data
+
+## Fish community data
+
+**Hokkaido, Japan.** We used data from the Hokkaido Freshwater Fish Database HFish[@fukushimaHokkaidoFreshwaterFish2011; @fukushimaModellingEffectsDams2007], monitoring data at protected watersheds[@comteRivFishTIMEGlobalDatabase2021; @teruiMetapopulationStabilityBranching2018], and primary data collected by the authors[@miyazakiTemporalDynamicsFluvial2016; @teruiThreeEcologicalFactors2016], which collectively cover the entire Hokkaido island. Fish data were collected from summer to fall. We screened data through the following procedure:
+
+1. We listed recorded fish species and re-organized species names to be consistent across data sources. We removed the following species at this stage: (1) identified at the family-level; (2) marine fish species (including species that occasionally use brackish/freshwater habitats).
+1. We selected sampling sites based on the following criteria: (1) surveys were conducted with netting and/or electrofishing, (2) surveys were designed to collect a whole fish community, (3) sites contained reliable coordinates (sites with coordinates identical at 3 decimal degrees were treated as the same site), and (4) sites did not involve species identified at the genus level that are rarely observed in the data set (< 100 sites occurrence).
 1. For sites with multiple visits (i.e., temporal replicates), we used the latest-year observation at each sampling site to minimize variation in sampling efforts among sites. Surveys that occurred in the same year were aggregated into a single observation.
 1. We confined sites to those with the latest observation year of $\ge$ 1990. Although the data set contained observations from 1953, we added this restriction to align the observation period with the data set in the Midwest, US.
-1. Four genera (*Lethenteron*, *Pungitius*, *Rhinogobius*, and *Tribolodon*) were treated as species groups (i.e., spp.) as they are difficult to identify and taxonomic resolutions varied greatly among data sources.
+1. Four genera (*Lethenteron*, *Pungitius*, *Rhinogobius*, and *Tribolodon*) were treated as species groups (i.e., spp.) as their taxonomic resolutions varied greatly among data sources due to difficulties in identifying species.
 
-## Midwest, US
-We assembled fish community data collected by the Iowa Department of Natural Resources, Illinois Environmental Protection Agency and Illinois Department of Natural Resources, Minnesota Pollution Control Agency, and Wisconsin Department of Natural Resources. These data sets cover most of Upper Mississippi (HUC 2, region 07) and the part of Great Lakes (HUC 2, region 04), Missouri (HUC 2, region 10), and Ohio (HUC 2, region 05). Data were collected from summer to fall with electrofishing (backpack, barge-type, or boat-mounted) and supplemental netting at some locations. We screened data through the following procedure:
+**Midwest, US.** We assembled fish community data collected by the Iowa Department of Natural Resources, Illinois Environmental Protection Agency and Illinois Department of Natural Resources, Minnesota Pollution Control Agency, and Wisconsin Department of Natural Resources. These data sets cover most of Upper Mississippi (Hydrologic Unit Code 2 [HUC 2] , region 07, as defined
+by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources Conservation Service[@u.s.geologicalsurveyandu.s.departmentofagriculturenaturalresourcesconservationserviceFederalStandardsProcedures2013]) and the part of Great Lakes (HUC 2, region 04), Missouri (HUC 2, region 10), and Ohio (HUC 2, region 05). Fish data were collected from summer to fall with electrofishing (backpack, barge-type, or boat-mounted) and supplemental netting at some locations. We screened data through the following procedure:
 
 1. We used data of the Upper Mississippi (HUC 2, region 07) and Great Lakes basins (HUC 2, region 04) as most sites are included in these regions.
-1. We removed records of unidentified species, hybrid species, and commercial species that are apparently absent in the wild (e.g., goldfish).
+1. We removed records of unidentified species, hybrid species, and commercial species apparently absent in the wild (e.g., goldfish).
 1. We used the latest observation at each sampling site to minimize variation in sampling efforts among sites.
 
 
@@ -66,117 +160,187 @@ We assembled fish community data collected by the Iowa Department of Natural Res
 
 # Tables
 
-## Table S1 Simulation parameter
+## Table S1 Simulation parameter (sensitivity analysis)
 
-Values and interpretation of parameters used in our simulation model. Refer to the maintext for model details.
-
-```{r}
-
-dat_sim %>% 
-  select(sd_env_source,
-         sd_env_lon,
-         sd_env,
-         rho,
-         phi,
-         niche_cost,
-         max_alpha,
-         theta,
-         p_dispersal
-         ) %>% 
-  summarise(across(everything(), unique)) %>% 
-  mutate(r0 = 4) %>% 
-  pivot_longer(cols = everything(),
-               names_to = "Parameter",
-               values_to = "Value") %>% 
-  group_by(Parameter) %>% 
-  summarize(Value = list(unique(Value))) %>% 
-  mutate(id = case_when(Parameter == 'sd_env_source' ~ 'a',
-                        Parameter == 'sd_env_lon' ~ 'b',
-                        Parameter == 'sd_env' ~ 'c',
-                        Parameter == 'rho' ~ 'd',
-                        Parameter == 'phi' ~ 'e',
-                        Parameter == 'niche_cost' ~ 'f',
-                        Parameter == 'max_alpha' ~ 'g',
-                        Parameter == 'theta' ~ 'h',
-                        Parameter == 'p_dispersal' ~ 'i',
-                        Parameter == 'r0' ~ 'j',
-                        TRUE ~ as.character(Parameter)),
-         Interpretation = case_when(Parameter == 'sd_env_source' ~ 'Environmental variation at headwaters',
-                                    Parameter == 'sd_env_lon' ~ 'Degree of local environmental noise',
-                                    Parameter == 'sd_env' ~ 'Temporal environmental variability',
-                                    Parameter == 'rho' ~ 'Strength of spatial autocorrelation in mean environmental condition',
-                                    Parameter == 'phi' ~ 'Extent of spatial autocorrelation in temporal environmental variation',
-                                    Parameter == 'niche_cost' ~ 'Cost of a wider niche',
-                                    Parameter == 'max_alpha' ~ 'Maximum value of interspecific competition coefficient',
-                                    Parameter == 'theta' ~ 'Rate parameter of an exponential dispersal kernel',
-                                    Parameter == 'p_dispersal' ~ 'Dispersal probability',
-                                    Parameter == 'r0' ~ 'Maxiumum reproductive rate',
-                                    TRUE ~ as.character(Parameter)),
-         Parameter = case_when(Parameter == 'sd_env_source' ~ '$\\sigma_{h}$',
-                               Parameter == 'sd_env_lon' ~ '$\\sigma_{l}$',
-                               Parameter == 'sd_env' ~ '$\\sigma_{z}$',
-                               Parameter == 'rho' ~ '$\\rho$',
-                               Parameter == 'phi' ~ '$\\phi$',
-                               Parameter == 'niche_cost' ~ '$\\nu$',
-                               Parameter == 'max_alpha' ~ '$\\alpha_{max}$',
-                               Parameter == 'theta' ~ '$\\theta$',
-                               Parameter == 'p_dispersal' ~ '$p_{d}$',
-                               Parameter == 'r0' ~ '$r_{0,i}$',
-                               TRUE ~ as.character(Parameter))
-         ) %>% 
-  arrange(id) %>% 
-  select(-id) %>% 
-  kable(format = 'markdown')
-
-```
-
-
-\newpage
-
-## Table SXX List of fish species in Hokkaido, Japan
-
-List of fish species in Hokkaido, Japan that are included in our statistical analysis. `r n_distinct(dat_hkd$Species)` species are ordered alphabetically with the number of sites present and % occupancy out of `r n_distinct(dat_hkd$SiteID)` sites.
+**Table S1** Parameter values used in the sensitivity analysis of the metacommunity simulation. See the main text for model details.
 
 ```{r chunk_table1}
-
-dat_hkd %>% 
-  mutate(n_site = n_distinct(SiteID)) %>% 
-  mutate(Species = str_replace_all(str_to_title(Species), "_", " ")) %>% 
-  mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
-  mutate(Species = str_replace_all(Species, "(sp$)", "sp\\.")) %>% 
-  mutate(Species = str_replace_all(Species, "(subsp)", "subsp\\. ")) %>% 
-  mutate(Species = str_replace_all(Species, "(sp\\sme$)", "sp\\. ME")) %>% 
-  group_by(Species) %>% 
-  summarise('Number of sites present' = n_distinct(SiteID),
-            'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
-  kable(format = 'markdown')
   
+  tibble(Parameter = c('$\\sigma_{h}$',
+                       '$\\sigma_{l}$',
+                       '$\\sigma_{z}$',
+                       '$\\rho$',
+                       '$\\phi$',
+                       '$\\nu$',
+                       '$\\alpha_{max}$',
+                       '$\\theta$',
+                       '$p_{d}$',
+                       '$r_{0,i}$'),
+         Value = c('Unif(0.01, 1)',
+                   'Unif(0.01, 1)',
+                   'Unif(0.01, 0.5)',
+                   '1',
+                   'Unif(0.01, 1)',
+                   'Unif(1, 5)',
+                   'Unif(0.5, 1.5)',
+                   'Unif(0.1, 1)',
+                   'Unif(0.01, 0.1)',
+                   '4'),
+         Interpretation = c('Environmental variation at headwaters',
+                            'Degree of local environmental noise',
+                            'Temporal environmental variability',
+                            'Strength of spatial autocorrelation in mean environmental condition',
+                            'Extent of spatial autocorrelation in temporal environmental variation',
+                            'Cost of a wider niche',
+                            'Maximum value of interspecific competition coefficient',
+                            'Rate parameter of an exponential dispersal kernel',
+                            'Dispersal probability',
+                            'Maximum reproductive rate')) %>% 
+    kable(format = 'markdown')
+
 ```
 
 
 \newpage
 
-## Table SXX List of fish species in Midwest, US
 
-List of fish species in Midwest, US that are included in our statistical analysis. `r n_distinct(dat_mw$Species)` species are ordered alphabetically with the number of sites present and % occupancy out of `r n_distinct(dat_mw$SiteID)` sites.
+## Table S2 Simulation parameter (main analysis)
+
+**Table S2** Values and interpretation of simulation parameters used in the main simulation. See the main text for model details.
 
 ```{r chunk_table2}
 
+  dat_sim %>% 
+    select(sd_env_source,
+           sd_env_lon,
+           sd_env,
+           rho,
+           phi,
+           niche_cost,
+           max_alpha,
+           theta,
+           p_dispersal
+    ) %>% 
+    summarise(across(everything(), unique)) %>% 
+    mutate(r0 = 4) %>% 
+    pivot_longer(cols = everything(),
+                 names_to = "Parameter",
+                 values_to = "Value") %>% 
+    group_by(Parameter) %>% 
+    summarize(Value = list(unique(Value))) %>% 
+    mutate(id = case_when(Parameter == 'sd_env_source' ~ 'a',
+                          Parameter == 'sd_env_lon' ~ 'b',
+                          Parameter == 'sd_env' ~ 'c',
+                          Parameter == 'rho' ~ 'd',
+                          Parameter == 'phi' ~ 'e',
+                          Parameter == 'niche_cost' ~ 'f',
+                          Parameter == 'max_alpha' ~ 'g',
+                          Parameter == 'theta' ~ 'h',
+                          Parameter == 'p_dispersal' ~ 'i',
+                          Parameter == 'r0' ~ 'j',
+                          TRUE ~ as.character(Parameter)),
+           Interpretation = case_when(Parameter == 'sd_env_source' ~ 'Environmental variation at headwaters',
+                                      Parameter == 'sd_env_lon' ~ 'Degree of local environmental noise',
+                                      Parameter == 'sd_env' ~ 'Temporal environmental variability',
+                                      Parameter == 'rho' ~ 'Strength of spatial autocorrelation in mean environmental condition',
+                                      Parameter == 'phi' ~ 'Extent of spatial autocorrelation in temporal environmental variation',
+                                      Parameter == 'niche_cost' ~ 'Cost of a wider niche',
+                                      Parameter == 'max_alpha' ~ 'Maximum value of interspecific competition coefficient',
+                                      Parameter == 'theta' ~ 'Rate parameter of an exponential dispersal kernel',
+                                      Parameter == 'p_dispersal' ~ 'Dispersal probability',
+                                      Parameter == 'r0' ~ 'Maxiumum reproductive rate',
+                                      TRUE ~ as.character(Parameter)),
+           Parameter = case_when(Parameter == 'sd_env_source' ~ '$\\sigma_{h}$',
+                                 Parameter == 'sd_env_lon' ~ '$\\sigma_{l}$',
+                                 Parameter == 'sd_env' ~ '$\\sigma_{z}$',
+                                 Parameter == 'rho' ~ '$\\rho$',
+                                 Parameter == 'phi' ~ '$\\phi$',
+                                 Parameter == 'niche_cost' ~ '$\\nu$',
+                                 Parameter == 'max_alpha' ~ '$\\alpha_{max}$',
+                                 Parameter == 'theta' ~ '$\\theta$',
+                                 Parameter == 'p_dispersal' ~ '$p_{d}$',
+                                 Parameter == 'r0' ~ '$r_{0,i}$',
+                                 TRUE ~ as.character(Parameter))
+    ) %>% 
+    arrange(id) %>% 
+    select(-id) %>% 
+    kable(format = 'markdown')
+
+```
+
+
+\newpage
+
+## Table S3 Sensitivity analysis for the effect of ecosystem size
+
+**Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Dependent variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
+
+```{r chunk_table3, results='asis'}
+  
+  cat(star_area, sep='\n')
+
+```
+
+\newpage
+
+
+## Table S4 Sensitivity analysis for the effect of ecosystem complexity
+
+**Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Dependent variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
+
+```{r chunk_table4, results='asis'}
+
+  cat(star_bp, sep='\n')
+
+```
+
+\newpage
+
+
+## Table S5 List of fish species in Hokkaido, Japan
+
+**Table S5** List of fish species in Hokkaido, Japan, included in our statistical analysis. `r n_distinct(dat_hkd$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy out of `r n_distinct(dat_hkd$SiteID)` sites.
+
+```{r chunk_table5}
+
+dat_hkd %>% 
+    mutate(n_site = n_distinct(SiteID)) %>% 
+    mutate(Species = str_replace_all(str_to_title(Species), "_", " ")) %>% 
+    mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
+    mutate(Species = str_replace_all(Species, "(sp$)", "sp\\.")) %>% 
+    mutate(Species = str_replace_all(Species, "(subsp)", "subsp\\. ")) %>% 
+    mutate(Species = str_replace_all(Species, "(sp\\sme$)", "sp\\. ME")) %>% 
+    group_by(Species) %>% 
+    summarise('Number of sites present' = n_distinct(SiteID),
+              'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
+    kable(format = 'markdown')
+
+```
+
+
+\newpage
+
+## Table S6 List of fish species in Midwest, US
+
+**Table S6** List of fish species in the Midwest, US, included in our statistical analysis. `r n_distinct(dat_mw$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy out of `r n_distinct(dat_mw$SiteID)` sites.
+
+```{r chunk_table6}
+
 sp_mw_latin <- read_csv(here::here('/empirical/data_out/data_mw_splist_latin.csv'))
-
-dat_mw %>% 
-  mutate(n_site = n_distinct(SiteID)) %>% 
-  rename(Common_name = Species) %>% 
-  group_by(Common_name) %>% 
-  summarise('Number of sites present' = n_distinct(SiteID),
-            'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
-  left_join(sp_mw_latin, by = "Common_name") %>% 
-  select(Species = Latin_name,
-         'Number of sites present',
-         'Occupancy (%)') %>% 
-  arrange(Species) %>% 
-  kable(format = 'markdown')
-
+  
+  dat_mw %>% 
+    mutate(n_site = n_distinct(SiteID)) %>% 
+    rename(Common_name = Species) %>% 
+    group_by(Common_name) %>% 
+    summarise('Number of sites present' = n_distinct(SiteID),
+              'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
+    left_join(sp_mw_latin, by = "Common_name") %>% 
+    select(Species = Latin_name,
+           'Number of sites present',
+           'Occupancy (%)') %>% 
+    arrange(Species) %>% 
+    kable(format = 'markdown')
+  
 ```
 
 
@@ -284,6 +448,18 @@ for(i in seq_len(nrow(param))){
 ```
 
 `r paste(knit(text = figure_complex), collapse = '\n')`
+
+## Figure S19 Correlation structure of explanatory variables
+
+```{r fig_s19, fig.height = 10, fig.width = 10}
+
+source(here::here('empirical/figure_correlation.R'))
+
+```
+
+**Figure S19 ** Correlation structure of potential explanatory variables for riverine diversity metrics. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from regional averages to remove any regional effects.
+
+\newpage
 
 
 # References 
