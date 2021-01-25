@@ -12,10 +12,12 @@
     rename(gamma = Estimator,
            alpha = mu_alpha) %>% 
     mutate(beta = gamma/alpha,
-           logit_forest = log(frac_forest) - log(1 - frac_forest)) %>% 
+           logit_forest = log(frac_forest) - log(1 - frac_forest),
+           dam_density = n_dam/area) %>% 
     mutate(resid_forest = resid(lm(logit_forest ~ region, data = .)),
            resid_temp = resid(lm(mean_temp ~ region, data = .)),
-           resid_ppt = resid(lm(mean_ppt ~ region, data = .)))
+           resid_ppt = resid(lm(mean_ppt ~ region, data = .)),
+           resid_dam = resid(lm(dam_density ~ region, data = .)))
   
 
 # model selection ---------------------------------------------------------
@@ -23,11 +25,11 @@
   m_compare <- function(response, data) {
     
     mod1 <<- lm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
-                                    scale(resid_temp) + scale(resid_ppt) + scale(resid_forest),
+                                    scale(resid_temp) + scale(resid_ppt) + scale(resid_forest) + scale(resid_dam),
                 data = data)
     
     mod0 <<- lm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
-                                    scale(resid_temp) + scale(resid_ppt) + scale(resid_forest),
+                                    scale(resid_temp) + scale(resid_ppt) + scale(resid_forest) + scale(resid_dam),
                     data = data)
     
     # bf01: bayes factor in favor of mod0 over mod1
