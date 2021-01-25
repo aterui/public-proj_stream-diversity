@@ -43,17 +43,20 @@
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator, alpha = mu_alpha) %>% 
     mutate(beta = gamma/alpha,
-           logit_forest = log(frac_forest) - log(1 - frac_forest)) %>% 
+           logit_forest = log(frac_forest) - log(1 - frac_forest),
+           dam_density = n_dam/area) %>% 
     mutate(resid_forest = resid(lm(logit_forest ~ region, data = .)),
            resid_temp = resid(lm(mean_temp ~ region, data = .)),
-           resid_ppt = resid(lm(mean_ppt ~ region, data = .))) %>% 
+           resid_ppt = resid(lm(mean_ppt ~ region, data = .)),
+           resid_dam = resid(lm(dam_density ~ region, data = .))) %>% 
     pivot_longer(cols = c(alpha, beta, gamma),
                  names_to = "metric")
   
   dat_base <- data.frame(region = factor(rep(c("hokkaido", "midwest"), each = 100)),
                          resid_temp = mean(dat$resid_temp),
                          resid_ppt = mean(dat$resid_ppt),
-                         resid_forest = mean(dat$resid_forest))
+                         resid_forest = mean(dat$resid_forest),
+                         resid_dam = mean(dat$resid_dam))
 
 # data frame for prediction -----------------------------------------------
   
@@ -101,7 +104,8 @@
   g2 <- ggplot(dat, aes(x = p_branch, y = value, color = region)) +
     facet_wrap(facets = ~metric, labeller = label_parsed) +
     geom_point(alpha = 0.25) +
-    geom_line(data = dat_bp, aes(x = p_branch, y = value)) +
+    geom_line(data = dat_bp, aes(x = p_branch, y = value, linetype = metric)) +
+    scale_linetype_manual(values = c('blank', 'solid', 'solid'), guide = "none") +
     scale_color_hue(name = "Region", labels = c("Hokkaido", "Midwest")) +
     xlab("Branching probability") +
     scale_y_continuous(trans='log10') +
