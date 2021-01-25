@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2020.11.6)  25 JAN 2021 11:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2020.11.6)  25 JAN 2021 14:59
 entering extended mode
 **./supplementary_information.tex
 (supplementary_information.tex
@@ -826,8 +826,8 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  14834 strings out of 480236
- 224479 string characters out of 2890394
- 565818 words of memory out of 3000000
+ 224455 string characters out of 2890394
+ 565800 words of memory out of 3000000
  30848 multiletter control sequences out of 15000+200000
  599324 words of font info for 129 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -847,7 +847,7 @@ es/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Program Files/MiKTeX/fonts/type1/p
 ublic/lm/lmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:
 /Program Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX
 /fonts/type1/public/lm/lmsy7.pfb>
-Output written on supplementary_information.pdf (34 pages, 731297 bytes).
+Output written on supplementary_information.pdf (34 pages, 731204 bytes).
 PDF statistics:
  662 PDF objects out of 1000 (max. 8388607)
  127 named destinations out of 1000 (max. 500000)

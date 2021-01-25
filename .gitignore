@@ -6,3 +6,6 @@
 *.csv
 *.dbf
 *old
+*.pdf
+*.html
+*.log
