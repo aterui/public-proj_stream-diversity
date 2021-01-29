@@ -59,6 +59,7 @@ csl: nature.csl
                                                          "Intercept"),
                                     single.row = FALSE,
                                     digits = 3,
+                                    dep.var.caption  = "Response variable",
                                     dep.var.labels.include = FALSE,
                                     column.labels = c("Effect of $N_{p}$ on $\\alpha$ diversity",
                                                       "Effect of $N_{p}$ on $\\beta$ diversity",
@@ -89,6 +90,7 @@ csl: nature.csl
                                                        "Intercept"),
                                   single.row = FALSE,
                                   digits = 3,
+                                  dep.var.caption  = "Response variable",
                                   dep.var.labels.include = FALSE,
                                   column.labels = c("Effect of $P_{b}$ on $\\alpha$ diversity",
                                                     "Effect of $P_{b}$ on $\\beta$ diversity",
@@ -116,7 +118,7 @@ log_{10}~y_j &\sim Normal(\mu_j, \sigma^2)\\
 \end{aligned}
 $$
 
-where $\psi_q$ ($q = 0-2$) are the intercept ($\psi_0$) and regression coefficients ($\psi_1$ and $\psi_2$). We extracted 500 estimates of $\psi_1$ and $\psi_2$, which represent the effects of $N_{p}$ and $P_{b}$ on diversity metrics under a given parameter combination. To examine influences of simulation parameters (**Table S1**) on $\psi_1$ and $\psi_2$, we developed the following regression model taking $\psi_1$ or $\psi_2$ as a dependent variable $u_k$ (parameter combination $k$):
+where $\psi_q$ ($q = 0-2$) are the intercept ($\psi_0$) and regression coefficients ($\psi_1$ and $\psi_2$). We extracted 500 estimates of $\psi_1$ and $\psi_2$, which represent the effects of $N_{p}$ and $P_{b}$ on diversity metrics under a given parameter combination. To examine influences of simulation parameters (**Table S1**) on $\psi_1$ and $\psi_2$, we developed the following regression model taking $\psi_1$ or $\psi_2$ as a response variable $u_k$ (parameter combination $k$):
 
 $$
 \begin{aligned}
@@ -154,6 +156,20 @@ by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources C
 1. We used data of the Upper Mississippi (HUC 2, region 07) and Great Lakes basins (HUC 2, region 04) as most sites are included in these regions.
 1. We removed records of unidentified species, hybrid species, and commercial species apparently absent in the wild (e.g., goldfish).
 1. We used the latest observation at each sampling site to minimize variation in sampling efforts among sites.
+
+## Asymptotic species richness
+
+We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with a known value of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, presence of species $i$ at site $x$, $I_{ix}$, was drawn from a Bernoulli distribution as $I_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}I_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT'[@hsiehINEXTPackageRarefaction2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
+
+$$
+\%~bias = \frac{100(S_{est} - S_{true})}{S_{true}}
+$$
+
+Positive values of % bias indicate an overestimation of species richness, while negative values indicate an underestimation.
+
+We used the following values for parameters: $S_{true} = 10, 40, 70, 100$ and $N_{site} = 5, 10, 15, 20, 100$. We produced 100 replicates of simulated data sets for each parameter combination, resulting in a total of 2000 simulation replicates. In each simulation replicate, the probabilities of detection and true presence were drawn randomly from uniform distributions as $p_i \sim Unif(0.3, 0.8)$ and $\kappa_{ix} \sim Unif(0, 1)$.
+
+The number of sampling sites influenced the estimation accuracy of asymptotic species richness. The % bias decreased sharply as the number of sampling sites increased (**Figure S20**). In particular, the estimation bias with a small sample size ($N_{site} = 5$) was substantial when the true species richness $S_{true}$ was low; some estimates showed > 150 % bias (**Figure S20**). Given the simulation results, estimates of asymptotic species richness at watersheds with < 10 sampling sites may involve substantial statistical uncertainty.
 
 
 \newpage
@@ -273,7 +289,7 @@ by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources C
 
 ## Table S3 Sensitivity analysis for ecosystem size effects
 
-**Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Dependent variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
+**Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
 
 ```{r chunk_table3, results='asis'}
   
@@ -286,7 +302,7 @@ by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources C
 
 ## Table S4 Sensitivity analysis for ecosystem complexity effects
 
-**Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Dependent variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
+**Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
 
 ```{r chunk_table4, results='asis'}
 
@@ -457,9 +473,20 @@ source(here::here('empirical/figure_correlation.R'))
 
 ```
 
-**Figure S19 ** Correlation structure of potential explanatory variables for riverine diversity metrics. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
+**Figure S19 ** Correlation structure of potential explanatory variables for riverine diversity metrics. Numeric values in each cell are the Pearson's correlation coefficients. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
 
 \newpage
 
+## Figure S20 Sensitivity analysis of asymptotic species richness
+
+```{r fig_s20, fig.height = 6, fig.width = 8}
+
+source(here::here('empirical/figure_iNEXT_sim.R'))
+
+```
+
+**Figure S20 ** Sensitivity analysis of asymptotic species richness in relation to true species richness $S_{true}$ and the number of sampling sites $N_{site}$. Positive values of % bias indicate overestimation of species richness, while negative values indicate underestimation. Different panels show results with different true species richness. The box boundaries represent 25 and 75 percentiles and the whiskers represent 5 and 95 percentiles. Dots represent individual simulation replicates. 
+
+\newpage
 
 # References 
