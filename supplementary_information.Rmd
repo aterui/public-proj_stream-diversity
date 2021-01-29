@@ -132,7 +132,7 @@ The sensitivity analysis revealed key simulation parameters. For the effects of 
 
 Based on the results, we identified $\sigma_h$, $\sigma_l$, $\alpha_{max}$, $\theta$, and $p_d$ as key parameters. We changed the values of these parameters in the main analysis and examined the relationships between diversity metrics and ecosystem properties.
 
-## Longitudinal gradients of local species richness
+## Longitudinal gradient of local species richness
 
 Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns,' in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing the previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios, as described in the main text (a set of parameters is described in **Table S2**). Under each simulation scenario, we generated 10 branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). This results in a total of 320 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of local species richness at each habitat patch for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods. We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
 
@@ -479,13 +479,13 @@ source(here::here('empirical/figure_correlation.R'))
 
 ## Figure S20 Sensitivity analysis of asymptotic species richness
 
-```{r fig_s20, fig.height = 6, fig.width = 8}
+```{r fig_s20, fig.height = 6, fig.width = 6}
 
 source(here::here('empirical/figure_iNEXT_sim.R'))
 
 ```
 
-**Figure S20 ** Sensitivity analysis of asymptotic species richness in relation to true species richness $S_{true}$ and the number of sampling sites $N_{site}$. Positive values of % bias indicate overestimation of species richness, while negative values indicate underestimation. Different panels show results with different true species richness. The box boundaries represent 25 and 75 percentiles and the whiskers represent 5 and 95 percentiles. Dots represent individual simulation replicates. 
+**Figure S20 ** Sensitivity analysis of asymptotic species richness in relation to true species richness $S_{true}$ (panels) and the number of sampling sites $N_{site}$ (x-axis). Positive values of % bias indicate an overestimation of species richness, while negative values indicate an underestimation. Different panels show results with different true species richness. The box boundaries represent 25 and 75 percentiles and the whiskers represent 5 and 95 percentiles. Dots represent individual simulation replicates. 
 
 \newpage
 
