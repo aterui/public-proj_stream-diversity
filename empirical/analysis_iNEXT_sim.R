@@ -2,20 +2,27 @@
 # setup -------------------------------------------------------------------
 
   rm(list = ls(all.names = TRUE))
-  pacman::p_load(tidyverse, MuMIn, foreach)
+  pacman::p_load(tidyverse, iNEXT, foreach)
   options(na.action = "na.fail")
   setwd(here::here("empirical"))
-  
 
 
 # simulation function -----------------------------------------------------
 
-  f_sim <- function(n_species, n_site, p_min = 0, p_max = 0.8){
+  f_sim <- function(n_species, n_site,
+                    p_min = 0.3, p_max = 0.8,
+                    kappa_min = 0, kappa_max = 1
+                    ){
     p <- runif(n = n_species, p_min, p_max)
-    freq <- sapply(seq_len(n_species), FUN = function(x) rbinom(n = n_site, prob = p[x], size = 1))
-    x <- c(n_site, sort(colSums(freq), decreasing = T))
+    m_kappa <- matrix(runif(n = n_species*n_site, min = kappa_min, max = kappa_max), nrow = n_species, ncol = n_site)
+    zeta <- c(foreach(i = seq_len(n_species), .combine = rbind) %do% {p[i]*m_kappa[i,]})
     
-    y <- iNEXT(x, datatype = "incidence_freq")  
+    incidence <- rbinom(n = n_species*n_site, size = 1, prob = zeta)
+    m_incidence <- matrix(incidence, nrow = n_species, ncol = n_site)
+    freq <- c(n_site, sort(rowSums(m_incidence), decreasing = T))
+    
+    
+    y <- iNEXT(freq, datatype = "incidence_freq")  
     return(y[[3]][,"Estimator"][1])
   }
   
@@ -42,18 +49,5 @@
   sim_re <- sim_re %>% 
     mutate(bias = 100*((estimate - n_species) / n_species))
   
-  sim_summary <- sim_re %>% 
-    group_by(n_species, n_site) %>% 
-    summarise(median_bias = median(bias),
-              iql_bias = quantile(bias, probs = 0.75) - quantile(bias, probs = 0.25))
-  
-
-# plot --------------------------------------------------------------------
-  
-  sim_re %>% 
-    ggplot(aes(y = bias, x = factor(n_site))) +
-    facet_wrap(facets = ~ n_species) +
-    geom_boxplot(alpha = 0.5) +
-    geom_jitter(alpha = 0.5, size = 0.5) +
-    geom_hline(yintercept = 0)
+  write_csv(sim_re, here::here("empirical/result/result_sim_inext.csv"))
   
