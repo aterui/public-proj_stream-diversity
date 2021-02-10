@@ -2,9 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
+reference.bib
+nature.csl
+README.Rmd
+data_org*
+data_out*
 *.Rproj
 *.csv
-*.dbf
 *old
 *.pdf
 *.html
