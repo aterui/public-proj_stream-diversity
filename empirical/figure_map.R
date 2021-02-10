@@ -86,8 +86,8 @@
     re <- wsd_subset[[i]] %>% 
       left_join(n_site, by = "watershed_id") %>% 
       mutate(category = case_when(n_site <= 50 ~ "10 to 50",
-                                  between(n_site, 50, 99) ~ "51 to 100",
-                                  n_site > 99 ~ "> 100",
+                                  between(n_site, 51, 100) ~ "51 to 100",
+                                  n_site > 100 ~ "> 100",
                                   TRUE ~ as.character(n_site))) %>% 
       mutate(category = factor(category, levels = c("> 100", "51 to 100", "10 to 50")))
     return(re)
