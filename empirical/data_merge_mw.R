@@ -16,7 +16,7 @@
   fishdata <- list.files(path = "data_org_mw", full.names = TRUE) %>%
     lapply(read_csv)
   
-  ## IA: wgs84; MI, WI, IL: NAD83
+  ## IA: wgs84; MN, WI, IL: NAD83
   d0 <- do.call(what = bind_rows, args = fishdata) %>% 
     st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>% 
     st_transform(crs = st_crs(watershed)$wkt) %>% 
