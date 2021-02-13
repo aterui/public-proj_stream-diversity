@@ -34,7 +34,7 @@
 # read data ---------------------------------------------------------------
   
   ## model estimate
-  source(normalizePath("../empirical/analysis_lm_bf.R"))
+  source("analysis_lm_bf.R")
   
   ## redefine data.frame
   dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
