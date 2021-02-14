@@ -5,6 +5,5 @@
 README.Rmd
 document_output
 *.Rproj
-*.csv
 *old
 *.log
