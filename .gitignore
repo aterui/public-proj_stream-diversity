@@ -5,12 +5,8 @@
 reference.bib
 nature.csl
 README.Rmd
-data_org*
-data_out*
+document_output
 *.Rproj
 *.csv
 *old
-*.pdf
-*.html
 *.log
-*.docx
