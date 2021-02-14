@@ -33,6 +33,12 @@ A directory for theoretical data analysis.
     spatial patterns of local species richness (for Supplementary
     Information)
   - `run_simulation`: run metacommunity simulations
+  - `table_sensitivity_analysis`: table for the results of sensitivity
+    analysis
+  - `table_sim_parameter_main`: table for parameters used in main
+    simulations
+  - `table_sim_parameter_sensitivity`: table for parameters used in
+    sensitivity analysis
   - `/result`: subdirectory for simulation results
 
 ## `/empirical`
