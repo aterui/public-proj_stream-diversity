@@ -3,12 +3,12 @@ title: |
   | Supplementary Information for:
   | Ecosystem size and complexity dictate riverine biodiversity
 author:
-- Akira Terui^[Department of Biology, University of North Carolina at Greensboro]
+- Akira Terui^[Department of Biology, University of North Carolina at Greensboro, Greensboro, NC 27412, USA]
 - Seoghyun Kim\footnotemark[1]
 - Christine L. Dolph^[Department of Ecology, Evolution and Behavior, University of
-  Minnesota]
-- Taku Kadoya^[National Institute for Environmental Studies]
-- Yusuke Miyazaki^[Shiraume Gakuen University]
+  Minnesota, St. Paul, MN 55108, USA]
+- Taku Kadoya^[National Institute for Environmental Studies, Tsukuba, Ibaraki 305-8506, Japan]
+- Yusuke Miyazaki^[Shiraume Gakuen College, Kodaira, Tokyo 187-8570, Japan]
 output:
   pdf_document:
     toc: yes
@@ -27,84 +27,14 @@ knit: (function(inputFile, encoding) {
                         message = FALSE,
                         warning = FALSE)
   
-  # simulation data main
-  dat_sim <- read_csv(here::here('/theory/result/result_sim2020-11-10.csv'))
-  
-  # sensitivity analysis  
-  source(here::here("/theory/analysis_sensitivity.R"))
-  
   # Hokkaido data
   dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
   
   # Midwest data
   dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
-
+  
   # sensitivity tables
-  
-  ## ecosystem size
-  m_area <- fit_sense %>% 
-    mutate(area = str_detect(response, "area")) %>% 
-    filter(area == TRUE)
-  
-  star_area <- stargazer::stargazer(m_area$fit[1],
-                                    m_area$fit[2],
-                                    m_area$fit[3],
-                                    header = FALSE,
-                                    type = "latex",
-                                    covariate.labels = c("$\\sigma_{h}$",
-                                                         "$\\sigma_{l}$",
-                                                         "$\\sigma_{z}$",
-                                                         "$\\phi$",
-                                                         "$\\nu$",
-                                                         "$\\alpha_{max}$",
-                                                         "$\\theta$",
-                                                         "$p_{d}$",
-                                                         "Intercept"),
-                                    single.row = FALSE,
-                                    digits = 3,
-                                    dep.var.caption  = "Response variable",
-                                    dep.var.labels.include = FALSE,
-                                    column.labels = c("Effect of $N_{p}$ on $\\alpha$ diversity",
-                                                      "Effect of $N_{p}$ on $\\beta$ diversity",
-                                                      "Effect of $N_{p}$ on $\\gamma$ diversity"),
-                                    report = "vcs",
-                                    omit.table.layout = "ns",
-                                    model.numbers = FALSE)
-  
-  star_area <- sub('^.+\\caption.+$','', star_area)
-  
-  ## Ecosystem complexity
-  m_bp <- fit_sense %>% 
-    mutate(area = str_detect(response, "area")) %>% 
-    filter(area == FALSE)
-  
-  star_bp <- stargazer::stargazer(m_bp$fit[1],
-                                  m_bp$fit[2],
-                                  m_bp$fit[3],
-                                  header = FALSE,
-                                  type = "latex",
-                                  covariate.labels = c("$\\sigma_{h}$",
-                                                       "$\\sigma_{l}$",
-                                                       "$\\sigma_{z}$",
-                                                       "$\\phi$",
-                                                       "$\\nu$",
-                                                       "$\\alpha_{max}$",
-                                                       "$\\theta$",
-                                                       "$p_{d}$",
-                                                       "Intercept"),
-                                  single.row = FALSE,
-                                  digits = 3,
-                                  dep.var.caption  = "Response variable",
-                                  dep.var.labels.include = FALSE,
-                                  column.labels = c("Effect of $P_{b}$ on $\\alpha$ diversity",
-                                                    "Effect of $P_{b}$ on $\\beta$ diversity",
-                                                    "Effect of $P_{b}$ on $\\gamma$ diversity"),
-                                  report = "vcs",
-                                  omit.table.layout = "ns",
-                                  model.numbers = FALSE)
-  
-    star_bp <- sub('^.+\\caption.+$','', star_bp)
-
+  source(here::here('theory/table_sensitivity_analysis.R'))
   
 ```
 
@@ -189,38 +119,9 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 **Table S1** Parameter values used in the sensitivity analysis of the metacommunity simulation. See the main text for model details.
 
 ```{r chunk_table1}
-  
-  tibble(Parameter = c('$\\sigma_{h}$',
-                       '$\\sigma_{l}$',
-                       '$\\sigma_{z}$',
-                       '$\\rho$',
-                       '$\\phi$',
-                       '$\\nu$',
-                       '$\\alpha_{max}$',
-                       '$\\theta$',
-                       '$p_{d}$',
-                       '$r_{0,i}$'),
-         Value = c('Unif(0.01, 1)',
-                   'Unif(0.01, 1)',
-                   'Unif(0.01, 0.5)',
-                   '1',
-                   'Unif(0.01, 1)',
-                   'Unif(1, 5)',
-                   'Unif(0.5, 1.5)',
-                   'Unif(0.1, 1)',
-                   'Unif(0.01, 0.1)',
-                   '4'),
-         Interpretation = c('Environmental variation at headwaters',
-                            'Degree of local environmental noise',
-                            'Temporal environmental variability',
-                            'Strength of spatial autocorrelation in mean environmental condition',
-                            'Extent of spatial autocorrelation in temporal environmental variation',
-                            'Cost of a wider niche',
-                            'Maximum value of interspecific competition coefficient',
-                            'Rate parameter of an exponential dispersal kernel',
-                            'Dispersal probability',
-                            'Maximum reproductive rate')) %>% 
-    kable(format = 'markdown')
+
+  source(here::here('empirical/table_sim_parameter_sensitivity.R'))
+  table_output
 
 ```
 
@@ -234,61 +135,8 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ```{r chunk_table2}
 
-  dat_sim %>% 
-    select(sd_env_source,
-           sd_env_lon,
-           sd_env,
-           rho,
-           phi,
-           niche_cost,
-           max_alpha,
-           theta,
-           p_dispersal
-    ) %>% 
-    summarise(across(everything(), unique)) %>% 
-    mutate(r0 = 4) %>% 
-    pivot_longer(cols = everything(),
-                 names_to = "Parameter",
-                 values_to = "Value") %>% 
-    group_by(Parameter) %>% 
-    summarize(Value = list(unique(Value))) %>% 
-    mutate(id = case_when(Parameter == 'sd_env_source' ~ 'a',
-                          Parameter == 'sd_env_lon' ~ 'b',
-                          Parameter == 'sd_env' ~ 'c',
-                          Parameter == 'rho' ~ 'd',
-                          Parameter == 'phi' ~ 'e',
-                          Parameter == 'niche_cost' ~ 'f',
-                          Parameter == 'max_alpha' ~ 'g',
-                          Parameter == 'theta' ~ 'h',
-                          Parameter == 'p_dispersal' ~ 'i',
-                          Parameter == 'r0' ~ 'j',
-                          TRUE ~ as.character(Parameter)),
-           Interpretation = case_when(Parameter == 'sd_env_source' ~ 'Environmental variation at headwaters',
-                                      Parameter == 'sd_env_lon' ~ 'Degree of local environmental noise',
-                                      Parameter == 'sd_env' ~ 'Temporal environmental variability',
-                                      Parameter == 'rho' ~ 'Strength of spatial autocorrelation in mean environmental condition',
-                                      Parameter == 'phi' ~ 'Extent of spatial autocorrelation in temporal environmental variation',
-                                      Parameter == 'niche_cost' ~ 'Cost of a wider niche',
-                                      Parameter == 'max_alpha' ~ 'Maximum value of interspecific competition coefficient',
-                                      Parameter == 'theta' ~ 'Rate parameter of an exponential dispersal kernel',
-                                      Parameter == 'p_dispersal' ~ 'Dispersal probability',
-                                      Parameter == 'r0' ~ 'Maxiumum reproductive rate',
-                                      TRUE ~ as.character(Parameter)),
-           Parameter = case_when(Parameter == 'sd_env_source' ~ '$\\sigma_{h}$',
-                                 Parameter == 'sd_env_lon' ~ '$\\sigma_{l}$',
-                                 Parameter == 'sd_env' ~ '$\\sigma_{z}$',
-                                 Parameter == 'rho' ~ '$\\rho$',
-                                 Parameter == 'phi' ~ '$\\phi$',
-                                 Parameter == 'niche_cost' ~ '$\\nu$',
-                                 Parameter == 'max_alpha' ~ '$\\alpha_{max}$',
-                                 Parameter == 'theta' ~ '$\\theta$',
-                                 Parameter == 'p_dispersal' ~ '$p_{d}$',
-                                 Parameter == 'r0' ~ '$r_{0,i}$',
-                                 TRUE ~ as.character(Parameter))
-    ) %>% 
-    arrange(id) %>% 
-    select(-id) %>% 
-    kable(format = 'markdown')
+  source(here::here('empirical/table_sim_parameter_main.R'))
+  table_output
 
 ```
 
@@ -327,17 +175,8 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ```{r chunk_table5}
 
-dat_hkd %>% 
-    mutate(n_site = n_distinct(SiteID)) %>% 
-    mutate(Species = str_replace_all(str_to_title(Species), "_", " ")) %>% 
-    mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
-    mutate(Species = str_replace_all(Species, "(sp$)", "sp\\.")) %>% 
-    mutate(Species = str_replace_all(Species, "(subsp)", "subsp\\. ")) %>% 
-    mutate(Species = str_replace_all(Species, "(sp\\sme$)", "sp\\. ME")) %>% 
-    group_by(Species) %>% 
-    summarise('Number of sites present' = n_distinct(SiteID),
-              'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
-    kable(format = 'markdown')
+  source(here::here('empirical/table_splist_hkd.R'))
+  table_output
 
 ```
 
@@ -350,20 +189,8 @@ dat_hkd %>%
 
 ```{r chunk_table6}
 
-sp_mw_latin <- read_csv(here::here('/empirical/data_out/data_mw_splist_latin.csv'))
-  
-  dat_mw %>% 
-    mutate(n_site = n_distinct(SiteID)) %>% 
-    rename(Common_name = Species) %>% 
-    group_by(Common_name) %>% 
-    summarise('Number of sites present' = n_distinct(SiteID),
-              'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
-    left_join(sp_mw_latin, by = "Common_name") %>% 
-    select(Species = Latin_name,
-           'Number of sites present',
-           'Occupancy (%)') %>% 
-    arrange(Species) %>% 
-    kable(format = 'markdown')
+  source(here::here('empirical/table_splist_mw.R'))
+  table_output
   
 ```
 
