@@ -48,35 +48,35 @@ Directory for theoretical data analysis.
           - n\_rep: replicate ID
           - mc\_capacity: sum of carrying capacities across habitat
             patches
-          - n\_patch: number of habitat patches \(N_{p}\)
-          - p\_branch: branching probability \(P_{b}\)
+          - n\_patch: number of habitat patches N<sub>p</sub>
+          - p\_branch: branching probability P<sub>b</sub>
           - n\_species: number of species simulated
           - mean\_env\_source: mean environmental value at headwaters
           - sd\_env\_source: sd of environmental value at headwaters
-            \(\sigma_{h}\)
-          - rho: spatial autocorrelation in mean environment \(\rho\)
+            σ<sub>h</sub>
+          - rho: spatial autocorrelation in mean environment ρ
           - asymmetry\_factor: degree of asymentry in distance matrix
           - min\_optim: minimum value of niche optimum
           - max\_optim: maximum value of niche optimum
-          - sd\_env\_lon: sd of local environmental noise \(\sigma_{l}\)
-          - theta: rate parameter of dispersal distance \(\theta\)
+          - sd\_env\_lon: sd of local environmental noise σ<sub>l</sub>
+          - theta: rate parameter of dispersal distance θ
           - K0: carrying capacity at headwaters
-          - sd\_env: temporal sd of environmental values \(\sigma_{z}\)
+          - sd\_env: temporal sd of environmental values σ<sub>z</sub>
           - spatial\_env\_cor: logical value indicating whether spatial
             autocorrelation in temporal environmental variation is
             considered
           - phi: degree of spatial autocorrelation in temporal
-            environmental variation \(\phi\)
+            environmental variation φ
           - min\_niche\_width: minimum value of niche width
           - max\_niche\_width: maximum value of niche width
-          - niche\_cost: niche cost \(\nu\)
-          - p\_dispersal: dispersal probability \(p_{d}\)
+          - niche\_cost: niche cost ν
+          - p\_dispersal: dispersal probability p<sub>d</sub>
           - min\_alpha: minimum value of interspecific competition
             coefficient
           - max\_alpha: maximum value of interspecific competition
             coefficient
           - alpha\_div: predicted alpha diversity
-          - beta\_div: predicted beta diversity (additive)
+          - beta\_div: predicted beta diversity (additive: γ - α)
           - gamma\_div: predicted gamma diversity
       - `result_sim_alpha_pattern2021-01-20`: results of supplementary
         simulation (local diversity patterns)
