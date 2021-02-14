@@ -6,7 +6,7 @@
 
 # table -------------------------------------------------------------------
 
-  dat_hkd %>% 
+  table_output <- dat_hkd %>% 
     mutate(n_site = n_distinct(SiteID)) %>% 
     mutate(Species = str_replace_all(str_to_title(Species), "_", " ")) %>% 
     mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
@@ -17,5 +17,3 @@
     summarise('Number of sites present' = n_distinct(SiteID),
               'Occupancy (%)' = round((n_distinct(SiteID)*100)/unique(n_site), 2)) %>% 
     kable(format = 'markdown')
-
-  print(g)

@@ -8,7 +8,7 @@
 
   sp_mw_latin <- read_csv(here::here('/empirical/data_out/data_mw_splist_latin.csv'))
   
-  dat_mw %>% 
+  table_output <- dat_mw %>% 
     mutate(n_site = n_distinct(SiteID)) %>% 
     rename(Common_name = Species) %>% 
     group_by(Common_name) %>% 
@@ -20,5 +20,3 @@
            'Occupancy (%)') %>% 
     arrange(Species) %>% 
     kable(format = 'markdown')
-  
-  print(g)
