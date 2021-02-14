@@ -2,8 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-reference.bib
-nature.csl
 README.Rmd
 document_output
 *.Rproj
