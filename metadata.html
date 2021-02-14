@@ -429,12 +429,12 @@ summary {
 
 <div id="summary" class="section level1 tabset">
 <h1 class="tabset">Summary</h1>
-<p>This file provides brief descriptions for the files in the repository.</p>
+<p>This file provides brief descriptions for the files in the repository. Main directory contains <code>.Rmd</code> files for manuscript, figures, tables, and supplementary information. Directory <code>/theory</code> contains files for theoretical analysis. Directory <code>empirical</code> contains files for empirical data analysis.</p>
 <div id="main-directory" class="section level2">
 <h2>Main directory</h2>
 <p>Main directory for ‘Ecosystem size and complexity dictate riverine biodiversity’</p>
 <ul>
-<li><code>manuscript</code>: Rmarkdown for main text<br />
+<li><code>manuscript</code> - Rmarkdown for main text<br />
 </li>
 <li><code>supplementary_information</code> - Rmarkdown for Supplementary Information<br />
 </li>
@@ -469,7 +469,8 @@ summary {
 <strong>n_species</strong>: number of species simulated<br />
 <strong>mean_env_source</strong>: mean environmental value at headwaters<br />
 <strong>sd_env_source</strong>: sd of environmental value at headwaters <span class="math inline">\(\sigma_h\)</span><br />
-<strong>rho</strong>: spatial autocorrelation in mean environment <span class="math inline">\(\rho\)</span> <strong>asymmetry_factor</strong>: degree of asymentry in distance matrix<br />
+<strong>rho</strong>: spatial autocorrelation in mean environment <span class="math inline">\(\rho\)</span><br />
+<strong>asymmetry_factor</strong>: degree of asymentry in distance matrix<br />
 <strong>min_optim</strong>: minimum value of niche optimum<br />
 <strong>max_optim</strong>: maximum value of niche optimum<br />
 <strong>sd_env_lon</strong>: sd of local environmental noise <span class="math inline">\(\sigma_l\)</span><br />
@@ -497,7 +498,8 @@ summary {
 <strong>n_species</strong>: number of species simulated<br />
 <strong>mean_env_source</strong>: mean environmental value at headwaters<br />
 <strong>sd_env_source</strong>: sd of environmental value at headwaters <span class="math inline">\(\sigma_h\)</span><br />
-<strong>rho</strong>: spatial autocorrelation in mean environment <span class="math inline">\(\rho\)</span> <strong>asymmetry_factor</strong>: degree of asymentry in distance matrix<br />
+<strong>rho</strong>: spatial autocorrelation in mean environment <span class="math inline">\(\rho\)</span><br />
+<strong>asymmetry_factor</strong>: degree of asymentry in distance matrix<br />
 <strong>min_optim</strong>: minimum value of niche optimum<br />
 <strong>max_optim</strong>: maximum value of niche optimum<br />
 <strong>sd_env_lon</strong>: sd of local environmental noise <span class="math inline">\(\sigma_l\)</span><br />
@@ -512,7 +514,15 @@ summary {
 <strong>p_dispersal</strong>: dispersal probability <span class="math inline">\(p_d\)</span><br />
 <strong>min_alpha</strong>: minimum value of interspecific competition coefficient<br />
 <strong>max_alpha</strong>: maximum value of interspecific competition coefficient<br />
-<strong>patch</strong>: patch ID <strong>alpha_div</strong>: species richness at the habitat patch <strong>mean_env</strong>: mean environmental condition at the habitat patch <strong>carrying_capacity</strong>: carrying capacity at the habitat patch <strong>connectivity</strong>: connectivity at the habitat patch <strong>branch_id</strong>: branch ID <strong>environment</strong>: mean environmental condition at the habitat patch <strong>n_patch_upstream</strong>: number of upstream habitat patches
+<strong>patch</strong>: patch ID<br />
+<strong>alpha_div</strong>: species richness at the habitat patch<br />
+<strong>mean_env</strong>: mean environmental condition at the habitat patch<br />
+<strong>carrying_capacity</strong>: carrying capacity at the habitat patch<br />
+<strong>connectivity</strong>: connectivity at the habitat patch<br />
+<strong>branch_id</strong>: branch ID<br />
+<strong>environment</strong>: mean environmental condition at the habitat patch<br />
+<strong>n_patch_upstream</strong>: number of upstream habitat patches<br />
+
 </details>
 <details>
 <summary><code>result_sensitivity.csv</code> - results of sensitivity analysis</summary> <strong>n_rep</strong>: replicate ID<br />
@@ -522,7 +532,8 @@ summary {
 <strong>n_species</strong>: number of species simulated<br />
 <strong>mean_env_source</strong>: mean environmental value at headwaters<br />
 <strong>sd_env_source</strong>: sd of environmental value at headwaters <span class="math inline">\(\sigma_h\)</span><br />
-<strong>rho</strong>: spatial autocorrelation in mean environment <span class="math inline">\(\rho\)</span> <strong>asymmetry_factor</strong>: degree of asymentry in distance matrix<br />
+<strong>rho</strong>: spatial autocorrelation in mean environment <span class="math inline">\(\rho\)</span><br />
+<strong>asymmetry_factor</strong>: degree of asymentry in distance matrix<br />
 <strong>min_optim</strong>: minimum value of niche optimum<br />
 <strong>max_optim</strong>: maximum value of niche optimum<br />
 <strong>sd_env_lon</strong>: sd of local environmental noise <span class="math inline">\(\sigma_l\)</span><br />
@@ -588,7 +599,7 @@ summary {
 <strong>Presence</strong>: 1 if present. disregard<br />
 
 </details></li>
-<li><code>/data_org_mw</code>: subdirectory for raw fish data in Midwest
+<li><code>/data_org_mw</code> - subdirectory for raw fish data in Midwest
 <details>
 <summary><code>data_fmt_STATE_latest.csv</code></summary> <strong>State</strong>: state<br />
 <strong>SiteID</strong>: unique siteID.<br />
@@ -602,7 +613,7 @@ summary {
 </details></li>
 <li><code>/data_out</code>: subdirectory for formatted fish data
 <details>
-<summary><code>dat_hkd_site.csv</code>: site-level fish data in Hokkaido</summary> <strong>SiteID</strong>: unique site ID<br />
+<summary><code>dat_hkd_site.csv</code> - site-level fish data in Hokkaido</summary> <strong>SiteID</strong>: unique site ID<br />
 <strong>VisitID</strong>: unique visit ID<br />
 <strong>Year</strong>: sampling year<br />
 <strong>Species</strong>: species<br />
@@ -627,7 +638,7 @@ summary {
 
 </details>
 <details>
-<summary><code>dat_mw_site.csv</code>: site-level fish data in Midwest</summary> <strong>State</strong>: state<br />
+<summary><code>dat_mw_site.csv</code> - site-level fish data in Midwest</summary> <strong>State</strong>: state<br />
 <strong>SiteID</strong>: unique site ID<br />
 <strong>VisitID</strong>: unique visit ID<br />
 <strong>Date</strong>: sampling date<br />
@@ -649,7 +660,7 @@ summary {
 
 </details>
 <details>
-<summary><code>data_REGION</code> - watershed-level data in Hokkaido (<code>REGION</code> = <code>hkd</code>) or Midwest (<code>mw</code>)</summary> <strong>Site</strong>: site ID output from iNEXT function. Equivalent to watershed_id<br />
+<summary><code>data_REGION.csv</code> - watershed-level data in Hokkaido (<code>REGION</code> = <code>hkd</code>) or Midwest (<code>mw</code>)</summary> <strong>Site</strong>: site ID output from iNEXT function. Equivalent to watershed_id<br />
 <strong>Diversity</strong>: diversity metric<br />
 <strong>Observed</strong>: observed species richness<br />
 <strong>Estimator</strong>: asymptotic species richness<br />
@@ -674,10 +685,10 @@ summary {
 <summary><code>data_hkd_splist.csv</code> - list of fish species in Hokkaido</summary>
 </details>
 <details>
-<summary><code>data_mw_splist</code> - list of fish species in Midwest</summary>
+<summary><code>data_mw_splist.csv</code> - list of fish species in Midwest</summary>
 </details>
 <details>
-<summary><code>data_mw_splist_latin</code> - correspondence table for common and latin names of fish species in Midwest</summary>
+<summary><code>data_mw_splist_latin.csv</code> - correspondence table for common and latin names of fish species in Midwest</summary>
 </details></li>
 <li><code>/result</code> - subdirectory for simulation output of the iNEXT sensitivity analysis</li>
 </ul>
