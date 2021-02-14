@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 README.Rmd
+metadata.Rmd
 document_output
 *.Rproj
 *old
