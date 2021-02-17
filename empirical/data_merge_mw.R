@@ -109,7 +109,7 @@
   ## export site data
   dat_fish %>% 
     filter(watershed_id %in% wsd_subset) %>% 
-    write_csv('data_out/dat_mw_site.csv')
+    write_csv('data_out/data_mw_site.csv')
   
   ## export species list
   splist <- d0 %>% 
