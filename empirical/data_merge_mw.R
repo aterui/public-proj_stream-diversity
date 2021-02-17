@@ -69,21 +69,20 @@
     pivot_wider(id_cols = watershed_id,
                 names_from = Species,
                 values_from = freq,
-                values_fill = list(freq = 0))
-  watershed_id <- pull(dat_freq, watershed_id) 
+                values_fill = list(freq = 0)) 
   
   dat_freq <- dat_fish %>% 
     group_by(watershed_id) %>% 
     summarise(n_site = n_distinct(SiteID)) %>% 
-    left_join(dat_freq, by = "watershed_id") %>% 
-    select(-watershed_id)
+    left_join(dat_freq, by = "watershed_id")
   
   list_freq <- foreach(i = seq_len(nrow(dat_freq))) %do% {
-    x <- as.vector(sort(dat_freq[i,], decreasing = T))
+    x <- as.vector(sort(dat_freq[i,-which(colnames(dat_freq) == 'watershed_id')],
+                        decreasing = T))
     return(x[x > 0])
   }
   
-  names(list_freq) <- watershed_id
+  names(list_freq) <- dat_freq$watershed_id
   
   ## iNEXT: select watershed with 90% coverage
   full_est <- iNEXT(list_freq, datatype = "incidence_freq")
