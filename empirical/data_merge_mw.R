@@ -83,6 +83,7 @@
   }
   
   names(list_freq) <- dat_freq$watershed_id
+  all(dat_freq$n_site == unlist(lapply(list_freq, function(x)x[1]))) # check if the first element of the list is n_site
   
   ## iNEXT: select watershed with 90% coverage
   full_est <- iNEXT(list_freq, datatype = "incidence_freq")
