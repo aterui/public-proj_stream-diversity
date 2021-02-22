@@ -43,9 +43,9 @@
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator, alpha = mu_alpha) %>% 
     mutate(beta = gamma/alpha,
-           logit_forest = log(frac_forest) - log(1 - frac_forest),
+           logit_agri = log(frac_agri) - log(1 - frac_agri),
            dam_density = n_dam/area) %>% 
-    mutate(resid_forest = resid(lm(logit_forest ~ region, data = .)),
+    mutate(resid_agri = resid(lm(logit_agri ~ region, data = .)),
            resid_temp = resid(lm(mean_temp ~ region, data = .)),
            resid_ppt = resid(lm(mean_ppt ~ region, data = .)),
            resid_dam = resid(lm(dam_density ~ region, data = .))) %>% 
@@ -55,7 +55,7 @@
   dat_base <- data.frame(region = factor(rep(c("hokkaido", "midwest"), each = 100)),
                          resid_temp = mean(dat$resid_temp),
                          resid_ppt = mean(dat$resid_ppt),
-                         resid_forest = mean(dat$resid_forest),
+                         resid_agri = mean(dat$resid_agri),
                          resid_dam = mean(dat$resid_dam))
 
 # data frame for prediction -----------------------------------------------
