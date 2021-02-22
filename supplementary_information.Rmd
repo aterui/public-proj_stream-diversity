@@ -13,7 +13,7 @@ output:
   pdf_document:
     toc: yes
     toc_depth: 2
-bibliography: reference.bib
+bibliography: references.bib
 csl: nature.csl
 knit: (function(inputFile, encoding) {
         rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
@@ -61,6 +61,7 @@ u_{n} &\sim Normal(\mu_n, \sigma^2)\\
 \mu_n &= \zeta_0 + \zeta_1 \sigma_{h,n} + \zeta_2 \sigma_{l,n} + \zeta_3 \sigma_{z,n} + \zeta_4 \phi_n + \zeta_5 \nu_n + \zeta_6 \alpha_{max, n} + \zeta_7 \theta_n + \zeta_8 p_{d,n} 
 \end{aligned}
 $$
+
 where $\zeta_k$ ($k = 0-8$) are the intercept ($\zeta_0$) and regression coefficients ($\zeta_{1-8}$). Explanatory variables were standardized to a mean of zero and a standard deviation of one, so that regression coefficients are comparable.
 
 The sensitivity analysis revealed key simulation parameters. For the effects of $N_p$, the following simulation parameters were influential: the degree of local environmental noise ($\sigma_l$; influenced the effects on $\alpha$ and $\gamma$ diversity), the maximum value of interspecific competition coefficient ($\alpha_{max}$; influenced the effects on $\alpha$, $\beta$, and $\gamma$ diversity), dispersal distance ($\theta$; influenced the effects on $\alpha$ and $\beta$ diversity), and dispersal probability ($p_d$; influenced the effect on $\alpha$ diversity) (**Table S3**). For the effects of $P_b$, the following simulation parameters were influential: environmental variation at headwaters ($\sigma_h$; influenced the effect on $\gamma$ diversity), the degree of local environmental noise ($\sigma_l$; influenced the effects on $\alpha$ and $\beta$ diversity), and dispersal distance ($\theta$; influenced the effects on $\alpha$ and $\beta$ diversity) (**Table S4**).
@@ -69,10 +70,9 @@ Based on the results, we identified $\sigma_h$, $\sigma_l$, $\alpha_{max}$, $\th
 
 ## Longitudinal gradient of local species richness
 
-Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowallDiadromyAssemblyRestoration1996; @mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns,' in which local species richness decreases downstream[@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing the previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios, as described in the main text (a set of parameters is described in **Table S2**). Under each simulation scenario, we generated 10 branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). This results in a total of 320 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of local species richness at each habitat patch for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods. We removed simulation replicates in which no species established populations over the initial 400 time steps. We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
+Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness[@mcdowall1996; @mcdowall1998; @rahel1991; @terui2016]. However, recent empirical and theoretical studies also showed 'reversed patterns,' in which local species richness decreases downstream[@bsemer2013; @harvey2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing the previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios, as described in the main text (a set of parameters is described in **Table S2**). Under each simulation scenario, we generated 10 branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). This results in a total of 320 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of local species richness at each habitat patch for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods. We removed simulation replicates in which no species established populations over the initial 400 time steps. We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
 
 The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability (**Figure S1**). Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios were capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
-
 
 \newpage
 
@@ -80,24 +80,23 @@ The simulation reproduced diverse patterns of longitudinal gradients in local sp
 
 ## Fish community data
 
-**Hokkaido, Japan.** We used data from the Hokkaido Freshwater Fish Database HFish[@fukushimaHokkaidoFreshwaterFish2011; @fukushimaModellingEffectsDams2007], monitoring data at protected watersheds[@comteRivFishTIMEGlobalDatabase2021; @teruiMetapopulationStabilityBranching2018], and primary data collected by the authors[@miyazakiTemporalDynamicsFluvial2016; @teruiThreeEcologicalFactors2016], which collectively cover the entire Hokkaido island. Most data were collected from summer to fall. We screened data through the following procedure:
+**Hokkaido, Japan.** We used data from the Hokkaido Freshwater Fish Database HFish[@fukushima2011; @fukushima2007], monitoring data at protected watersheds[@comte2021; @terui2018], and primary data collected by the authors[@miyazaki2016; @terui2016], which collectively cover the entire Hokkaido island. Most data were collected from summer to fall. We screened data through the following procedure:
 
-1. We listed recorded fish species and re-organized species names to make them consistent across data sources. We removed the following species at this stage: (1) identified at the family-level; (2) marine fish species (including species that occasionally use brackish/freshwater habitats).
-1. We selected sampling sites based on the following criteria: (1) surveys were conducted with netting and/or electrofishing, (2) surveys were designed to collect a whole fish community, (3) sites contained reliable coordinates (sites with coordinates identical at 3 decimal degrees were treated as the same site), and (4) sites did not involve unidentified species (genus level) that are rarely observed in the data set (< 100 sites occurrence).
-1. For sites with multiple visits (i.e., temporal replicates), we used the latest-year observation at each sampling site to minimize variation in sampling efforts among sites. Surveys that occurred in the same year were aggregated into a single observation.
-1. We confined sites to those with the latest observation year of $\ge$ 1990. Although the data set contained observations from 1953, we added this restriction to align the observation period with the data set in the Midwest, US.
-1. Four genera (*Lethenteron*, *Pungitius*, *Rhinogobius*, and *Tribolodon*) were treated as species groups (i.e., spp.) as their taxonomic resolutions varied greatly among data sources due to difficulties in identifying species.
+1.  We listed recorded fish species and re-organized species names to make them consistent across data sources. We removed the following species at this stage: (1) identified at the family-level; (2) marine fish species (including species that occasionally use brackish/freshwater habitats).
+2.  We selected sampling sites based on the following criteria: (1) surveys were conducted with netting and/or electrofishing, (2) surveys were designed to collect a whole fish community, (3) sites contained reliable coordinates (sites with coordinates identical at 3 decimal degrees were treated as the same site), and (4) sites did not involve unidentified species (genus level) that are rarely observed in the data set (\< 100 sites occurrence).
+3.  For sites with multiple visits (i.e., temporal replicates), we used the latest-year observation at each sampling site to minimize variation in sampling efforts among sites. Surveys that occurred in the same year were aggregated into a single observation.
+4.  We confined sites to those with the latest observation year of $\ge$ 1990. Although the data set contained observations from 1953, we added this restriction to align the observation period with the data set in the Midwest, US.
+5.  Four genera (*Lethenteron*, *Pungitius*, *Rhinogobius*, and *Tribolodon*) were treated as species groups (i.e., spp.) as their taxonomic resolutions varied greatly among data sources due to difficulties in identifying species.
 
-**Midwest, US.** We assembled fish community data collected by the Iowa Department of Natural Resources[@iowadepartmentofnaturalresourcesBiologicalAssessmentIowa2004], Illinois Environmental Protection Agency and Illinois Department of Natural Resources[@illinoisenvironmentalprotectionagencyIllinoisWaterMonitoring2014], Minnesota Pollution Control Agency[@minnesotapollutioncontrolagencyDevelopmentFishbasedIndex2014], and Wisconsin Department of Natural Resources[@wisconsindepartmentofnaturalresourcesGuidelinesAssessingFish2018]. These data sets cover most of Upper Mississippi (Hydrologic Unit Code 2 [HUC 2] , region 07, as defined
-by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources Conservation Service[@u.s.geologicalsurveyandu.s.departmentofagriculturenaturalresourcesconservationserviceFederalStandardsProcedures2013]) and the part of Great Lakes (HUC 2, region 04), Missouri (HUC 2, region 10), and Ohio (HUC 2, region 05). Fish data were collected from summer to fall with electrofishing (backpack, barge-type, or boat-mounted) and supplemental netting at some locations. We screened data through the following procedure:
+**Midwest, US.** We assembled fish community data collected by the Iowa Department of Natural Resources[@iowadepartmentofnaturalresources2004], Illinois Environmental Protection Agency and Illinois Department of Natural Resources[@illinoisenvironmentalprotectionagency2014], Minnesota Pollution Control Agency[@minnesotapollutioncontrolagency2014], and Wisconsin Department of Natural Resources[@wisconsindepartmentofnaturalresources2018]. These data sets cover most of Upper Mississippi (Hydrologic Unit Code 2 [HUC 2] , region 07, as defined by U.S. Geological Survey and U.S. Department of Agriculture Natural Resources Conservation Service[@u.s.geologicalsurveyandu.s.departmentofagriculturenaturalresourcesconservationservice2013]) and the part of Great Lakes (HUC 2, region 04), Missouri (HUC 2, region 10), and Ohio (HUC 2, region 05). Fish data were collected from summer to fall with electrofishing (backpack, barge-type, or boat-mounted) and supplemental netting at some locations. We screened data through the following procedure:
 
-1. We used data of the Upper Mississippi (HUC 2, region 07) and Great Lakes basins (HUC 2, region 04) as most sites are included in these regions.
-1. We removed records of unidentified species, hybrid species, and commercial species apparently absent in the wild (e.g., goldfish).
-1. We used the latest observation at each sampling site to minimize variation in sampling efforts among sites.
+1.  We used data of the Upper Mississippi (HUC 2, region 07) and Great Lakes basins (HUC 2, region 04) as most sites are included in these regions.
+2.  We removed records of unidentified species, hybrid species, and commercial species apparently absent in the wild (e.g., goldfish).
+3.  We used the latest observation at each sampling site to minimize variation in sampling efforts among sites.
 
 ## Asymptotic species richness
 
-We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with known values of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, presence of species $i$ at site $x$, $J_{ix}$, was drawn from a Bernoulli distribution as $J_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}J_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT'[@hsiehINEXTPackageRarefaction2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
+We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with known values of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, presence of species $i$ at site $x$, $J_{ix}$, was drawn from a Bernoulli distribution as $J_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}J_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT'[@hsieh2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
 
 $$
 \%~bias = \frac{100(S_{est} - S_{true})}{S_{true}}
@@ -107,8 +106,7 @@ Positive values of % bias indicate an overestimation of species richness, while 
 
 We used the following values for parameters: $S_{true} = 10, 40, 70, 100$ and $N_{site} = 5, 10, 15, 20, 100$. We produced 100 replicates of simulated data sets for each parameter combination, resulting in a total of 2000 simulation replicates. In each simulation replicate, the probabilities of detection and true presence were drawn randomly from uniform distributions as $p_i \sim Unif(0.3, 0.8)$ and $\kappa_{ix} \sim Unif(0, 1)$.
 
-The number of sampling sites influenced the estimation accuracy of asymptotic species richness. The % bias decreased sharply as the number of sampling sites increased (**Figure S20**). In particular, the estimation bias with a small sample size ($N_{site} = 5$) was substantial when the true species richness $S_{true}$ was low; some estimates showed > 150% bias (**Figure S20**). Given the simulation results, estimates of asymptotic species richness at watersheds with < 10 sampling sites may involve substantial statistical uncertainty.
-
+The number of sampling sites influenced the estimation accuracy of asymptotic species richness. The % bias decreased sharply as the number of sampling sites increased (**Figure S20**). In particular, the estimation bias with a small sample size ($N_{site} = 5$) was substantial when the true species richness $S_{true}$ was low; some estimates showed \> 150% bias (**Figure S20**). Given the simulation results, estimates of asymptotic species richness at watersheds with \< 10 sampling sites may involve substantial statistical uncertainty.
 
 \newpage
 
@@ -125,9 +123,7 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ```
 
-
 \newpage
-
 
 ## Table S2 Simulation parameter (main analysis)
 
@@ -139,7 +135,6 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
   table_output
 
 ```
-
 
 \newpage
 
@@ -155,7 +150,6 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 \newpage
 
-
 ## Table S4 Sensitivity analysis for ecosystem complexity effects
 
 **Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
@@ -168,7 +162,6 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 \newpage
 
-
 ## Table S5 List of fish species in Hokkaido, Japan
 
 **Table S5** List of fish species in Hokkaido, Japan, included in our statistical analysis. `r n_distinct(dat_hkd$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy out of `r n_distinct(dat_hkd$SiteID)` sites.
@@ -179,7 +172,6 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
   table_output
 
 ```
-
 
 \newpage
 
@@ -193,7 +185,6 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
   table_output
   
 ```
-
 
 \newpage
 
@@ -232,7 +223,6 @@ for(i in seq_len(nrow(param))){
 
 `r paste(knit(text = figure_alpha_pattern), collapse = '\n')`
 
-
 ```{r chunk_fig_set2}
 
 source(here::here("/theory/figure_n_patch_si.R"))
@@ -265,7 +255,6 @@ for(i in seq_len(nrow(param))){
 ```
 
 `r paste(knit(text = figure_size), collapse = '\n')`
-
 
 ```{r chunk_fig_set3}
 
@@ -308,7 +297,7 @@ source(here::here('empirical/figure_correlation.R'))
 
 ```
 
-**Figure S19 ** Correlation structure of potential explanatory variables for riverine diversity metrics. Numeric values in each cell are the Pearson's correlation coefficients. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
+**Figure S19** Correlation structure of potential explanatory variables for riverine diversity metrics. Numeric values in each cell are the Pearson's correlation coefficients. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
 
 \newpage
 
@@ -320,8 +309,8 @@ source(here::here('empirical/figure_iNEXT_sim.R'))
 
 ```
 
-**Figure S20 ** Sensitivity analysis of asymptotic species richness in relation to true species richness $S_{true}$ (panels) and the number of sampling sites $N_{site}$ (x-axis). Positive values of % bias indicate an overestimation of species richness, while negative values indicate an underestimation. Different panels show results with different true species richness. The center lines are median values, the box boundaries 25 and 75 percentiles, and the whiskers 5 and 95 percentiles. Dots represent individual simulation replicates. 
+**Figure S20** Sensitivity analysis of asymptotic species richness in relation to true species richness $S_{true}$ (panels) and the number of sampling sites $N_{site}$ (x-axis). Positive values of % bias indicate an overestimation of species richness, while negative values indicate an underestimation. Different panels show results with different true species richness. The center lines are median values, the box boundaries 25 and 75 percentiles, and the whiskers 5 and 95 percentiles. Dots represent individual simulation replicates.
 
 \newpage
 
-# References 
+# References
