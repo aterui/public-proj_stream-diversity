@@ -2,7 +2,7 @@
 # setup -------------------------------------------------------------------
 
   pacman::p_load(tidyverse, knitr, kableExtra)
-  dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
+  dat_hkd <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
 
 # table -------------------------------------------------------------------
 
