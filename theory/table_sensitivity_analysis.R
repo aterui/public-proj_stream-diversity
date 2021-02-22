@@ -2,7 +2,7 @@
 # setup -------------------------------------------------------------------
 
   pacman::p_load(tidyverse, knitr, kableExtra)
-  source(here::here("/theory/analysis_sensitivity.R"))
+  source(here::here("theory/analysis_sensitivity.R"))
 
 
 # sensitivity tables ------------------------------------------------------

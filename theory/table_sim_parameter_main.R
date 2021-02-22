@@ -2,7 +2,7 @@
 # setup -------------------------------------------------------------------
 
   pacman::p_load(tidyverse, knitr, kableExtra)
-  dat_sim <- read_csv(here::here('/theory/result/result_sim2020-11-10.csv'))
+  dat_sim <- read_csv(here::here('theory/result/result_sim2020-11-10.csv'))
 
 # table -------------------------------------------------------------------
 
