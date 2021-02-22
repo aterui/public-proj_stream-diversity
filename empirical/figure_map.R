@@ -49,7 +49,7 @@
   
   
   net <- foreach(i = seq_len(nrow(para))) %do% {
-    set.seed(123)
+    set.seed(122)
     brnet(n_patch = para$n_patch[i],
           p_branch = para$p_branch[i],
           sd_env_source = para$sd_env_source[i],
