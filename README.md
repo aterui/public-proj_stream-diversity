@@ -7,6 +7,7 @@ README
     -   [Main directory](#main-directory)
     -   [Directory `theory`](#directory-theory)
     -   [Directory `empirical`](#directory-empirical)
+-   [Session information](#session-information)
 
 # Title
 
@@ -20,9 +21,7 @@ Miyazaki
 # File descriptions
 
 See below or `metadata.html` (to view `metadata.html`, clone the
-repository and open `metadata.html` from your local computer). **Note
-that original empirical data sets were not included in this repository
-because they were provided by third parties**.
+repository and open `metadata.html` from your local computer).
 
 ## Main directory
 
@@ -129,3 +128,27 @@ Directory for empirical data analysis.
         </summary>
 -   `/result` - subdirectory for simulation output of the iNEXT
     sensitivity analysis
+
+# Session information
+
+    ## R version 4.0.2 (2020-06-22)
+    ## Platform: x86_64-w64-mingw32/x64 (64-bit)
+    ## Running under: Windows 10 x64 (build 19042)
+    ## 
+    ## Matrix products: default
+    ## 
+    ## locale:
+    ## [1] LC_COLLATE=English_United States.1252 
+    ## [2] LC_CTYPE=English_United States.1252   
+    ## [3] LC_MONETARY=English_United States.1252
+    ## [4] LC_NUMERIC=C                          
+    ## [5] LC_TIME=English_United States.1252    
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] compiler_4.0.2    magrittr_2.0.1    tools_4.0.2       htmltools_0.5.1.1
+    ##  [5] yaml_2.2.1        stringi_1.5.3     rmarkdown_2.6     knitr_1.31       
+    ##  [9] stringr_1.4.0     xfun_0.21         digest_0.6.27     rlang_0.4.10     
+    ## [13] evaluate_0.14
