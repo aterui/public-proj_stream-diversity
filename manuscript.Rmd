@@ -234,6 +234,6 @@ AT conceived of the project. AT performed theoretical and statistical analysis w
 
 # Data and code availability
 
-Third parties provided data for empirical data analysis; references are provided in the main text and Supplementary Information where appropriate. R functions for the generation of branching networks and the metacommunity simulation are provided as the R package 'mcbrnet' (available at <https://github.com/aterui/mcbrnet>). Codes for simulations, statistical analysis, figures, and tables are available at XXX.
+Third parties provided data for empirical data analysis; references are provided in the main text and Supplementary Information where appropriate. R functions for the generation of branching networks and the metacommunity simulation are provided as the R package 'mcbrnet' (available at <https://github.com/aterui/mcbrnet>). Codes for simulations, statistical analysis, figures, and tables are available at <https://github.com/aterui/public-proj_stream-diversity>.
 
 # References
