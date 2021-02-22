@@ -28,10 +28,10 @@ knit: (function(inputFile, encoding) {
                         warning = FALSE)
   
   # Hokkaido data
-  dat_hkd <- read_csv(here::here('/empirical/data_out/dat_hkd_site.csv'))
+  dat_hkd <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
   
   # Midwest data
-  dat_mw <- read_csv(here::here('/empirical/data_out/dat_mw_site.csv'))
+  dat_mw <- read_csv(here::here('empirical/data_out/data_mw_site.csv'))
   
   # sensitivity tables
   source(here::here('theory/table_sensitivity_analysis.R'))
@@ -118,7 +118,7 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ```{r chunk_table1}
 
-  source(here::here('empirical/table_sim_parameter_sensitivity.R'))
+  source(here::here('theory/table_sim_parameter_sensitivity.R'))
   table_output
 
 ```
@@ -131,7 +131,7 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ```{r chunk_table2}
 
-  source(here::here('empirical/table_sim_parameter_main.R'))
+  source(here::here('theory/table_sim_parameter_main.R'))
   table_output
 
 ```
@@ -192,7 +192,7 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ```{r chunk_fig_set1}
 
-source(here::here("/theory/figure_alpha_pattern.R"))
+source(here::here("theory/figure_alpha_pattern.R"))
 
 figure_cap <- conditional_text <- NULL
 
@@ -225,7 +225,7 @@ for(i in seq_len(nrow(param))){
 
 ```{r chunk_fig_set2}
 
-source(here::here("/theory/figure_n_patch_si.R"))
+source(here::here("theory/figure_n_patch_si.R"))
 
 figure_cap <- conditional_text <- NULL
 
@@ -258,7 +258,7 @@ for(i in seq_len(nrow(param))){
 
 ```{r chunk_fig_set3}
 
-source(here::here("/theory/figure_p_branch_si.R"))
+source(here::here("theory/figure_p_branch_si.R"))
 
 figure_cap <- conditional_text <- NULL
 
