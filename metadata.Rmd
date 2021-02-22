@@ -1,0 +1,150 @@
+---
+title: "Metadata: Ecosystem size and complexity dictate riverine biodiversity"
+output: html_document
+---
+
+# Summary {.tabset}
+
+This metadata provides brief descriptions for the files in the repository. Directory `/theory` contains files for theoretical analysis. Directory `empirical` contains files for empirical data analysis. Note that original empirical data sets are not included in this repository because they were provided by third parties.
+
+## Directory `theory`
+
+Directory for theoretical data analysis.
+
+- `analysis_sensitivity` - regressions for simulation results of sensitivity analysis
+- `figure_alpha_pattern` - figure for spatial patterns of local species richness
+- `figure_n_patch` - figure for relationships between diversity metrics and ecosystem size
+- `figure_n_patch_si` - figure for relationships between diversity metrics and ecosystem size
+- `figure_p_branch` - figure for relationships between diversity metrics and ecosystem complexity
+- `figure_p_branch_si` - figure for relationships between diversity metrics and ecosystem complexity
+- `run_sensitivity_analysis` - run metacommunity simulations for sensitivity analysis
+- `run_simulaiton_alpha_pattern` - run metacommunity simulations for spatial patterns of local species richness
+- `run_simulation` - run metacommunity simulations
+- `table_sensitivity_analysis` - table for the results of sensitivity analysis
+- `table_sim_parameter_main` - table for parameters used in main simulations
+- `table_sim_parameter_sensitivity` - table for parameters used in sensitivity analysis
+- `/result` - subdirectory for simulation results
+  <details>
+  <summary>`result_sim2020-11-10.csv` - results of main metacommunity simulation</summary>
+    **n_rep**: replicate ID\
+    **mc_capacity**: sum of carrying capacities across habitat patches\
+    **n_patch**: number of habitat patches $N_p$\
+    **p_branch**: branching probability $P_b$\
+    **n_species**: number of species simulated\
+    **mean_env_source**: mean environmental value at headwaters\
+    **sd_env_source**: sd of environmental value at headwaters $\sigma_h$\
+    **rho**: spatial autocorrelation in mean environment $\rho$\
+    **asymmetry_factor**: degree of asymentry in distance matrix\
+    **min_optim**: minimum value of niche optimum\
+    **max_optim**: maximum value of niche optimum\
+    **sd_env_lon**: sd of local environmental noise $\sigma_l$\
+    **theta**: rate parameter of dispersal distance $\theta$\
+    **K0**: carrying capacity at headwaters\
+    **sd_env**: temporal sd of environmental values $\sigma_z$\
+    **spatial_env_cor**: logical value indicating whether spatial autocorrelation in temporal environmental variation is considered\
+    **phi**: degree of spatial autocorrelation in temporal environmental variation $\phi$\
+    **min_niche_width**: minimum value of niche width\
+    **max_niche_width**: maximum value of niche width\
+    **niche_cost**: niche cost $\nu$\
+    **p_dispersal**: dispersal probability $p_d$\
+    **min_alpha**: minimum value of interspecific competition coefficient\
+    **max_alpha**: maximum value of interspecific competition coefficient\
+    **alpha_div**: predicted alpha diversity (averaged across habitat patches)\
+    **beta_div**: predicted beta diversity (additive: $\gamma - \alpha$)\
+    **gamma_div**: predicted gamma diversity\
+  </details>
+  
+  <details>
+  <summary>`result_sim_alpha_pattern2021-01-20.csv` - results of supplementary simulation (local diversity patterns)</summary>
+    **n_rep**: replicate ID\
+    **mc_capacity**: sum of carrying capacities across habitat patches\
+    **n_patch**: number of habitat patches $N_p$\
+    **p_branch**: branching probability $P_b$\
+    **n_species**: number of species simulated\
+    **mean_env_source**: mean environmental value at headwaters\
+    **sd_env_source**: sd of environmental value at headwaters $\sigma_h$\
+    **rho**: spatial autocorrelation in mean environment $\rho$\
+    **asymmetry_factor**: degree of asymentry in distance matrix\
+    **min_optim**: minimum value of niche optimum\
+    **max_optim**: maximum value of niche optimum\
+    **sd_env_lon**: sd of local environmental noise $\sigma_l$\
+    **theta**: rate parameter of dispersal distance $\theta$\
+    **K0**: carrying capacity at headwaters\
+    **sd_env**: temporal sd of environmental values $\sigma_z$\
+    **spatial_env_cor**: logical value indicating whether spatial autocorrelation in temporal environmental variation is considered\
+    **phi**: degree of spatial autocorrelation in temporal environmental variation $\phi$\
+    **min_niche_width**: minimum value of niche width\
+    **max_niche_width**: maximum value of niche width\
+    **niche_cost**: niche cost $\nu$\
+    **p_dispersal**: dispersal probability $p_d$\
+    **min_alpha**: minimum value of interspecific competition coefficient\
+    **max_alpha**: maximum value of interspecific competition coefficient\
+    **patch**: patch ID\
+    **alpha_div**: species richness at the habitat patch\
+    **mean_env**: mean environmental condition at the habitat patch\
+    **carrying_capacity**: carrying capacity at the habitat patch\
+    **connectivity**: connectivity at the habitat patch\
+    **branch_id**: branch ID\
+    **environment**: mean environmental condition at the habitat patch\
+    **n_patch_upstream**: number of upstream habitat patches\
+  </details>
+  
+  <details>
+  <summary>`result_sensitivity.csv` - results of sensitivity analysis</summary>
+    **n_rep**: replicate ID\
+    **mc_capacity**: sum of carrying capacities across habitat patches\
+    **n_patch**: number of habitat patches $N_p$\
+    **p_branch**: branching probability $P_b$\
+    **n_species**: number of species simulated\
+    **mean_env_source**: mean environmental value at headwaters\
+    **sd_env_source**: sd of environmental value at headwaters $\sigma_h$\
+    **rho**: spatial autocorrelation in mean environment $\rho$\
+    **asymmetry_factor**: degree of asymentry in distance matrix\
+    **min_optim**: minimum value of niche optimum\
+    **max_optim**: maximum value of niche optimum\
+    **sd_env_lon**: sd of local environmental noise $\sigma_l$\
+    **theta**: rate parameter of dispersal distance $\theta$\
+    **K0**: carrying capacity at headwaters\
+    **sd_env**: temporal sd of environmental values $\sigma_z$\
+    **spatial_env_cor**: logical value indicating whether spatial autocorrelation in temporal environmental variation is considered\
+    **phi**: degree of spatial autocorrelation in temporal environmental variation $\phi$\
+    **min_niche_width**: minimum value of niche width\
+    **max_niche_width**: maximum value of niche width\
+    **niche_cost**: niche cost $\nu$\
+    **p_dispersal**: dispersal probability $p_d$\
+    **min_alpha**: minimum value of interspecific competition coefficient\
+    **max_alpha**: maximum value of interspecific competition coefficient\
+    **alpha_div**: predicted alpha diversity (averaged across habitat patches)\
+    **beta_div**: predicted beta diversity (additive: $\gamma - \alpha$)\
+    **gamma_div**: predicted gamma diversity\
+  </details>
+
+## Directory `empirical`
+
+Directory for empirical data analysis.
+
+- `analysis_iNEXT_sim` - sensitivity simulation for the iNEXT function (Chao 2 estimator)
+- `analysis_lm_bf` - main analysis for influences of environmental variables on diversity metrics
+- `data_merge_hkd` - merge fish and GIS data in Hokkaido, Japan
+- `data_merge_mw` - merge fish and GIS data in Midwest, US
+- `figure_correlation` - correlation structure for potential explanatory variable
+- `figure_diversity` - figure for relationships between biodiversity and ecosystem properties
+- `figure_iNEXT_sim` - figure for sensitivity analysis of the iNEXT function 
+- `figure_map` - figure for maps
+- `table_splist_hkd` - table for a fish species list in Hokkaido, Japan
+- `table_splist_mw` - table for a fish species list in Midwest, US
+- `/data_gis` - subdirectory for raw gis data
+  <details>
+  <summary>`.gpkg` files</summary>
+    `albers_channel_hkd` - channel network for Hokkaido\
+    `albers_channel_mw` - channel network for Midwest\
+    `albers_hkd_shape` - polygon for Hokkaido\
+    `albers_mw_shape` - polygon for Midest (HUC)\
+    `albers_point_subset_hkd` - subset of sampling points for Hokkaido\
+    `albers_point_subset_mw` - subset of sampling points for Midwest\
+    `albers_watershed_hkd_final` - watershed polygons for Hokkaido\
+    `albers_watershed_mw_final` - watershed polygons for Midwest\
+    `albers_wsd_subset_hkd` - subset of watershed polygons for Hokkaido\
+    `albers_wsd_subset_mw` - subset of watershed polygons for Midwest\
+  </details>
+- `/result` - subdirectory for simulation output of the iNEXT sensitivity analysis
