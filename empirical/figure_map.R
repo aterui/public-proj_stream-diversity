@@ -5,10 +5,10 @@
   rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse, sf, patchwork, mcbrnet, igraph, ggraph, foreach)
   setwd(here::here("empirical"))
-
-
-# fig: network ------------------------------------------------------------
   
+
+# set theme ---------------------------------------------------------------
+
   ## set theme
   plt_theme <- theme_bw() + theme(
     plot.background = element_blank(),
@@ -33,13 +33,30 @@
   
   theme_set(plt_theme)
   
+
+# fig: network ------------------------------------------------------------
+
   ## network generation
-  n_patch <- 50
-  p_branch <- seq(0.2, 0.8, by = 0.3)
+  n_patch <- 30
+  p_branch <- c(0.2, 0.8)
+  sd_env_lon <- c(0.01, 1)
+  sd_env_source <- c(0.01, 1)
+  para <- expand.grid(n_patch = n_patch,
+                      p_branch = p_branch,
+                      sd_env_source = sd_env_source,
+                      sd_env_lon = sd_env_lon) %>% 
+    filter(!(sd_env_lon == sd_env_source))
   
-  set.seed(111)
-  net <- lapply(p_branch, FUN = function(x) brnet(n_patch = n_patch, p_branch = x, plot= FALSE,
-                                                  sd_env_lon = 0.01, sd_env_source = 1))
+  
+  net <- foreach(i = seq_len(nrow(para))) %do% {
+    set.seed(123)
+    brnet(n_patch = para$n_patch[i],
+          p_branch = para$p_branch[i],
+          sd_env_source = para$sd_env_source[i],
+          sd_env_lon = para$sd_env_lon[i],
+          plot = FALSE)
+  }
+  
   v_env <- unlist(lapply(seq_len(length(net)), FUN = function(x) net[[x]]$df_patch$environment))
   
   colvalue <- data.frame(color = viridis::viridis(length(v_env)),
@@ -56,8 +73,8 @@
       geom_node_point(shape = 21,
                       fill = colvalue$color[match(V(adj)$env, colvalue$value)],
                       color = grey(0.5),
-                      size = 2) +
-      labs(subtitle = paste("Branching prob. =", p_branch[i]))
+                      size = 3) +
+      labs(subtitle = paste("Branching prob. =", para$p_branch[i]))
   }
   
   
@@ -136,7 +153,8 @@
   
 # plot assembly -----------------------------------------------------------
 
-  patch <- (ng[[1]] + labs(title = "A")) + ng[[2]] + ng[[3]]
-  print(patch / ((eg + labs(title = "B")) + (hkd + theme(legend.position = "none") + labs(title = "C")) + mw))
+  network1 <- (ng[[1]] + labs(title = "A")) + ng[[2]]
+  network2 <- (ng[[3]] + labs(title = "B")) + ng[[4]]
+  print((network1 | network2) / ((eg + labs(title = "C")) + (hkd + theme(legend.position = "none") + labs(title = "D")) + mw))
   
   
