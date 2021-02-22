@@ -16,7 +16,7 @@ knit: (function(inputFile, encoding) {
 
 ```{r, echo = FALSE, message=FALSE, results='asis'}
 
-source(here::here("/empirical/analysis_lm_bf.R"))
+source(here::here("empirical/analysis_lm_bf.R"))
 
 stargazer::stargazer(fit$alpha$model, fit$beta$model, fit$gamma$model,
                      header = FALSE,
