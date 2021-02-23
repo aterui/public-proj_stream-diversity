@@ -1,4 +1,4 @@
-﻿SiteID,VisitID,Year,OTU,Abundance,Sample_area,Source,Lon,Lat,n_obs,Presence
+﻿SiteID,VisitID,Year,Species,Abundance,Sample_area,Source,Lon,Lat,n_obs,Presence
 st00001,st00001-1996,1996,RHINOGOBIUS_SPP,10,NA,hfish_HSGK,139.45,42.088,1,1
 st00002,st00002-1996,1996,LETHENTERON_SPP,3,NA,hfish_HSGK,139.45,42.089,1,1
 st00002,st00002-1996,1996,RHINOGOBIUS_SPP,29,NA,hfish_HSGK,139.45,42.089,1,1
