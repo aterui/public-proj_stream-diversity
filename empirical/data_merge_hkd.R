@@ -14,7 +14,6 @@
 # merge fish and gis data -------------------------------------------------
 
   d0 <- read_csv('data_org_hkd/data_fmt_hkd_latest.csv') %>% 
-    rename(Species = OTU) %>% 
     st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>% 
     st_transform(crs = st_crs(watershed)$wkt) %>% 
     filter(Year >= 1990) %>% 
