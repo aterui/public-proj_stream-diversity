@@ -34,7 +34,7 @@
 # read data ---------------------------------------------------------------
   
   ## model estimate
-  source("analysis_lm_bf.R")
+  source("analysis_rlm_bf.R")
   
   ## redefine data.frame
   dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
@@ -42,21 +42,15 @@
   
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator, alpha = mu_alpha) %>% 
-    mutate(beta = gamma/alpha,
-           logit_agri = log(frac_agri) - log(1 - frac_agri),
-           dam_density = n_dam/area) %>% 
-    mutate(resid_agri = resid(lm(logit_agri ~ region, data = .)),
-           resid_temp = resid(lm(mean_temp ~ region, data = .)),
-           resid_ppt = resid(lm(mean_ppt ~ region, data = .)),
-           resid_dam = resid(lm(dam_density ~ region, data = .))) %>% 
+    mutate(beta = gamma/alpha) %>% 
     pivot_longer(cols = c(alpha, beta, gamma),
                  names_to = "metric")
   
   dat_base <- data.frame(region = factor(rep(c("hokkaido", "midwest"), each = 100)),
-                         resid_temp = mean(dat$resid_temp),
-                         resid_ppt = mean(dat$resid_ppt),
-                         resid_agri = mean(dat$resid_agri),
-                         resid_dam = mean(dat$resid_dam))
+                         resid_temp = 0,
+                         resid_ppt = 0,
+                         resid_agri = 0,
+                         resid_dam = 0)
 
 # data frame for prediction -----------------------------------------------
   
