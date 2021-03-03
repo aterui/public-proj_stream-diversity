@@ -1,5 +1,7 @@
+  
+  library(tidyselect)
 
-  avpc <- function(m, u, v = NULL, link = NULL) {  
+  avpc <- function(m, u, v = NULL, var_transform = NULL) {  
     
     # define function ---------------------------------------------------------
     
@@ -10,57 +12,65 @@
     
     # extract model data frame ------------------------------------------------
     
+    if(!any(u %in% attributes(terms(m))$term.labels)) stop('invalid variable input u; check varaible name')
+    
+    if(is.null(v)) {
+      
+      v_var_names <- attributes(terms(m))$term.labels
+      v <- v_var_names[!(v_var_names %in% u)]
+      
+    } else {
+      
+      if(!all(v %in% attributes(terms(m))$term.labels)) stop('invalid variable input v; check varaible name')
+      
+    }
+    
+    
+    # division by model class
     if(any(class(m) %in% c('lm', 'rlm', 'glm'))) {
       
-      if(!any(u %in% attributes(terms(m))$term.labels)) stop('invalid variable input u; check varaible name')
       m_frame <- m$model
       
-      if(is.null(v)) {
-        v_var_names <- attributes(terms(m))$term.labels
-        v <- v_var_names[!(v_var_names %in% u)]
+    } else {
+      
+      if(any(class(m) %in% 'lmerMod')) {
+        m_frame <- m@frame
       } else {
-        if(!all(v %in% attributes(terms(m))$term.labels)) stop('invalid variable input v; check varaible name')
+        stop('the provided model class is not supported')  
       }
-    }
-    
-    if(any(class(m) %in% 'lmerMod')) {
       
-      if(!any(u %in% attributes(terms(m))$term.labels)) stop('invalid variable input u; check varaible name')
-      m_frame <- m@frame
-      
-      if(is.null(v)) {
-        v_var_names <- attributes(terms(m))$term.labels
-        v <- v_var_names[!(v_var_names %in% u)]
-      }
     }
+      
     
-    if(ncol(m_frame %>% summarise(across(.cols = where(is.character)))) > 0) {
+    if(!all(unlist(lapply(m_frame, class)) %in% c('numeric', 'character'))) stop('variables contain classes of other than numeric or character')
+    
+    if(any(unlist(lapply(m_frame, class)) %in% c('character'))) {
       
       # character variable(s) exist
       
       ## extract character variables and convert them to numeric values
       ## stop if there are > 2 character levels in any character variable
       n_levels <- m_frame %>% 
-        summarise(across(.cols = where(is.character),
-                         .fns = ~ n_distinct(.x))) 
+        dplyr::summarize(dplyr::across(.cols = where(is.character),
+                                       .fns = ~ dplyr::n_distinct()(.x))) 
       
       if(any(n_levels > 2)) stop('Currently, this function does not support categorical variables with > 2 levels. Consider converting the variable(s) to dummy binary variables (0, 1)')
       
       m_chr <- m_frame %>% 
-        summarise(across(.cols = where(is.character),
-                         .fns = ~ as.numeric(as.factor(.x)) - 1)) %>% 
-        mutate(id = as.numeric(rownames(.)))
+        dplyr::summarize(dplyr::across(.cols = where(is.character),
+                                       .fns = ~ as.numeric(as.factor(.x)) - 1)) %>% 
+        dplyr::mutate(id = as.numeric(rownames(.)))
       
       ## extract numeric variables
       m_dbl <- m_frame %>% 
-        summarise(across(.cols = where(is.numeric))) %>% 
-        mutate(id = as.numeric(rownames(.)))
+        dplyr::summarize(dplyr::across(.cols = where(is.numeric))) %>% 
+        dplyr::mutate(id = as.numeric(rownames(.)))
       
       ## combine numeric and character variables
       mod <- m_chr %>% 
-        left_join(m_dbl, by = 'id') %>% 
-        select(-id) %>% 
-        tibble()
+        dplyr::left_join(m_dbl, by = 'id') %>% 
+        dplyr::select(-id) %>% 
+        dplyr::tibble()
       
       message('Character variable(s) detected in the data. These variables were coverted to dummy binary variables (0, 1)')
       
@@ -68,7 +78,7 @@
       
       # no character variable
       
-      mod <- tibble(m_frame)
+      mod <- dplyr::tibble(m_frame)
       
     }
     
@@ -76,57 +86,57 @@
     # get pairs for u and v ---------------------------------------------------
     
     # frame for v variables
-    X1 <- X2 <- mod %>% select(all_of(v))
-    X <- X1 %>% mutate(id = as.numeric(rownames(.)))
+    X1 <- X2 <- mod %>% dplyr::select(dplyr::all_of(v))
+    X <- X1 %>% dplyr::mutate(id = as.numeric(rownames(.)))
     
     # mahalanobis distance for a set of v variables
     m_cov <- cov(X1)
     m_dist <- apply(X1, 1, function(row_i) mahalanobis(X2, row_i, m_cov))
-    df_v <-  tibble(sq_distance = c(m_dist),
-                    row_id = rep(seq_len(nrow(m_dist)), times = ncol(m_dist)),
-                    col_id = rep(seq_len(ncol(m_dist)), each = nrow(m_dist))) %>% 
-      mutate(weight = 1/(1 + sq_distance))
+    df_v <-  dplyr::tibble(sq_distance = c(m_dist),
+                           row_id = rep(seq_len(nrow(m_dist)), times = ncol(m_dist)),
+                           col_id = rep(seq_len(ncol(m_dist)), each = nrow(m_dist))) %>% 
+      dplyr::mutate(weight = 1/(1 + sq_distance))
     
     # combine with input u
     m_u <- mod %>%
-      select(all_of(u)) %>% 
-      rename(u_input = all_of(u)) %>% 
-      mutate(id = as.numeric(rownames(.)))
+      dplyr::select(dplyr::all_of(u)) %>% 
+      dplyr::rename(u_input = dplyr::all_of(u)) %>% 
+      dplyr::mutate(id = as.numeric(rownames(.)))
     
     df_uv <- df_v %>% 
-      left_join(m_u, by = c('row_id' = 'id')) %>% 
-      rename(u1 = u_input) %>% 
-      left_join(m_u, by = c('col_id' = 'id')) %>% 
-      rename(u2 = u_input) %>% 
-      mutate(sign = ifelse(u2 - u1 >= 0, 1, -1)) %>% 
-      left_join(X, by = c('row_id' = 'id'), suffix = c('_v1', '_v2')) %>% 
-      left_join(X, by = c('col_id' = 'id'), suffix = c('_v1', '_v2'))
+      dplyr::left_join(m_u, by = c('row_id' = 'id')) %>% 
+      dplyr::rename(u1 = u_input) %>% 
+      dplyr::left_join(m_u, by = c('col_id' = 'id')) %>% 
+      dplyr::rename(u2 = u_input) %>% 
+      dplyr::mutate(sign = ifelse(u2 - u1 >= 0, 1, -1)) %>% 
+      dplyr::left_join(X, by = c('row_id' = 'id'), suffix = c('_v1', '_v2')) %>% 
+      dplyr::left_join(X, by = c('col_id' = 'id'), suffix = c('_v1', '_v2'))
     
     
     # average predictive comparison -------------------------------------------
     
     # input u and other variables v (note: v is v1 irrespective of input u)
-    u1 <- df_uv %>% pull(u1)
-    u2 <- df_uv %>% pull(u2)
-    df_v1 <- df_uv %>% summarize(across(ends_with('v1')))
+    u1 <- df_uv %>% dplyr::pull(u1)
+    u2 <- df_uv %>% dplyr::pull(u2)
+    df_v1 <- df_uv %>% dplyr::summarize(dplyr::across(ends_with('v1')))
     
     # input low
-    df_uv1 <- tibble(u1 = u1, df_v1)
+    df_uv1 <- dplyr::tibble(u1 = u1, df_v1)
     colnames(df_uv1) <- c(u, v)
-    df_uv1 <- tibble(Intercept = 1, df_uv1)
+    df_uv1 <- dplyr::tibble(Intercept = 1, df_uv1)
     
     # input high
-    df_uv2 <- tibble(u2 = u2, df_v1)
+    df_uv2 <- dplyr::tibble(u2 = u2, df_v1)
     colnames(df_uv2) <- c(u, v)
-    df_uv2 <- tibble(Intercept = 1, df_uv2)
+    df_uv2 <- dplyr::tibble(Intercept = 1, df_uv2)
     
-    # get link function from the model object if link 'null'
-    if(is.null(link)) {
+    # get link function from the model object if var_transform 'null'
+    if(is.null(var_transform)) {
       model_family <- family(m)
-      link <- model_family$link
+      var_transform <- model_family$link
     }
     
-    if(!any(link %in% c('log', 'logit', 'identity'))) stop('Link function must be either log, logit or identity')
+    if(!any(var_transform %in% c('log', 'logit', 'identity'))) stop('var_transform must be either log, logit or identity')
     
     
     # for model classes lm, rlm, glm
@@ -171,18 +181,18 @@
       
     }
     
-    # division by link function types
-    if(link == 'identity') {
+    # division by var_transform types
+    if(var_transform == 'identity') {
       e_y1 <- m_uv1 %*% v_b
       e_y2 <- m_uv2 %*% v_b
     }
     
-    if(link == 'log') {
+    if(var_transform == 'log') {
       e_y1 <- exp(m_uv1 %*% v_b)
       e_y2 <- exp(m_uv2 %*% v_b)
     }
     
-    if(link == 'logit') {
+    if(var_transform == 'logit') {
       e_y1 <- ilogit(m_uv1 %*% v_b)
       e_y2 <- ilogit(m_uv2 %*% v_b)
     }
