@@ -1,39 +1,49 @@
 
 # setup -------------------------------------------------------------------
-
+  
+  #rm(list = ls())
   pacman::p_load(tidyverse, foreach)
-  source(here::here('empirical/analysis_rlm_bf.R'))
-
-
+  source(here::here('empirical/analysis_lm_bf.R'))
+  library(MASS)
+  m <- rlm(log(gamma, 10) ~ scale(log(area, 10)) + scale(log(p_branch, 10)) + region, dat)
+  
+  est <- avpc(m = m, u = 'scale(log(p_branch, 10))', link = 'log')
+  est$est
+  m
+  
 # simulation --------------------------------------------------------------
   
   m <- fit$gamma$model
-  u <- 'log(p_branch, 10)'
-  v <- c('log(area, 10)', 'region', 'scale(resid_ppt)')
-  link <- 'log'
 
-
-#avpc <- function(u, v = NULL, link = NULL) {  
+avpc <- function(m, u, v = NULL, link = NULL) {  
   
-# define function ---------------------------------------------------------
+  # define function ---------------------------------------------------------
 
   ilogit <- function(x) {
     1 / (1 + exp(-x))
   }
     
   
-# extract model data frame ------------------------------------------------
+  # extract model data frame ------------------------------------------------
   
   if(any(class(m) %in% c('lm', 'rlm', 'glm'))) {
+    
+    if(!any(u %in% attributes(terms(m))$term.labels)) stop('invalid variable input u; check varaible name')
     m_frame <- m$model
+    
     if(is.null(v)) {
-      v_var_names <- attributes(m$terms)$term.labels
+      v_var_names <- attributes(terms(m))$term.labels
       v <- v_var_names[!(v_var_names %in% u)]
+    } else {
+      if(!all(v %in% attributes(terms(m))$term.labels)) stop('invalid variable input v; check varaible name')
     }
   }
   
   if(any(class(m) %in% 'lmerMod')) {
+    
+    if(!any(u %in% attributes(terms(m))$term.labels)) stop('invalid variable input u; check varaible name')
     m_frame <- m@frame
+    
     if(is.null(v)) {
       v_var_names <- attributes(terms(m))$term.labels
       v <- v_var_names[!(v_var_names %in% u)]
@@ -79,7 +89,7 @@
   }
 
 
-# get pairs for u and v ---------------------------------------------------
+  # get pairs for u and v ---------------------------------------------------
   
   # frame for v variables
   X1 <- X2 <- mod %>% select(all_of(v))
@@ -109,19 +119,20 @@
     left_join(X, by = c('col_id' = 'id'), suffix = c('_v1', '_v2'))
   
 
-# average predictive comparison -------------------------------------------
+  # average predictive comparison -------------------------------------------
+  
+  # input u and other variables v (note: v is v1 irrespective of input u)
+  u1 <- df_uv %>% pull(u1)
+  u2 <- df_uv %>% pull(u2)
+  df_v1 <- df_uv %>% summarize(across(ends_with('v1')))
   
   # input low
-  u1 <- df_uv %>% pull(u1)
-  df_v1 <- df_uv %>% summarize(across(ends_with('v1')))
   df_uv1 <- tibble(u1 = u1, df_v1)
   colnames(df_uv1) <- c(u, v)
   df_uv1 <- tibble(Intercept = 1, df_uv1)
   
   # input high
-  u2 <- df_uv %>% pull(u2)
-  df_v2 <- df_uv %>% summarize(across(ends_with('v2')))
-  df_uv2 <- tibble(u2 = u2, df_v2)
+  df_uv2 <- tibble(u2 = u2, df_v1)
   colnames(df_uv2) <- c(u, v)
   df_uv2 <- tibble(Intercept = 1, df_uv2)
   
@@ -135,9 +146,9 @@
   
   
   # for model classes lm, rlm, glm
-  if(class(m) %in% c('lm', 'rlm', 'glm')) {
+  if(any(class(m) %in% c('lm', 'rlm', 'glm'))) {
     
-    names(m$coefficients) <- c('Intercept', attributes(m$terms)$term.labels)
+    names(m$coefficients) <- c('Intercept', attributes(terms(m))$term.labels)
     v_var_id <- match(names(m$coefficients), names(df_uv1)) %>% 
       na.omit() %>% 
       c()
@@ -153,35 +164,10 @@
     if(any(rownames(v_b) != colnames(m_uv1))) stop('error in matrix organization')
     if(any(rownames(v_b) != colnames(m_uv2))) stop('error in matrix organization')
     
-    # division by link function types
-    if(link == 'identity') {
-      e_y1 <- m_uv1 %*% v_b
-      e_y2 <- m_uv2 %*% v_b
-      numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
-      denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
-      est <- numerator / denominator
-    }
-    
-    if(link == 'log') {
-      e_y1 <- exp(m_uv1 %*% v_b)
-      e_y2 <- exp(m_uv2 %*% v_b)
-      numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
-      denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
-      est <- numerator / denominator
-    }
-    
-    if(link == 'logit') {
-      e_y1 <- ilogit(m_uv1 %*% v_b)
-      e_y2 <- ilogit(m_uv2 %*% v_b)
-      numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
-      denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
-      est <- numerator / denominator
-    }
-    
   }
-  
+    
   # for model class lmerMod
-  if(class(m) %in% 'lmerMod') {
+  if(any(class(m) %in% 'lmerMod')) {
     
     names(m@beta) <- c('Intercept', attributes(terms(m))$term.labels)
     v_var_id <- match(names(m@beta), names(df_uv1)) %>% 
@@ -198,34 +184,31 @@
 
     if(any(rownames(v_b) != colnames(m_uv1))) stop('error in matrix organization')
     if(any(rownames(v_b) != colnames(m_uv2))) stop('error in matrix organization')
-        
-    # division by link function types
-    if(link == 'identity') {
-      e_y1 <- m_uv1 %*% v_b
-      e_y2 <- m_uv2 %*% v_b
-      numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
-      denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
-      est <- numerator / denominator
-    }
-    
-    if(link == 'log') {
-      e_y1 <- exp(m_uv1 %*% v_b)
-      e_y2 <- exp(m_uv2 %*% v_b)
-      numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
-      denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
-      est <- numerator / denominator
-    }
-    
-    if(link == 'logit') {
-      e_y1 <- ilogit(m_uv1 %*% v_b)
-      e_y2 <- ilogit(m_uv2 %*% v_b)
-      numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
-      denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
-      est <- numerator / denominator
-    }
     
   }
   
-  #return(list(estimate = est, df_uv = df_uv))
+  # division by link function types
+  if(link == 'identity') {
+    e_y1 <- m_uv1 %*% v_b
+    e_y2 <- m_uv2 %*% v_b
+  }
   
-#}
+  if(link == 'log') {
+    e_y1 <- exp(m_uv1 %*% v_b)
+    e_y2 <- exp(m_uv2 %*% v_b)
+  }
+  
+  if(link == 'logit') {
+    e_y1 <- ilogit(m_uv1 %*% v_b)
+    e_y2 <- ilogit(m_uv2 %*% v_b)
+  }
+  
+  # estimate
+  numerator <- sum(df_uv$weight * (e_y2 - e_y1) * df_uv$sign)
+  denominator <- sum(df_uv$weight * (u2 - u1) * df_uv$sign)
+  est <- numerator / denominator
+
+  return(list(estimate = est, df_uv = df_uv))
+  
+}
+
