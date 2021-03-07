@@ -60,19 +60,20 @@ knit: (function(inputFile, encoding) {
                        max_alpha) %>% 
     nrow()
   
-  # for bayes factor
-  source(here::here('empirical/analysis_lm_bf.R'))
-  
   # Hokkaido data
+  dat_hkd <- read_csv(here::here("empirical/data_out/data_hkd.csv")) %>% mutate(region = "hokkaido")
   dat_hkd_site <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
   
   # Midwest data
+  dat_mw <- read_csv(here::here("empirical/data_out/data_mw.csv")) %>% mutate(region = "midwest")
   dat_mw_site <- read_csv(here::here('empirical/data_out/data_mw_site.csv')) %>% 
     mutate(Year = format(as.Date(Date, format = '%m/%d/%Y'), "%Y"))
   
-  # sensitivity tables
-  source(here::here('theory/table_sensitivity_analysis.R'))
+  # tables
   
+  ## sensitivity
+  source(here::here('theory/table_sensitivity_analysis.R'))
+
 ```
 
 # Materials and Methods
@@ -156,7 +157,7 @@ We allowed interspecific variation in niche optimum and width, which were drawn 
 
 Under each simulation scenario, we simulated 1400 time steps of metacommunity dynamics (including 200 time steps for initialization and 200 time steps for burn-in) in `r max(dat_sim$n_rep)` branching networks with the gradients of ecosystem size (the number of habitat patches: `r min(dat_sim$n_patch)` to `r max(dat_sim$n_patch)`) and complexity (branching probability: `r round(min(dat_sim$p_branch), 2)` to `r round(max(dat_sim$p_branch), 2)`). During the first 200 time steps (an initialization period), we initialized the simulation by seeding each habitat patch with populations of each species drawn from a Poisson distribution with a mean of 0.5. We repeated the seeding every 10 time steps during the initialization to allow species to establish their populations if they can grow from low abundances. After the initialization period, we ran 200 time steps as a burn-in period with no seeding to minimize influences of initial conditions. We saved the last 1000 time steps to estimate the temporal averages of $\alpha$, $\beta$, and $\gamma$ diversity. We removed simulation replicates in which no species established populations over the initial 400 time steps (`r sum(dat_sim$alpha_div == 0)` replicates out of `r nrow(dat_sim)` replicates). Ecosystem size and complexity were drawn randomly from uniform distributions as: $N_p \sim Unif(10, 150)$ and $P_b \sim Unif(0.01, 0.99)$ ($N_p$ was rounded to the nearest integer before running simulations). Values of simulation parameters were summarized in **Table S2**. We performed simulations using R version 4.0.2 [@rcoreteam2020].
 
-## Empirical data analysis
+## Empirical data
 
 ### Fish community data
 
@@ -164,7 +165,7 @@ We compiled fish data at two geographic regions: the Hokkaido island, Japan, and
 
 We considered watersheds as independent replicates of metacommunities if the river network flows into one of the following: the ocean, a large lake/reservoir ($\ge$ 10 km² in the areal area) or a large river that may represent lentic habitats ($\ge$ 5000 km² in the watershed area). Metacommunities with $\ge$ 10 sampling sites were used in our analysis because a small sample size inflates statistical uncertainties in estimating diversity metrics (**Supplementary Text**).
 
-We estimated $\alpha$, $\beta$, and $\gamma$ diversity at each watershed. $\gamma$ diversity is the total species richness at each watershed. Since it is impossible to sample all species present in each watershed, we used asymptotic species richness as a proxy for $\gamma$ diversity. Asymptotic species richness can be interpreted as the estimated true species richness in a given area when estimated using spatial replicates of local community data within a metacommunity [@chao2014]. We estimated asymptotic species richness using sampling sites located in the same watershed (i.e., spatial replicates within a metacommunity) via the R package 'iNEXT' [@hsieh2016]. We assessed the completeness of the observed species richness based on sample coverage, which is the proportion abundances of observed species to the whole community [@chao2014]. We excluded watersheds whose sample coverage was below 0.9 because the estimates of asymptotic species richness may contain non-negligible statistical uncertainty. $\alpha$ diversity was estimated by taking an average of local species richness at each site. $\beta$ diversity was estimated by dividing the estimated $\gamma$ diversity by $\alpha$ diversity [@whittaker1960].
+We estimated $\alpha$, $\beta$, and $\gamma$ diversity at each watershed. $\gamma$ diversity is the total species richness at each watershed. Since it is impossible to sample all species present in each watershed, we used asymptotic species richness as a proxy for $\gamma$ diversity. Asymptotic species richness can be interpreted as the estimated true species richness in a given area when estimated using spatial replicates of local community data within a metacommunity [@chao2014]. We estimated asymptotic species richness using sampling sites located in the same watershed (i.e., spatial replicates within a metacommunity) via the R package 'iNEXT' [@hsieh2016]. We assessed the completeness of the observed species richness based on sample coverage, which is the total proportional abundances of observed species to the whole metacommunity [@chao2014]. We excluded watersheds whose sample coverage was below 0.9 because the estimates of asymptotic species richness may contain non-negligible statistical uncertainty. $\alpha$ diversity was estimated by taking an average of local species richness at each site. $\beta$ diversity was estimated by dividing the estimated $\gamma$ diversity by $\alpha$ diversity [@whittaker1960].
 
 After the data selection procedure, we obtained diversity estimates from `r nrow(wsd_subset[[1]]) + nrow(wsd_subset[[2]])` watersheds (Hokkaido: `r nrow(wsd_subset[[1]])`, Midwest: `r nrow(wsd_subset[[2]])`), which encompassed a total of `r nrow(point_subset[[1]]) + nrow(point_subset[[2]])` sites (Hokkaido: `r nrow(point_subset[[1]])`, Midwest: `r nrow(point_subset[[2]])`). Observations ranged from `r min(dat_hkd_site$Year, na.rm = T)` to `r max(dat_hkd_site$Year, na.rm = T)` in Hokkaido and from `r min(dat_mw_site$Year, na.rm = T)` to `r max(dat_mw_site$Year, na.rm = T)` in the Midwest. Fish species observed in the final data set were listed in **Tables S5 and S6**.
 
@@ -174,7 +175,7 @@ We collected data for watershed characteristics (watershed area [km^2^], branchi
 
 ### Statistical analysis
 
-We developed linear regression models to examine the effects of macro-scale drivers on diversity metrics. Log-transformed diversity metrics ($\alpha$, $\beta$ and $\gamma$ diversity) at watershed $w$, $log_{10}~y_w$, were assumed to follow a normal distribution as $log_{10}~y_w \sim Normal(\mu_w, \sigma^2)$. The parameter $\mu_w$ was related to linear predictors, including log-transformed watershed area (ecosystem size; $log_{10}~WA$), log-transformed branching probability (ecosystem complexity; $log_{10}~P_b$), region (coded as Hokkaido = 0, Midwest = 1; $region$), air temperature, precipitation, the fraction of agricultural land use (logit-transformed), and dam density. Although our primary focus of this analysis is to assess the effects of watershed area and branching probability, we included climate and land use variables to control their effects statistically. We did not include the fractions of urban and forest land use in the statistical models because these variables were strongly correlated with the fraction of agricultural land use (**Figure S19**). Similarly, we did not use mean elevation in the statistical models because it showed a moderate correlation with air temperature (**Figure S19**). Correlations for other combinations of explanatory variables were weak to moderate.
+We developed robust regression models with an M-estimation method to examine the effects of macro-scale drivers on diversity metrics. We employed robust regression models given the uncertainty of diversity estimates (see **Fish community data**). Log-transformed diversity metrics ($\alpha$, $\beta$ and $\gamma$ diversity) at watershed $w$, $log_{10}~y_w$, were assumed to follow a normal distribution as $log_{10}~y_w \sim Normal(\mu_w, \sigma^2)$. The parameter $\mu_w$ was related to linear predictors, including log-transformed watershed area (ecosystem size; $log_{10}~WA$), log-transformed branching probability (ecosystem complexity; $log_{10}~P_b$), region (coded as Hokkaido = 0, Midwest = 1; $region$), air temperature, precipitation, the fraction of agricultural land use (logit-transformed), and dam density. Although our primary focus of this analysis is to assess the effects of watershed area and branching probability, we included climate and land use variables to control their effects statistically. We did not include the fractions of urban and forest land use in the statistical models because these variables were strongly correlated with the fraction of agricultural land use (**Figure S19**). Similarly, we did not use mean elevation in the statistical models because it showed a moderate correlation with air temperature (**Figure S19**). Correlations for other combinations of explanatory variables were weak to moderate.
 
 Climate (air temperature and precipitation) and land use (the fraction of agricultural land use and dam density) differed clearly between the regions. Therefore, we used residuals of the simple linear regressions between the climate or land use variable (response variable) and region (explanatory variable). The residuals represent deviations from the regional averages; positive values indicate values greater than the regional average while negative values indicating values smaller than the regional average.
 
@@ -204,6 +205,7 @@ $$
 where $\Delta BIC_{10} = BIC(M1) - BIC(M0)$. We performed statistical analysis using R version 4.0.2 [@rcoreteam2020].
 
 \newpage
+
 
 # Supplementary Text
 
@@ -247,7 +249,7 @@ The simulation reproduced diverse patterns of longitudinal gradients in local sp
 
 ## Empirical data
 
-### Fish community data
+### Data selection criteria
 
 **Hokkaido, Japan.** We used data from the Hokkaido Freshwater Fish Database HFish [@fukushima2011; @fukushima2007], monitoring data at protected watersheds [@comte2021; @terui2018], and primary data collected by the authors [@miyazaki2016; @terui2016], which collectively cover the entire Hokkaido island. Most data were collected from summer to fall. We screened data through the following procedure:
 
@@ -356,6 +358,7 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 ```
 
 \newpage
+
 
 ## Figures
 

@@ -24,14 +24,14 @@
 
   m_compare <- function(response, data) {
     
-    mod1 <<- MASS::rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
-                                     scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
+    mod1 <- MASS::rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
+                                          scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
                        psi = MASS::psi.huber,
                        method = 'M',
                        data = data)
     
-    mod0 <<- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
-                                     scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
+    mod0 <- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
+                                          scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
                        method = 'M',
                        psi = MASS::psi.huber,
                        data = data)
