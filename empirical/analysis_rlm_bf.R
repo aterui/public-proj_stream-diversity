@@ -1,7 +1,7 @@
 
 # setup -------------------------------------------------------------------
 
-  pacman::p_load(tidyverse, MASS)
+  pacman::p_load(tidyverse)
 
 # read data ---------------------------------------------------------------
   
@@ -24,17 +24,17 @@
 
   m_compare <- function(response, data) {
     
-    mod1 <<- rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
+    mod1 <<- MASS::rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
                                      scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
-                 psi = psi.huber,
-                 method = 'M',
-                 data = data)
+                       psi = MASS::psi.huber,
+                       method = 'M',
+                       data = data)
     
-    mod0 <<- rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
+    mod0 <<- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
                                      scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
-                 method = 'M',
-                 psi = psi.huber,
-                 data = data)
+                       method = 'M',
+                       psi = MASS::psi.huber,
+                       data = data)
     
     # bf01: bayes factor in favor of mod0 over mod1
     bf01 <- exp(0.5*(BIC(mod1) - BIC(mod0)))
@@ -46,9 +46,4 @@
   }
   
   fit <- lapply(dat[,c("alpha", "beta", "gamma")], FUN = m_compare, data = dat)
-  
-
-# detach MASS (to avoid conflicts with tidyverse) -------------------------
-
-  detach('package:MASS', unload = TRUE)
   
