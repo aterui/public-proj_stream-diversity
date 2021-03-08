@@ -202,10 +202,11 @@ $$
 Bayes~factor = exp(\Delta BIC_{10}/2)
 $$
 
-where $\Delta BIC_{10} = BIC(M1) - BIC(M0)$. We performed statistical analysis using R version 4.0.2 [@rcoreteam2020].
+where $\Delta BIC_{10} = BIC(M1) - BIC(M0)$.
+
+For the supported model of $\gamma$ diversity, we estimated average predictive comparisons of watershed area and branching probability to compare their effect sizes. The average predictive comparison is an expected change of the response variable per a unit difference of the explanatory variable of interest [@gelman2007]. Unlike other common metrics of effect size (e.g., standardized regression coefficients), this method is applicable to models with variable transformations and allows direct comparisons of the effect sizes of watershed area and branching probability (see **Supplementary Text** for further details). We performed statistical analysis using R version 4.0.2 [@rcoreteam2020].
 
 \newpage
-
 
 # Supplementary Text
 
@@ -278,6 +279,56 @@ Positive values of % bias indicate an overestimation of species richness, while 
 We used the following values for parameters: $S_{true} = 10, 40, 70, 100$ and $N_{site} = 5, 10, 15, 20, 100$. We produced 100 replicates of simulated data sets for each parameter combination, resulting in a total of 2000 simulation replicates. In each simulation replicate, the probabilities of detection and true presence were drawn randomly from uniform distributions as $p_i \sim Unif(0.3, 0.8)$ and $\kappa_{ix} \sim Unif(0, 1)$.
 
 The number of sampling sites influenced the estimation accuracy of asymptotic species richness. The % bias decreased sharply as the number of sampling sites increased (**Figure S20**). In particular, the estimation bias with a small sample size ($N_{site} = 5$) was substantial when the true species richness $S_{true}$ was low; some estimates showed \> 150% bias (**Figure S20**). Given the simulation results, estimates of asymptotic species richness at watersheds with \< 10 sampling sites may involve substantial statistical uncertainty.
+
+### Average predictive comparison
+
+For regression models, standardized regression coefficients (or its variant) are perhaps the most common summary when comparing effect sizes of explanatory variables. These values are useful if they are directly interpretable. For example, in linear regression models without variable transformations, regression coefficients have direct interpretations as they represent additive effects. However, there are many cases where regression coefficients are difficult to interpret. In our case, we regressed the log-transformed species richness on explanatory variables, so regression coefficients do not have direct interpretations at the original scale of the response variable $y$ (i.e., species richness).
+
+The average predictive comparison provides an intuitive yet rigorous way to quantify effect sizes for each of explanatory variables in regression models with interactions and/or variable transformations [@gelman2007]. The basic predictive comparison $\delta_u$ is an expected change in $y$ on the original scale per a unit difference of the explanatory variable of interest:
+
+$$
+\delta_u(u^{(1)} \to u^{(2)}, v, \Theta) = \frac{E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta)}{u^{(2)} - u^{(1)}}
+$$
+
+where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of interest (a value for the explanatory variable of interest), $v$ all the other inputs (a vector in general), $\Theta$ a set of parameters in a regression model. In general, $\delta_u$ depends on $u^{(1)}$ and $u^{(2)}$ (the beginning and end points of the hypothesized change in the explanatory variable of interest), $v$, and $\Theta$. Therefore, Gelman and Pardoe [@gelman2007] defined the *average predictive comparison* $\Delta_u$, the mean value of $\delta_u$ over specified distributions of the inputs and model parameters:
+
+$$
+\Delta_u = \frac{\int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta (E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta))~p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta)}{ \int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta~(u^{(2)} - u^{(1)})~ p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta) }
+$$
+
+However, directly using the above equation is impractical because estimating $p(u^{(1)}|v)$ and $p(u^{(2)}|v)$ from finite data points is challenging (especially when $v$ is continuous). Instead, we estimated $\Delta_u$ using the following equation proposed by Gelman and Pardoe [@gelman2007]:
+
+$$
+\hat\Delta_u = \frac{\sum_{i=1}^n \sum_{j=1}^n \sum_{s=1}^S w_{ij}(E(y|u_j, v_i, \Theta_s) - E(y|u_i, v_i, \Theta_s))sign(u_j - u_i)}{\sum_{i=1}^n \sum_{j=1}^n \sum_{s=1}^S w_{ij}(u_j - u_i)sign(u_j - u_i)}
+$$
+
+The summations over $n$ data ($i$ and $j$ are a given data point) and $S$ parameter replicates ($s$ is a given simulation replicate) are a realization of averaging over the distributions of $(u^{(1)},v)$ , $u^{(2)}$, and $\Theta$. The factor $w_{ij}$ is a weight that serves to approximate $p(u^{(1)}|v)$ and $p(u^{(2)}|v)$. In theory, $v$ must be held constant while the input of interest changes from $u^{(1)}$ to $u^{(2)}$. However, there are, if any, few transitions from $u^{(1)}$ to $u^{(2)}$ with a common $v$. We approximate such exact transitions by assigning each pair of data points with a weight:
+
+$$
+w_{ij} = w(v_i, v_j)
+$$
+
+which should represent how likely it is for $u$ to transition from $u_i$ to $u_j$ with $v_i$ (note that $v_i$ is in general a vector of explanatory variables for data point $i$). We used the following weighting function based on Mahalanobis distances following Gelman and Pardoe [@gelman2007]:
+
+$$
+w(v_i, v_j) = \frac{1}{1 + (v_i - v_j)^T\sum_v^{-1}(v_i-v_j)}
+$$
+
+where $\sum_v$ is the variance-covariance matrix of $v$.
+
+We estimated $\hat \Delta_u$ for watershed area and branching probability using the estimated coefficients $\hat \xi_k$ of the regression model explaining $\gamma$ diversity. A thousand of vectors of simulated parameters $\Theta_s$ were drawn from normal distributions with means of $\hat \xi_k$ and standard deviations of $\sigma_{\xi, k}$ (the estimated standard errors of parameter $\xi_k$). The estimated average predictive comparisons are $\hat \Delta_{u} = \frac{1}{S} \sum_{s=1}^S \hat \Delta_{u,s}$ where
+
+$$
+\hat \Delta_{u,s} = \frac{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(E(y|u_j, v_i, \Theta_s) - E(y|u_i, v_i, \Theta_s))sign(u_j - u_i)}{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(u_j - u_i)sign(u_j - u_i)}
+$$
+
+Then
+
+$$
+S.E.(\hat \Delta_{u,s}) = \sqrt{\frac{1}{S-1} \sum_{s-1}^S (\hat \Delta_{u,s} - \hat \Delta_{u})^2}
+$$
+
+The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
@@ -359,6 +410,18 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 \newpage
 
+### Table S7 Average predictive comparisons
+
+Estimated average predictive comparisons. Regression coefficients were derived from the regression model explaining $\gamma$ diversity (see **Table 1** in the maintext for the estimated regression parameters). The average predictive comparisons (an expected increase in $\gamma$ diversity per a unit difference of the explanatory variable of interest) were estimated based on units of 1000 km^2^ for watershed area and 0.1 for branching probability.
+
+```{r chunk_table7}
+
+  source(here::here('empirical/table_apcomp.R'))
+  table_output
+
+```
+
+\newpage
 
 ## Figures
 
