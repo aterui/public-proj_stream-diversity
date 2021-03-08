@@ -133,8 +133,8 @@ Directory for empirical data analysis.
 - `figure_iNEXT_sim` - figure for sensitivity analysis of the iNEXT function 
 - `figure_map` - figure for maps
 - `table_apcomp` - table for average predictive comparisons
-- `table_splist_hkd` - table for a fish species list in Hokkaido, Japan
-- `table_splist_mw` - table for a fish species list in Midwest, US
+- `table_splist_hkd` - table for the fish species list in Hokkaido, Japan
+- `table_splist_mw` - table for the fish species list in Midwest, US
 - `/data_gis` - subdirectory for raw gis data
   <details>
   <summary>`.gpkg` files</summary>

@@ -79,8 +79,9 @@ Directory for empirical data analysis.
 -   `table_apcomp` - table for average predictive comparisons
 -   `table_sim_parameter_main` - table for parameter values of main
     simulations
--   `table_splist_hkd`; table for a fish species list in Hokkaido, Japan
--   `table_splist_mw` - table for a fish species list in Midwest, US
+-   `table_splist_hkd`; table for the fish species list in Hokkaido,
+    Japan
+-   `table_splist_mw` - table for the fish species list in Midwest, US
 -   `/data_gis` - subdirectory for raw gis data
     -   `albers_channel_hkd` - channel network for Hokkaido
     -   `albers_channel_mw` - channel network for Midwest
