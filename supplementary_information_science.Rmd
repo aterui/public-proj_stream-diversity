@@ -88,18 +88,18 @@ In our network generation, we first drew $N_b$ from the binomial distribution bu
 
 Two sources of variation characterize the long-term average of the abiotic environment at each habitat patch: environmental variation at headwaters ($\sigma_h$) and local environmental noise ($\sigma_l$). We drew random values from a normal distribution with a mean of zero and a standard deviation of $\sigma_{h}$ and assigned them to headwater patches (i.e., the most upstream patches). These environmental values at headwaters propagate downstream through a spatial autoregressive process defined as:
 
-$$
-\mu_{z,k} = \rho \mu_{z,k+1} + \epsilon_{k}
-$$
+\begin{equation}
+  \mu_{z,k} = \rho \mu_{z,k+1} + \epsilon_{k}
+\end{equation}
 
 where $\mu_{z,k}$ is the mean environmental value at longitudinal position $k$ ($k$ is the network distance from the outlet patch; $k = 1$ at the outlet), $\rho$ is the strength of spatial autocorrelation and $\epsilon_k$ is the local environmental noise that follows a normal distribution with a mean of zero and a standard deviation of $\sigma_l$. The parameter $\rho$ can take values of 0-1 with larger values indicating greater spatial autocorrelation. In this study, we set $\rho = 1$ to mimic strong spatial autocorrelation in riverine environments. At confluences, we took a weighted mean of environmental values given the relative size of upstream contributing area of joining tributaries:
 
-$$
+\begin{equation}
 \begin{aligned}
-\mu_{z,k} &= \omega(\rho \mu_{z,k+1}^R + \epsilon_{k}^R) + (1-\omega)(\rho \mu_{z,k+1}^L + \epsilon_{k}^L) \\
-\omega &= \frac{A_{k+1}^R}{A_{k+1}^R + A_{k+1}^L}
+  \mu_{z,k} &= \omega(\rho \mu_{z,k+1}^R + \epsilon_{k}^R) + (1-\omega)(\rho \mu_{z,k+1}^L + \epsilon_{k}^L) \\
+  \omega &= \frac{A_{k+1}^R}{A_{k+1}^R + A_{k+1}^L}
 \end{aligned}
-$$
+\end{equation}
 
 where $R$ and $L$ denote "right" and "left" branches, respectively, and $A_k$ is the number of upstream habitat patches at longitudinal position $k$ (akin to the upstream watershed area; $A_k = 1$ at the most upstream patch). The parameter $\omega$ takes values of 0-1 and represents the relative influence of the right tributary given the relative size of joining tributaries. With this expression, larger tributaries have a greater influence on the downstream environment, as observed in natural river networks [@bendaNetworkDynamicsHypothesis2004].
 
@@ -109,43 +109,43 @@ We simulated metacommunity dynamics in branching river networks following the me
 
 The realized number of individuals $N_{ix}(t + 1)$ (species $i$ at patch $x$ and time $t+1$) is given as:
 
-$$
-N_{ix}(t + 1) \sim Poisson(n_{ix}(t) + I_{ix}(t) - E_{ix}(t))
-$$
+\begin{equation}
+  N_{ix}(t + 1) \sim Poisson(n_{ix}(t) + I_{ix}(t) - E_{ix}(t))
+\end{equation}
 
 where $n_{ix}(t)$ is the expected number of individuals given the local community dynamics at time $t$, $I_{ix}(t)$ the expected number of immigrants to patch $x$, and $E_{ix}(t)$ the expected number of emigrants from patch $x$. The realized discrete number of individuals is drawn from a Poisson distribution to account for stochasticity in demographic and dispersal processes [@fronhoferClassicalMetapopulationDynamics2017; @thompsonProcessbasedMetacommunityFramework2020]. Local community dynamics are simulated based on the Beverton-Holt equation [@bevertonDynamicsExploitedFish1957]:
 
-$$
-n_{ix}(t) = \frac{N_{ix}(t)r_{ix}(t)}{1 + \frac{r_{0,i}-1}{K_{x}}\sum_{j=1}^S{\alpha_{ij}N_{jx}(t)}}
-$$
+\begin{equation}
+  n_{ix}(t) = \frac{N_{ix}(t)r_{ix}(t)}{1 + \frac{r_{0,i}-1}{K_{x}}\sum_{j=1}^S{\alpha_{ij}N_{jx}(t)}}
+\end{equation}
 
 where $r_{ix}(t)$ is the reproductive rate of species $i$ given the environmental condition at patch $x$ and time $t$, $r_{0,i}$ the maximum reproductive rate of species $i$, $K_{x}$ the carrying capacity at patch $x$, $\alpha_{ij}$ the competition coefficient between species $i$ and $j$, and $S$ the number of species in a metacommunity. $K_x$ was expressed as a function of the number of upstream habitat patches $A_x$ ($K_x = 100A_x$) to represent increasing habitat size with increasing upstream watershed area [@teruiThreeEcologicalFactors2016; @rahelFishAssemblagesHabitat1991]. The parameter $\alpha_{ij}$ represents the strength of interspecific competition relative to that of intraspecific competition: interspecific competition is greater than intraspecific competition if $\alpha_{ij}$ \> 1 (intraspecific competition coefficient was set constant as $\alpha_{ii} = 1$). $\alpha_{ij}$ was drawn randomly from a uniform distribution as $\alpha_{ij} \sim Unif(0, \alpha_{max})$. The density-independent reproductive rate $r_{ix}(t)$ is affected by abiotic environments (non-consumable) and determined by the following Gaussian function:
 
-$$
-r_{ix}(t) = \delta~r_{0,i}~exp[{-\frac{\{\mu_i-z_x(t)\}^2}{2\sigma^2_{niche,i}}}]
-$$
+\begin{equation}
+  r_{ix}(t) = \delta~r_{0,i}~exp[{-\frac{\{\mu_i-z_x(t)\}^2}{2\sigma^2_{niche,i}}}]
+\end{equation}
 
 where $\mu_i$ is the optimal environmental value for species $i$, $z_x(t)$ the environmental value at patch $x$ and time $t$, and $\sigma_{niche,i}$ the niche width of species $i$. We introduced the cost of a wide niche by multiplying $\delta$ [@chaianunpornEvolutionaryResponsesClimate2015]:
 
-$$
-\delta = exp(-\frac{\sigma_{niche,i}^2}{2\nu^2})
-$$
+\begin{equation}
+  \delta = exp(-\frac{\sigma_{niche,i}^2}{2\nu^2})
+\end{equation}
 
 Smaller values of $\nu$ imply greater costs of having a wider niche (i.e., decreased maximum reproductive rate) and reduce the realized reproductive rate $r_{ix}(t)$ near the niche optimum.
 
 The environmental value at patch $x$ and time $t$, $z_x(t)$, is assumed to follow a multivariate normal distribution as $z_{x}(t) \sim MVN(\boldsymbol{\mu_z}, \boldsymbol{\Omega_z})$, where $\boldsymbol{\mu_z}$ is the vector of mean environmental conditions of habitat patches and $\boldsymbol{\Omega_z}$ is the variance-covariance matrix. The diagonal elements of the variance-covariance matrix $\sigma^2_z$ represent the degree of temporal environmental variation. The off-diagonal elements $\Omega_{xy}$ represent the spatial autocorrelation in temporal environmental variation as:
 
-$$
-\Omega_{xy} = \sigma_z^2~exp(-\phi d_{xy})
-$$
+\begin{equation}
+  \Omega_{xy} = \sigma_z^2~exp(-\phi d_{xy})
+\end{equation}
 
 $\Omega_{xy}$ denotes the temporal covariance of environmental conditions between patch $x$ and $y$, which is assumed to decay exponentially with increasing distance between the patches $d_{xy}$ (the shortest network path measured as the number of habitat patches). The parameter $\phi$ determines the degree of the distance decay of environmental correlates.
 
 The expected number of emigrants at time $t$ is the product of dispersal probability $p_d$ and $n_{ix}(t)$: $E_{ix}(t) = p_{d}n_{ix}(t)$. The immigration probability at patch $x$ for species $i$, $\xi_{ix}(t)$, is calculated using the following equation that accounts for separation distance among habitat patches and dispersal capability of a species:
 
-$$
-\xi_{ix}(t) = \frac{\sum_{y,y \neq x}E_{iy}(t)~exp(-\theta d_{xy})}{\sum_{x} \sum_{y,y \neq x}E_{iy}(t)~exp(-\theta d_{xy})}
-$$
+\begin{equation}
+  \xi_{ix}(t) = \frac{\sum_{y,y \neq x}E_{iy}(t)~exp(-\theta d_{xy})}{\sum_{x} \sum_{y,y \neq x}E_{iy}(t)~exp(-\theta d_{xy})}
+\end{equation}
 
 The parameter $\theta$ regulates the dispersal distance of a species that follows an exponential distribution ($\theta^{-1}$ corresponds to the expected dispersal distance). The expected number of immigrants is calculated as $I_{ix}(t) = \xi_{ix}(t)\sum_x^{N_p} E_{ix}$.
 
@@ -181,26 +181,26 @@ Climate (air temperature and precipitation) and land use (the fraction of agricu
 
 We constructed two models for each of the diversity metrics: global and region-specific models. The global model assumes that the effects of watershed area and branching probability are consistent across geographic regions (i.e., no interactive effects of the region with other linear predictors).
 
-$$
-\mu_w = \xi_0 + \xi_1~log_{10}~WA_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w + \sum_k \xi_k x_{k,w}
-$$
+\begin{equation}
+  \mu_w = \xi_0 + \xi_1~log_{10}~WA_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w + \sum_k \xi_k x_{k,w}
+\end{equation}
 
 where $\xi_k$ are the intercept and regression coefficients for linear predictors. Meanwhile, the region-specific model assumes the effects of watershed area and branching probability differ between regions (i.e., interactions between region and watershed area/branching probability).
 
-$$
+\begin{equation}
 \begin{aligned}
-\mu_w =& \xi_0 + \xi_1~log_{10}~WA_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w +\\
-&\xi_4~log_{10}~WA_w \cdot region_w + \xi_5~log_{10}~P_{b,w} \cdot region_w + \sum_k \xi_k x_{k,w}
+  \mu_w =& \xi_0 + \xi_1~log_{10}~WA_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w +\\
+  &\xi_4~log_{10}~WA_w \cdot region_w + \xi_5~log_{10}~P_{b,w} \cdot region_w + \sum_k \xi_k x_{k,w}
 \end{aligned}
-$$
+\end{equation}
 
 All explanatory variables except watershed area, branching probability, and region were standardized to a mean of zero and a standard deviation of one before the analysis.
 
 We compared the performance of these competing models using the Bayes factor [@wagenmakersPracticalSolutionPervasive2007], which gives the relative strength of evidence in favor of the global model (M0) over the region-specific model (M1). We used Bayesian Information Criteria (BIC) of the linear models to approximate the Bayes factor [@wagenmakersPracticalSolutionPervasive2007]:
 
-$$
-Bayes~factor = exp(\Delta BIC_{10}/2)
-$$
+\begin{equation}
+  Bayes~factor = exp(\Delta BIC_{10}/2)
+\end{equation}
 
 where $\Delta BIC_{10} = BIC(M1) - BIC(M0)$.
 
@@ -218,21 +218,21 @@ We performed a sensitivity analysis of the metacommunity simulation to identify 
 
 For each parameter combination, we regressed log-transformed $\alpha$, $\beta$, and $\gamma$ diversity ($log_{10}~y_j$ for network replicate $j$) on the number of habitat patches $N_{p}$ and branching probability $P_{b}$ as:
 
-$$
+\begin{equation}
 \begin{aligned}
-log_{10}~y_j &\sim Normal(\mu_j, \sigma^2)\\
-       \mu_j &= \psi_0 + \psi_1~log_{10}~N_{p,j} + \psi_2~log_{10}~P_{b,j}
+  log_{10}~y_j &\sim Normal(\mu_j, \sigma^2)\\
+         \mu_j &= \psi_0 + \psi_1~log_{10}~N_{p,j} + \psi_2~log_{10}~P_{b,j}
 \end{aligned}
-$$
+\end{equation}
 
 where $\psi_k$ ($k = 0-2$) are the intercept ($\psi_0$) and regression coefficients ($\psi_1$ and $\psi_2$). We extracted 500 estimates of $\psi_1$ and $\psi_2$, which represent the effects of $N_{p}$ and $P_{b}$ on diversity metrics under a given parameter combination. To examine influences of simulation parameters (**Table S1**) on $\psi_1$ and $\psi_2$, we developed the following regression model taking $\psi_1$ or $\psi_2$ as a response variable $u_n$ (parameter combination $n$):
 
-$$
+\begin{equation}
 \begin{aligned}
-u_{n} &\sim Normal(\mu_n, \sigma^2)\\
-\mu_n &= \zeta_0 + \zeta_1 \sigma_{h,n} + \zeta_2 \sigma_{l,n} + \zeta_3 \sigma_{z,n} + \zeta_4 \phi_n + \zeta_5 \nu_n + \zeta_6 \alpha_{max, n} + \zeta_7 \theta_n + \zeta_8 p_{d,n} 
+  u_{n} &\sim Normal(\mu_n, \sigma^2)\\
+  \mu_n &= \zeta_0 + \zeta_1 \sigma_{h,n} + \zeta_2 \sigma_{l,n} + \zeta_3 \sigma_{z,n} + \zeta_4 \phi_n + \zeta_5 \nu_n + \zeta_6 \alpha_{max, n} + \zeta_7 \theta_n + \zeta_8 p_{d,n} 
 \end{aligned}
-$$
+\end{equation}
 
 where $\zeta_k$ ($k = 0-8$) are the intercept ($\zeta_0$) and regression coefficients ($\zeta_{1-8}$). Explanatory variables were standardized to a mean of zero and a standard deviation of one, so that regression coefficients are comparable.
 
@@ -270,9 +270,9 @@ The simulation reproduced diverse patterns of longitudinal gradients in local sp
 
 We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with known values of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, presence of species $i$ at site $x$, $J_{ix}$, was drawn from a Bernoulli distribution as $J_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}J_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT' [@hsiehINEXTPackageRarefaction2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
 
-$$
-\%~bias = \frac{100(S_{est} - S_{true})}{S_{true}}
-$$
+\begin{equation}
+  \%~bias = \frac{100(S_{est} - S_{true})}{S_{true}}
+\end{equation}
 
 Positive values of % bias indicate an overestimation of species richness, while negative values indicate an underestimation.
 
@@ -286,47 +286,50 @@ For regression models, standardized regression coefficients (or its variant) are
 
 The average predictive comparison provides an intuitive yet rigorous way to quantify effect sizes for each of explanatory variables in regression models with interactions and/or variable transformations [@gelmanAveragePredictiveComparisons2007]. The basic predictive comparison $\delta_u$ is an expected change in $y$ on the original scale per a unit difference of the explanatory variable of interest:
 
-$$
-\delta_u(u^{(1)} \to u^{(2)}, v, \Theta) = \frac{E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta)}{u^{(2)} - u^{(1)}}
-$$
+\begin{equation}
+  \delta_u(u^{(1)} \to u^{(2)}, v, \Theta) = \frac{E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta)}{u^{(2)} - u^{(1)}}
+\end{equation}
 
 where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of interest (a value for the explanatory variable of interest), $v$ all the other inputs (a vector in general), $\Theta$ a set of parameters in a regression model. In general, $\delta_u$ depends on $u^{(1)}$ and $u^{(2)}$ (the beginning and end points of the hypothesized change in the explanatory variable of interest), $v$, and $\Theta$. Therefore, Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007] defined the *average predictive comparison* $\Delta_u$, the mean value of $\delta_u$ over specified distributions of the inputs and model parameters:
 
-$$
-\Delta_u = \frac{\int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta (E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta))~p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta)}{ \int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta~(u^{(2)} - u^{(1)})~ p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta) }
-$$
+\begin{equation}
+  \Delta_u = \frac{\int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta (E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta))~p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta)}
+                  { \int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta~(u^{(2)} - u^{(1)})~ p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta) }
+\end{equation}
 
 However, directly using the above equation is impractical because estimating $p(u^{(1)}|v)$ and $p(u^{(2)}|v)$ from finite data points is challenging (especially when $v$ is continuous). Instead, we estimated $\Delta_u$ using the following equation proposed by Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
 
-$$
-\hat\Delta_u = \frac{\sum_{i=1}^n \sum_{j=1}^n \sum_{s=1}^S w_{ij}(E(y|u_j, v_i, \Theta_s) - E(y|u_i, v_i, \Theta_s))sign(u_j - u_i)}{\sum_{i=1}^n \sum_{j=1}^n \sum_{s=1}^S w_{ij}(u_j - u_i)sign(u_j - u_i)}
-$$
+\begin{equation}
+  \hat\Delta_u = \frac{\sum_{i=1}^n \sum_{j=1}^n \sum_{s=1}^S w_{ij}(E(y|u_j, v_i, \Theta_s) - E(y|u_i, v_i, \Theta_s))sign(u_j - u_i)}
+                      {\sum_{i=1}^n \sum_{j=1}^n \sum_{s=1}^S w_{ij}(u_j - u_i)sign(u_j - u_i)}
+\end{equation}
 
 The summations over $n$ data ($i$ and $j$ are a given data point) and $S$ parameter replicates ($s$ is a given simulation replicate) are a realization of averaging over the distributions of $(u^{(1)},v)$ , $u^{(2)}$, and $\Theta$. The factor $w_{ij}$ is a weight that serves to approximate $p(u^{(1)}|v)$ and $p(u^{(2)}|v)$. In theory, $v$ must be held constant while the input of interest changes from $u^{(1)}$ to $u^{(2)}$. However, there are, if any, few transitions from $u^{(1)}$ to $u^{(2)}$ with a common $v$. We approximate such exact transitions by assigning each pair of data points with a weight:
 
-$$
-w_{ij} = w(v_i, v_j)
-$$
+\begin{equation}
+  w_{ij} = w(v_i, v_j)
+\end{equation}
 
 which should represent how likely it is for $u$ to transition from $u_i$ to $u_j$ with $v_i$ (note that $v_i$ is in general a vector of explanatory variables for data point $i$). We used the following weighting function based on Mahalanobis distances following Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
 
-$$
+\begin{equation}
 w(v_i, v_j) = \frac{1}{1 + (v_i - v_j)^T\sum_v^{-1}(v_i-v_j)}
-$$
+\end{equation}
 
 where $\sum_v$ is the variance-covariance matrix of $v$.
 
 We estimated $\hat \Delta_u$ for watershed area and branching probability using the estimated coefficients $\hat \xi_k$ of the regression model explaining $\gamma$ diversity. A thousand of vectors of simulated parameters $\Theta_s$ were drawn from normal distributions with means of $\hat \xi_k$ and standard deviations of $\sigma_{\xi, k}$ (the estimated standard errors of parameters $\xi_k$). The estimated average predictive comparisons are $\hat \Delta_{u} = \frac{1}{S} \sum_{s=1}^S \hat \Delta_{u,s}$ where
 
-$$
-\hat \Delta_{u,s} = \frac{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(E(y|u_j, v_i, \Theta_s) - E(y|u_i, v_i, \Theta_s))sign(u_j - u_i)}{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(u_j - u_i)sign(u_j - u_i)}
-$$
+\begin{equation}
+  \hat \Delta_{u,s} = \frac{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(E(y|u_j, v_i, \Theta_s) - E(y|u_i, v_i, \Theta_s))sign(u_j - u_i)}
+                           {\sum_{i=1}^n \sum_{j=1}^n w_{ij}(u_j - u_i)sign(u_j - u_i)}
+\end{equation}
 
 Then
 
-$$
-S.E.(\hat \Delta_{u,s}) = \sqrt{\frac{1}{S-1} \sum_{s-1}^S (\hat \Delta_{u,s} - \hat \Delta_{u})^2}
-$$
+\begin{equation}
+  S.E.(\hat \Delta_{u,s}) = \sqrt{\frac{1}{S-1} \sum_{s-1}^S (\hat \Delta_{u,s} - \hat \Delta_{u})^2}
+\end{equation}
 
 The estimated average predictive comparisons were summarized in **Table S7**.
 
