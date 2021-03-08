@@ -1,22 +1,19 @@
 README
 ================
 
--   [Title](#title)
--   [Author](#author)
--   [File descriptions](#file-descriptions)
+-   [Article Information](#article-information)
+-   [File Descriptions](#file-descriptions)
     -   [Directory `theory`](#directory-theory)
     -   [Directory `empirical`](#directory-empirical)
 
-# Title
+# Article Information
 
-Ecosystem size and complexity dictate riverine biodiversity
+**Title**: Ecosystem size and complexity dictate riverine biodiversity
 
-# Author
+**Author**: Akira Terui, Seoghyun Kim, Christine L. Dolph, Taku Kadoya,
+Yusuke Miyazaki
 
-Akira Terui, Seoghyun Kim, Christine L. Dolph, Taku Kadoya, Yusuke
-Miyazaki
-
-# File descriptions
+# File Descriptions
 
 See below or `metadata.html` (to view `metadata.html`, clone the
 repository and open `metadata.html` from your local computer). Note that
@@ -65,6 +62,7 @@ Directory for theoretical data analysis.
 
 Directory for empirical data analysis.
 
+-   `analysis_apcomp` - average predictive comparisons
 -   `analysis_iNEXT_sim` - sensitivity simulation for the iNEXT function
     (Chao 2 estimator)
 -   `analysis_lm_bf` - main analysis for influences of environmental
@@ -78,6 +76,7 @@ Directory for empirical data analysis.
 -   `figure_iNEXT_sim` - figure for sensitivity analysis of the iNEXT
     function
 -   `figure_map` - figure for maps
+-   `table_apcomp` - table for average predictive comparisons
 -   `table_sim_parameter_main` - table for parameter values of main
     simulations
 -   `table_splist_hkd`; table for a fish species list in Hokkaido, Japan
