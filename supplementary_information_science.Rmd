@@ -328,7 +328,7 @@ We estimated $\hat \Delta_u$ for watershed area and branching probability using 
 Then
 
 \begin{equation}
-  S.E.(\hat \Delta_{u,s}) = \sqrt{\frac{1}{S-1} \sum_{s-1}^S (\hat \Delta_{u,s} - \hat \Delta_{u})^2}
+  S.E.(\hat \Delta_{u,s}) = \sqrt{\frac{1}{S-1} \sum_{s=1}^S (\hat \Delta_{u,s} - \hat \Delta_{u})^2}
 \end{equation}
 
 The estimated average predictive comparisons were summarized in **Table S7**.
