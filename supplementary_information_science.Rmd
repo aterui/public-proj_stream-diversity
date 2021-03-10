@@ -296,7 +296,7 @@ The number of sampling sites influenced the estimation accuracy of asymptotic sp
 
 ### Average predictive comparison
 
-For regression models, standardized regression coefficients (or its variant) are perhaps the most common summary when comparing effect sizes of explanatory variables. These values are useful if they are directly interpretable. For example, in linear regression models without interactions and/or variable transformations, regression coefficients have direct interpretations as they represent additive effects. However, there are many cases where regression coefficients are difficult to interpret. In our case, we regressed the log-transformed species richness on explanatory variables, so regression coefficients do not have direct interpretations at the original scale of the response variable $y$ (i.e., species richness).
+For regression models, standardized regression coefficients (or its variant) are perhaps the most common summary when comparing effect sizes of explanatory variables. These values are useful if they are directly interpretable. For example, in linear regression models without interactions and variable transformations, regression coefficients have direct interpretations as they represent additive effects. However, there are many cases where regression coefficients are difficult to interpret. In our case, we regressed the log-transformed species richness on explanatory variables, so regression coefficients do not have direct interpretations at the original scale of the response variable $y$ (i.e., species richness).
 
 The average predictive comparison provides an intuitive yet rigorous way to quantify effect sizes for each of explanatory variables in regression models with interactions and/or variable transformations [@gelmanAveragePredictiveComparisons2007]. The basic predictive comparison $\delta_u$ is an expected change in $y$ on the original scale per a unit difference of the explanatory variable of interest:
 
@@ -309,8 +309,8 @@ where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of inter
 
 ```{=tex}
 \begin{equation}
-  \Delta_u = \frac{\int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta (E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta))~p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta)}
-                  { \int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta~(u^{(2)} - u^{(1)})~ p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta) }
+  \Delta_u = \frac{\int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta (E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta))~p(u^{(1)}|v)~p(u^{(2)}|v)~p(v)~p(\Theta)}
+                  { \int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta~(u^{(2)} - u^{(1)})~ p(u^{(1)}|v)~p(u^{(2)}|v)~p(v)~p(\Theta) }
 \end{equation}
 ```
 However, directly using the above equation is impractical because estimating $p(u^{(1)}|v)$ and $p(u^{(2)}|v)$ from finite data points is challenging (especially when $v$ is continuous). Instead, we estimated $\Delta_u$ using the following equation proposed by Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
@@ -335,7 +335,7 @@ The weight factor should represent the likelihood of $u$ changing from $u_i$ to 
 w(v_i, v_j) = \frac{1}{1 + (v_i - v_j)^T\Omega_v^{-1}(v_i-v_j)}
 \end{equation}
 ```
-where $\Omega_v^{-1}$ is the inverse of the variance-covariance matrix of $v$.
+where $\Omega_v^{-1}$ is the inverse of the variance-covariance matrix of $v$. The function gives the maximum weight for a pair of $u_i$ and $u_j$ if $v_i = v_j$ (note that $v=v_i$ when $u = u_i$) while giving a less weight as the Mahalanobis distance between $v_i$ and $v_j$ increases. This property makes sense because our goal is to approximate the probability of transition from $u_i$ to $u_j$ with a common $v$ (i.e., $v_i = v_j$).
 
 We estimated $\hat \Delta_u$ for watershed area and branching probability using the estimated coefficients $\hat \xi_k$ of the regression model explaining $\gamma$ diversity. A thousand of vectors of simulated parameters $\Theta_s$ were drawn from normal distributions with means of $\hat \xi_k$ and standard deviations of $\sigma_{\xi, k}$ (the estimated standard errors of parameters $\xi_k$). The estimated average predictive comparisons are $\hat \Delta_{u} = \frac{1}{S} \sum_{s=1}^S \hat \Delta_{u,s}$ where
 
@@ -345,7 +345,7 @@ We estimated $\hat \Delta_u$ for watershed area and branching probability using 
                            {\sum_{i=1}^n \sum_{j=1}^n w_{ij}(10^{u_j} - 10^{u_i})sign(u_j - u_i)}
 \end{equation}
 ```
-We exponentiated $u_i$ and $u_j$ because we log-transformed watershed area and branching probability in the statistical model. Then
+We exponentiated $u_i$ and $u_j$ in the denominator because we log-transformed watershed area and branching probability in the statistical model. Then
 
 ```{=tex}
 \begin{equation}
