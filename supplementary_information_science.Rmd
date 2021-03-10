@@ -290,7 +290,7 @@ The average predictive comparison provides an intuitive yet rigorous way to quan
   \delta_u(u^{(1)} \to u^{(2)}, v, \Theta) = \frac{E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta)}{u^{(2)} - u^{(1)}}
 \end{equation}
 
-where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of interest (a value for the explanatory variable of interest), $v$ all the other inputs (a vector in general), $\Theta$ a set of parameters in a regression model. In general, $\delta_u$ depends on $u^{(1)}$ and $u^{(2)}$ (the beginning and end points of the hypothesized change in the explanatory variable of interest), $v$, and $\Theta$. Therefore, Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007] defined the *average predictive comparison* $\Delta_u$, the mean value of $\delta_u$ over specified distributions of the inputs and model parameters:
+where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of interest (a value for the explanatory variable of interest), $v$ all the other inputs (a vector in general), $\Theta$ a set of parameters in a regression model. In general, $\delta_u$ depends on $u^{(1)}$ and $u^{(2)}$ (the lower and higher points of the hypothesized change in the explanatory variable of interest), $v$, and $\Theta$. Therefore, Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007] defined the *average predictive comparison* $\Delta_u$, the mean value of $\delta_u$ over specified distributions of the inputs and model parameters:
 
 \begin{equation}
   \Delta_u = \frac{\int\int_{u^{(2)}>u^{(1)}}du^{(1)}du^{(2)}\int dv \int d\Theta (E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta))~p(u^{u^{(1)}}|v)~p(u^{u^{(2)}}|v)~p(v)~p(\Theta)}
@@ -310,7 +310,7 @@ The summations over $n$ data ($i$ and $j$ are a given data point) and $S$ parame
   w_{ij} = w(v_i, v_j)
 \end{equation}
 
-which should represent how likely it is for $u$ to transition from $u_i$ to $u_j$ with $v_i$ (note that $v_i$ is in general a vector of explanatory variables for data point $i$). We used the following weighting function based on Mahalanobis distances following Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
+which should represent the likelihood of $u$ changing from $u_i$ to $u_j$ with $v_i$ (note that $v_i$ is in general a vector of explanatory variables for data point $i$). We used the following weighting function based on Mahalanobis distances following Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
 
 \begin{equation}
 w(v_i, v_j) = \frac{1}{1 + (v_i - v_j)^T\sum_v^{-1}(v_i-v_j)}
