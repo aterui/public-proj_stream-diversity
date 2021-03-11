@@ -2,11 +2,11 @@
 # setup -------------------------------------------------------------------
 
   pacman::p_load(tidyverse, knitr, kableExtra)
-  dat_hkd <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
+  dat_hkd_site <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
 
 # table -------------------------------------------------------------------
 
-  table_output <- dat_hkd %>% 
+  table_output <- dat_hkd_site %>% 
     mutate(n_site = n_distinct(SiteID)) %>% 
     mutate(Species = str_replace_all(str_to_title(Species), "_", " ")) %>% 
     mutate(Species = str_replace_all(Species, "(spp$)|(spp\\s)", "spp\\.")) %>% 
