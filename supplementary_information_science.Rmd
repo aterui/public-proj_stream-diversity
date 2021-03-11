@@ -386,7 +386,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ### Table S3 Sensitivity analysis for ecosystem size effects
 
-**Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
+**Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See **Tables S1 and S2** for interpretation of the simulation parameters.
 
 ```{r chunk_table3, results='asis'}
   
@@ -398,7 +398,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ### Table S4 Sensitivity analysis for ecosystem complexity effects
 
-**Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See Tables S1 and S2 for interpretation of the simulation parameters.
+**Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See **Tables S1 and S2** for interpretation of the simulation parameters.
 
 ```{r chunk_table4, results='asis'}
 
@@ -410,7 +410,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ### Table S5 List of fish species in Hokkaido, Japan
 
-**Table S5** List of fish species in Hokkaido, Japan, included in our statistical analysis. `r n_distinct(dat_hkd$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy out of `r n_distinct(dat_hkd$SiteID)` sites.
+**Table S5** List of fish species in Hokkaido, Japan, included in our statistical analysis. `r n_distinct(dat_hkd_site$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy of `r n_distinct(dat_hkd_site$SiteID)` sites.
 
 ```{r chunk_table5}
 
@@ -423,7 +423,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ### Table S6 List of fish species in Midwest, US
 
-**Table S6** List of fish species in the Midwest, US, included in our statistical analysis. `r n_distinct(dat_mw$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy out of `r n_distinct(dat_mw$SiteID)` sites.
+**Table S6** List of fish species in the Midwest, US, included in our statistical analysis. `r n_distinct(dat_mw_site$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy of `r n_distinct(dat_mw_site$SiteID)` sites.
 
 ```{r chunk_table6}
 
