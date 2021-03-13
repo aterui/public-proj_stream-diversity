@@ -114,7 +114,7 @@ While the prevailing evidence supports the importance of ecosystem size in scali
 
 # Acknowledgments
 
-We are grateful to numerous people who have been involved in the collection of fish community data. We thank Michio Fukushima and Hirokazu Urabe for providing information on the Hokkaido Freshwater Fish Database HFish and the fish monitoring data at protected watersheds in Hokkaido. We thank Jacques Finlay for his constructive comments on the earlier version of the manuscript. This research was funded by National Science Foundation through a Water Sustainability and Climate Program (WSC) Observatory grant (EAR‐1209402): REACH (Resilience under Accelerated Change) and through the Division of Environmental Biology (DEB 2015634), Environmental Protection Agency through a Water Quality Benefits grant (EPA-G2015-STAR-A1), and the University of North Carolina at Greensboro through a start-up fund.
+We are grateful to numerous people who have been involved in the collection of fish community data. We thank Michio Fukushima and Hirokazu Urabe for providing information on the Hokkaido Freshwater Fish Database HFish and the fish monitoring data at protected watersheds in Hokkaido. We thank Jacques Finlay for his constructive comments on the earlier version of the manuscript. This research was funded by National Science Foundation through a Water Sustainability and Climate Program Observatory grant (EAR‐1209402): REACH (Resilience under Accelerated Change) and through the Division of Environmental Biology (DEB 2015634), Environmental Protection Agency through a Water Quality Benefits grant (EPA-G2015-STAR-A1), and the University of North Carolina at Greensboro through a start-up fund.
 
 # Author contributions
 
