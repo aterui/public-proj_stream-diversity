@@ -259,8 +259,6 @@ Longitudinal gradients of local species richness have been extensively studied i
 
 The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability (**Figure S1**). Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios were capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
 
-\newpage
-
 ## Empirical data
 
 ### Data selection criteria
