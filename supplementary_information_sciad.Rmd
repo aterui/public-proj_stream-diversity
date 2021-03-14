@@ -76,154 +76,9 @@ knit: (function(inputFile, encoding) {
 
 ```
 
-# Materials and Methods
+# Theory
 
-## Theory
-
-### Network generation
-
-We depicted branching ecosystems as a bifurcating network of connected habitat patches [@teruiMetapopulationStabilityBranching2018; @yeakelSynchronisationStabilityRiver2014] (**Figure 1**). Habitat patches, or local communities, can be either non-branching or branching river sections with a unit length $l$, which defines the scale of local species interactions. Two parameters determine the geometric properties of simulated branching networks: the number of habitat patches $N_p$ (ecosystem size) and branching probability $P_b$ (ecosystem complexity). Each habitat patch is assigned to be a branching patch (including upstream terminals) with probability $P_b$ or a non-branching patch with probability $1-P_b$. In this framework, an individual branch is a consecutive series of non-branching patches terminated at a branching patch; therefore, the number of habitat patches in branch $q$, $n_{p,q}$, is a realization of a random variable drawn from a geometric distribution $n_{p,q} \sim Ge(P_{b})$ [@teruiMetapopulationStabilityBranching2018] but conditional on $\sum_{q=1}^{N_b}n_{p,q} = N_p$ ($N_b$ is the number of branches in a network). The number of branches $N_b$ is identical to the number of branching habitat patches in a network, or the number of 'success' out of $N_p$ trials. This leads to an assumption that $N_b$ is a realization of a random variable drawn from a binomial distribution as $N_b \sim Binomial(N_p, P_b)$. This framework has two merits. First, it reflects observed patterns of branch length distribution, which is known to follow an exponential distribution (a continuous version of a geometric distribution) [@rodriguez-iturbeFractalRiverBasins2001]. Second, it preserves the fractal nature of branching patterns [@peckhamReformulationHortonLaws1999]. An alternative approach is the use of optimal channel networks [@carraroGenerationApplicationRiver2020a]. However, we employed our framework because branching probability $P_b$ is quantifiable in natural river networks, enabling us to compare theoretical predictions with empirical observations.
-
-In our network generation, we first drew $N_b$ from the binomial distribution but selected an odd number to constitute a bifurcating branching network. We then determined $n_{p,q}$ as random draws from the geometric distribution with the constraint of $\sum_{q=1}^{N_b}n_{p,q} = N_p$. The generated branches were organized randomly into a bifurcating branching network.
-
-Two sources of variation characterize the long-term average of the abiotic environment at each habitat patch: environmental variation at headwaters ($\sigma_h$) and local environmental noise ($\sigma_l$). We drew random values from a normal distribution with a mean of zero and a standard deviation of $\sigma_{h}$ and assigned them to headwater patches (i.e., the most upstream patches). These environmental values at headwaters propagate downstream through a spatial autoregressive process defined as:
-
-```{=tex}
-\begin{equation}
-  \mu_{z,k} = \rho \mu_{z,k+1} + \epsilon_{k}
-\end{equation}
-```
-where $\mu_{z,k}$ is the mean environmental value at longitudinal position $k$ ($k$ is the network distance from the outlet patch; $k = 1$ at the outlet), $\rho$ is the strength of spatial autocorrelation and $\epsilon_k$ is the local environmental noise that follows a normal distribution with a mean of zero and a standard deviation of $\sigma_l$. The parameter $\rho$ can take values of 0-1 with larger values indicating greater spatial autocorrelation. In this study, we set $\rho = 1$ to mimic strong spatial autocorrelation in riverine environments. At confluences, we took a weighted mean of environmental values given the relative size of upstream contributing area of joining tributaries:
-
-```{=tex}
-\begin{equation}
-\begin{aligned}
-  \mu_{z,k} &= \omega(\rho \mu_{z,k+1}^R + \epsilon_{k}^R) + (1-\omega)(\rho \mu_{z,k+1}^L + \epsilon_{k}^L) \\
-  \omega &= \frac{A_{k+1}^R}{A_{k+1}^R + A_{k+1}^L}
-\end{aligned}
-\end{equation}
-```
-where $R$ and $L$ denote "right" and "left" branches, respectively, and $A_k$ is the number of upstream habitat patches at longitudinal position $k$ (akin to the upstream watershed area; $A_k = 1$ at the most upstream patch). The parameter $\omega$ takes values of 0-1 and represents the relative influence of the right tributary given the relative size of joining tributaries. With this expression, larger tributaries have a greater influence on the downstream environment, as observed in natural river networks [@bendaNetworkDynamicsHypothesis2004].
-
-### Metacommunity model
-
-We simulated metacommunity dynamics in branching river networks following the metacommunity framework proposed by Thompson et al [@thompsonProcessbasedMetacommunityFramework2020]. In this framework, abiotic environmental conditions (density-independent), intra- and interspecific competition (density-dependent), and dispersal regulate a species' realized population growth. Below, we describe the details of our metacommunity model.
-
-The realized number of individuals $N_{ix}(t + 1)$ (species $i$ at patch $x$ and time $t+1$) is given as:
-
-```{=tex}
-\begin{equation}
-  N_{ix}(t + 1) \sim Poisson(n_{ix}(t) + I_{ix}(t) - E_{ix}(t))
-\end{equation}
-```
-where $n_{ix}(t)$ is the expected number of individuals given the local community dynamics at time $t$, $I_{ix}(t)$ the expected number of immigrants to patch $x$, and $E_{ix}(t)$ the expected number of emigrants from patch $x$. The realized discrete number of individuals is drawn from a Poisson distribution to account for stochasticity in demographic and dispersal processes [@fronhoferClassicalMetapopulationDynamics2017; @thompsonProcessbasedMetacommunityFramework2020]. Local community dynamics are simulated based on the Beverton-Holt equation [@bevertonDynamicsExploitedFish1957]:
-
-```{=tex}
-\begin{equation}
-  n_{ix}(t) = \frac{N_{ix}(t)r_{ix}(t)}{1 + \frac{r_{0,i}-1}{K_{x}}\sum_{j=1}^S{\alpha_{ij}N_{jx}(t)}}
-\end{equation}
-```
-where $r_{ix}(t)$ is the reproductive rate of species $i$ given the environmental condition at patch $x$ and time $t$, $r_{0,i}$ the maximum reproductive rate of species $i$, $K_{x}$ the carrying capacity at patch $x$, $\alpha_{ij}$ the competition coefficient between species $i$ and $j$, and $S$ the number of species in a metacommunity. $K_x$ was expressed as a function of the number of upstream habitat patches $A_x$ ($K_x = 100A_x$) to represent increasing habitat size with increasing upstream watershed area [@teruiThreeEcologicalFactors2016; @rahelFishAssemblagesHabitat1991]. The parameter $\alpha_{ij}$ represents the strength of interspecific competition relative to that of intraspecific competition: interspecific competition is greater than intraspecific competition if $\alpha_{ij}$ \> 1 (intraspecific competition coefficient was set constant as $\alpha_{ii} = 1$). $\alpha_{ij}$ was drawn randomly from a uniform distribution as $\alpha_{ij} \sim Unif(0, \alpha_{max})$. The density-independent reproductive rate $r_{ix}(t)$ is affected by abiotic environments (non-consumable) and determined by the following Gaussian function:
-
-```{=tex}
-\begin{equation}
-  r_{ix}(t) = \delta~r_{0,i}~exp[{-\frac{\{\mu_i-z_x(t)\}^2}{2\sigma^2_{niche,i}}}]
-\end{equation}
-```
-where $\mu_i$ is the optimal environmental value for species $i$, $z_x(t)$ the environmental value at patch $x$ and time $t$, and $\sigma_{niche,i}$ the niche width of species $i$. We introduced the cost of a wide niche by multiplying $\delta$ [@chaianunpornEvolutionaryResponsesClimate2015]:
-
-```{=tex}
-\begin{equation}
-  \delta = exp(-\frac{\sigma_{niche,i}^2}{2\nu^2})
-\end{equation}
-```
-Smaller values of $\nu$ imply greater costs of having a wider niche (i.e., decreased maximum reproductive rate) and reduce the realized reproductive rate $r_{ix}(t)$ near the niche optimum.
-
-The environmental value at patch $x$ and time $t$, $z_x(t)$, is assumed to follow a multivariate normal distribution as $z_{x}(t) \sim MVN(\boldsymbol{\mu_z}, \boldsymbol{\Omega_z})$, where $\boldsymbol{\mu_z}$ is the vector of mean environmental conditions of habitat patches and $\boldsymbol{\Omega_z}$ is the variance-covariance matrix. The diagonal elements of the variance-covariance matrix $\sigma^2_z$ represent the degree of temporal environmental variation. The off-diagonal elements $\Omega_{xy}$ represent the spatial autocorrelation in temporal environmental variation as:
-
-```{=tex}
-\begin{equation}
-  \Omega_{xy} = \sigma_z^2~exp(-\phi d_{xy})
-\end{equation}
-```
-$\Omega_{xy}$ denotes the temporal covariance of environmental conditions between patch $x$ and $y$, which is assumed to decay exponentially with increasing distance between the patches $d_{xy}$ (the shortest network path measured as the number of habitat patches). The parameter $\phi$ determines the degree of the distance decay of environmental correlates.
-
-The expected number of emigrants at time $t$ is the product of dispersal probability $p_d$ and $n_{ix}(t)$: $E_{ix}(t) = p_{d}n_{ix}(t)$. The immigration probability at patch $x$ for species $i$, $\xi_{ix}(t)$, is calculated using the following equation that accounts for separation distance among habitat patches and dispersal capability of a species:
-
-```{=tex}
-\begin{equation}
-  \xi_{ix}(t) = \frac{\sum_{y,y \neq x}E_{iy}(t)~exp(-\theta d_{xy})}{\sum_{x} \sum_{y,y \neq x}E_{iy}(t)~exp(-\theta d_{xy})}
-\end{equation}
-```
-The parameter $\theta$ regulates the dispersal distance of a species that follows an exponential distribution ($\theta^{-1}$ corresponds to the expected dispersal distance). The expected number of immigrants is calculated as $I_{ix}(t) = \xi_{ix}(t)\sum_x^{N_p} E_{ix}$.
-
-### Simulation
-
-We used `r n_scenario` sets of parameter combinations (i.e., simulation scenarios) based on the results of extensive sensitivity analysis (**Supplementary Text**). The parameter combinations comprises four landscape and eight ecological scenarios. Landscape scenarios distinguish spatial patterns of habitat heterogeneity, while ecological scenarios change ecological traits of simulated species. For landscape scenarios, we used four combinations of environmental variation at headwaters ($\sigma_h = 0.01, 1$) and the degree of local environmental noise ($\sigma_l = 0.01, 1$). The inequality of $\sigma_h$ and $\sigma_l$ controls the relationship between branching complexity and habitat heterogeneity (**Figures 1A and 1B**). For ecological scenarios, we varied three ecological parameters that are relevant for dispersal and interspecific competition: dispersal distance ($\theta =$ `r unique(dat_sim$theta)`), dispersal probability ($p_d =$ `r unique(dat_sim$p_dispersal)`), and the maximum value of competition coefficients ($\alpha_{max} =$ `r unique(dat_sim$max_alpha)`). This setup results in eight ecological scenarios with different levels of dispersal and competition.
-
-We allowed interspecific variation in niche optimum and width, which were drawn from uniform distributions as $\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$. We used fixed values for the following parameters: maximum reproductive rate ($r_{0,i} =$ 4), niche cost ($\nu =$ `r unique(dat_sim$niche_cost)`), the degree of temporal environmental variation ($\sigma_z =$ `r unique(dat_sim$sd_env)`), and the extent of spatial autocorrelation in temporal environmental dynamics ($\phi =$ `r unique(dat_sim$phi)`).
-
-Under each simulation scenario, we simulated 1400 time steps of metacommunity dynamics (including 200 time steps for initialization and 200 time steps for burn-in) in `r max(dat_sim$n_rep)` branching networks with the gradients of ecosystem size (the number of habitat patches: `r min(dat_sim$n_patch)` to `r max(dat_sim$n_patch)`) and complexity (branching probability: `r round(min(dat_sim$p_branch), 2)` to `r round(max(dat_sim$p_branch), 2)`). During the first 200 time steps (an initialization period), we initialized the simulation by seeding each habitat patch with populations of each species drawn from a Poisson distribution with a mean of 0.5. We repeated the seeding every 10 time steps during the initialization to allow species to establish their populations if they can grow from low abundances. After the initialization period, we ran 200 time steps as a burn-in period with no seeding to minimize influences of initial conditions. We saved the last 1000 time steps to estimate the temporal averages of $\alpha$, $\beta$, and $\gamma$ diversity. We removed simulation replicates in which no species established populations over the initial 400 time steps (`r sum(dat_sim$alpha_div == 0)` replicates out of `r nrow(dat_sim)` replicates). Ecosystem size and complexity were drawn randomly from uniform distributions as: $N_p \sim Unif(10, 150)$ and $P_b \sim Unif(0.01, 0.99)$ ($N_p$ was rounded to the nearest integer before running simulations). Values of simulation parameters were summarized in **Table S2**. We performed simulations using R version 4.0.2 [@rcoreteamLanguageEnvironmentStatistical2020].
-
-## Empirical data
-
-### Fish community data
-
-We compiled fish data at two geographic regions: the Hokkaido island, Japan, and the Midwest, US. For Hokkaido, we used data from the Hokkaido Freshwater Fish Database HFish [@fukushimaModellingEffectsDams2007; @fukushimaHokkaidoFreshwaterFish2011], monitoring data at protected watersheds [@comteRivFishTIMEGlobalDatabase2021; @teruiMetapopulationStabilityBranching2018], and primary data collected by the authors [@miyazakiTemporalDynamicsFluvial2016; @teruiThreeEcologicalFactors2016], which collectively cover the entire island. For the Midwest, we assembled fish community data collected by the Iowa Department of Natural Resources [@iowadepartmentofnaturalresourcesBiologicalAssessmentIowa2004], Illinois Environmental Protection Agency and Illinois Department of Natural Resources [@illinoisenvironmentalprotectionagencyIllinoisWaterMonitoring2014], Minnesota Pollution Control Agency [@minnesotapollutioncontrolagencyDevelopmentFishbasedIndex2014], and Wisconsin Department of Natural Resources [@wisconsindepartmentofnaturalresourcesGuidelinesAssessingFish2018]. We detailed procedures for initial data selection in **Supplementary Text**.
-
-We considered watersheds as independent replicates of metacommunities if the river network flows into one of the following: the ocean, a large lake/reservoir ($\ge$ 10 km² in the areal area) or a large river that may represent lentic habitats ($\ge$ 5000 km² in the watershed area). Metacommunities with $\ge$ 10 sampling sites were used in our analysis because a small sample size inflates statistical uncertainties in estimating asymptotic species richness (**Supplementary Text**).
-
-We estimated $\alpha$, $\beta$, and $\gamma$ diversity at each watershed. $\gamma$ diversity is the total species richness at each watershed. Since it is impossible to sample all species present in each watershed, we used asymptotic species richness as a proxy for $\gamma$ diversity. Asymptotic species richness can be interpreted as the estimated true species richness in a given area when estimated using spatial replicates of local community data within a metacommunity [@chaoRarefactionExtrapolationHill2014a]. We estimated asymptotic species richness using sampling sites located in the same watershed (i.e., spatial replicates within a metacommunity) via the R package 'iNEXT' [@hsiehINEXTPackageRarefaction2016]. We assessed the completeness of the observed species richness based on sample coverage, which is the total proportional abundances of observed species to the whole metacommunity [@chaoRarefactionExtrapolationHill2014a]. We excluded watersheds whose sample coverage was below 0.9 because the estimates of asymptotic species richness may contain non-negligible statistical uncertainty. $\alpha$ diversity was estimated by taking an average of local species richness at each site. $\beta$ diversity was estimated by dividing the estimated $\gamma$ diversity by $\alpha$ diversity [@whittakerVegetationSiskiyouMountains1960].
-
-After the data selection procedure, we obtained diversity estimates from `r nrow(wsd_subset[[1]]) + nrow(wsd_subset[[2]])` watersheds (Hokkaido: `r nrow(wsd_subset[[1]])`, Midwest: `r nrow(wsd_subset[[2]])`), which encompassed a total of `r nrow(point_subset[[1]]) + nrow(point_subset[[2]])` sites (Hokkaido: `r nrow(point_subset[[1]])`, Midwest: `r nrow(point_subset[[2]])`). Observations ranged from `r min(dat_hkd_site$Year, na.rm = T)` to `r max(dat_hkd_site$Year, na.rm = T)` in Hokkaido and from `r min(dat_mw_site$Year, na.rm = T)` to `r max(dat_mw_site$Year, na.rm = T)` in the Midwest. Fish species observed in the final data set were listed in **Tables S5 and S6**.
-
-### Environmental data
-
-We collected data for watershed characteristics (watershed area [km^2^], branching probability, and mean elevation [m]), climatic variables (mean annual air temperature [degree Celsius] and cumulative precipitation [mm]), and land use (the fractions of forest, urban, and agriculture, and dam density per watershed area [km^-2^]). We used Hydrologically Adjusted Elevations of MERIT Hydro [@yamazakiMERITHydroHighResolution2019] to delineate watershed polygons and river lines (defined as $\ge$ 1 km^2^ in the watershed area), which were separated by either the ocean, large lakes/reservoirs ($\ge$ 10 km^2^ in the areal area), or large rivers ($\ge$ 5000 km^2^ in the watershed area). The ocean and large lakes/reservoirs were extracted from Global 1-second Water Body Map ver 1.0 [@yamazakiDevelopmentGlobal90m2015]. Watershed area was estimated based on the delineated watershed polygons. We estimated branching probability by fitting exponential distributions to histograms of branch length (unit: kilometer, river segment between successive confluences or a confluence and the outlet/upstream terminal) as $branch~length \sim Exp(\lambda)$. A derived statistical quantity $1 − e^{−\lambda}$ corresponds to the theoretical branching probability $P_b$. We obtained the mean elevations for each watershed polygon using Hydrologically Adjusted Elevations of MERIT Hydro [@yamazakiMERITHydroHighResolution2019]. We estimated the spatial averages of mean annual air temperature and cumulative precipitation for each watershed (\~1 km resolution), which were extracted from WorldClim 1.4 [@hijmansVeryHighResolution2005]. We calculated the fractions of forest, urban, and agriculture for each watershed using land use data in 2015 from Copernicus Global Land Service (100-m resolution) [@marcelbuchhornCopernicusGlobalLand2020]. We calculated dam density per watershed area (km^-2^) based on the Global Reservoir and Dam Database, Version 1 (GRanDv1) [@lehnerGlobalReservoirDam2011]. We used ArcMap 10.7, SAGA 6.3.0, and the following R packages to perform geospatial analysis: 'RSAGA' [@brenningRSAGASAGAGeoprocessing2018], 'sf' [@pebesmaSimpleFeaturesStandardized2018] 'raster' [@hijmansRasterGeographicData2020] 'stars' [@pebesmaStarsSpatiotemporalArrays2020], and 'exactextractr' [@bastonExactextractrFastExtraction2020].
-
-### Statistical analysis
-
-We developed robust regression models with an M-estimation method to examine the effects of macro-scale drivers on diversity metrics. The robust regression analysis is insensitive to outliers of a response variable; therefore, this method allows us to account for uncertainties of our diversity estimates (see **Fish community data**). Log-transformed diversity metrics ($\alpha$, $\beta$ and $\gamma$ diversity) at watershed $w$, $log_{10}~y_w$, were assumed to follow a normal distribution as $log_{10}~y_w \sim Normal(\mu_w, \sigma^2)$. The parameter $\mu_w$ was related to linear predictors, including log-transformed watershed area (ecosystem size; $log_{10}~WA$), log-transformed branching probability (ecosystem complexity; $log_{10}~P_b$), region (coded as Hokkaido = 0, Midwest = 1; $region$), air temperature, precipitation, the fraction of agricultural land use (logit-transformed), and dam density. Although our primary focus of this analysis is to assess the effects of watershed area and branching probability, we included climate and land use variables to control their effects statistically. We did not include the fractions of urban and forest land use in the statistical models because these variables were strongly correlated with the fraction of agricultural land use (**Figure S19**). Similarly, we did not use mean elevation in the statistical models because it showed a moderate correlation with air temperature (**Figure S19**). Correlations for other combinations of explanatory variables were weak to moderate.
-
-Climate (air temperature and precipitation) and land use (the fraction of agricultural land use and dam density) differed clearly between the regions. Therefore, we used residuals of the simple linear regressions between the climate or land use variable (response variable) and region (explanatory variable). The residuals represent deviations from the regional averages; positive values indicate values greater than the regional average while negative values indicating values smaller than the regional average.
-
-We constructed two models for each of the diversity metrics: global and region-specific models. The global model assumes that the effects of watershed area and branching probability are consistent across geographic regions (i.e., no interactive effects of the region with other linear predictors).
-
-```{=tex}
-\begin{equation}
-  \mu_w = \xi_0 + \xi_1~log_{10}~WA_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w + \sum_k \xi_k x_{k,w}
-\end{equation}
-```
-where $\xi_k$ are the intercept and regression coefficients for linear predictors. Meanwhile, the region-specific model assumes the effects of watershed area and branching probability differ between regions (i.e., interactions between region and watershed area/branching probability).
-
-```{=tex}
-\begin{equation}
-\begin{aligned}
-  \mu_w =& \xi_0 + \xi_1~log_{10}~WA_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w +\\
-  &\xi_4~log_{10}~WA_w \cdot region_w + \xi_5~log_{10}~P_{b,w} \cdot region_w + \sum_k \xi_k x_{k,w}
-\end{aligned}
-\end{equation}
-```
-All explanatory variables except watershed area, branching probability, and region were standardized to a mean of zero and a standard deviation of one before the analysis.
-
-We compared the performance of these competing models using the Bayes factor [@wagenmakersPracticalSolutionPervasive2007], which gives the relative strength of evidence in favor of the global model (M0) over the region-specific model (M1). We used Bayesian Information Criteria (BIC) of the linear models to approximate the Bayes factor [@wagenmakersPracticalSolutionPervasive2007]:
-
-```{=tex}
-\begin{equation}
-  Bayes~factor = exp(\Delta BIC_{10}/2)
-\end{equation}
-```
-where $\Delta BIC_{10} = BIC(M1) - BIC(M0)$.
-
-For the supported model of $\gamma$ diversity, we estimated average predictive comparisons of watershed area and branching probability to compare their effect sizes. The average predictive comparison is an expected change of the response variable per a unit difference of the explanatory variable of interest [@gelmanAveragePredictiveComparisons2007]. Unlike other common metrics of effect size (e.g., standardized regression coefficients), this method provides intuitive yet rigorous estimates of effect size in models with non-linear variable transformations (see **Supplementary Text** for further details). We performed statistical analysis using R version 4.0.2 [@rcoreteamLanguageEnvironmentStatistical2020].
-
-\newpage
-
-# Supplementary Text
-
-## Theory
-
-### Sensitivity analysis
+## Sensitivity analysis
 
 We performed a sensitivity analysis of the metacommunity simulation to identify key simulation parameters that strongly affect the relationships between diversity metrics ($\alpha$, $\beta$, and $\gamma$) and ecosystem properties (the number of habitat patches $N_{p}$ and branching probability $P_{b}$). We generated 500 sets of parameter combinations by randomly drawing values of 8 simulation parameters from uniform distributions (**Table S1**). For each parameter combination, we generated 100 branching networks with the gradients of ecosystem size ($N_p \sim Unif(10, 150)$) and complexity ($P_b \sim Unif(0.01, 0.99)$). This results in a total of 50000 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of $\alpha$, $\beta$, and $\gamma$ diversity for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods. We removed simulation replicates in which no species established populations over the initial 400 time steps.
 
@@ -253,15 +108,15 @@ The sensitivity analysis revealed key simulation parameters. For the effects of 
 
 Based on the results, we identified $\sigma_h$, $\sigma_l$, $\alpha_{max}$, $\theta$, and $p_d$ as key parameters. We changed the values of these parameters in the main analysis and examined the relationships between diversity metrics and ecosystem properties.
 
-### Longitudinal gradient of local species richness
+## Longitudinal gradient of local species richness
 
 Longitudinal gradients of local species richness have been extensively studied in rivers, illuminating typical patterns observed in nature. The most common pattern is a downstream increase of local species richness [@mcdowallFightingFlowDownstreamupstream1998; @rahelFishAssemblagesHabitat1991; @teruiThreeEcologicalFactors2016]. However, recent empirical and theoretical studies also showed 'reversed patterns,' in which local species richness decreases downstream [@bsemerHeadwatersAreCritical2013; @harveyDisturbanceReversesClassic2018]. We predicted the longitudinal gradient of local species richness to confirm that our simulation scenarios are capable of reproducing the previously observed patterns of local species richness. We considered 32 simulation scenarios comprising four landscape and eight ecological scenarios, as described in the main text (a set of parameters is described in **Table S2**). Under each simulation scenario, we generated 10 branching networks with fixed parameters of ecosystem size ($N_p = 100$) and complexity ($P_b = 0.5$). This results in a total of 320 simulation replicates. In each simulation replicate, we allowed interspecific variation in niche optimum $\mu_i$ and width $\sigma_{niche,i}$ ($\mu_i \sim Unif(-1, 1)$ and $\sigma_{niche,i} \sim Unif(0.1, 1)$, respectively; subscript $i$ represents species) and ran 1400 time steps of metacommunity dynamics. We obtained temporal means of local species richness at each habitat patch for the last 1000 time steps. The first 400 time steps were discarded as initialization and burn-in periods. We removed simulation replicates in which no species established populations over the initial 400 time steps. We evaluated the relationship between local species richness and the number of upstream habitat patches, a proxy for the longitudinal position of a habitat patch.
 
 The simulation reproduced diverse patterns of longitudinal gradients in local species richness (**Figures S1-4**). The downstream increase of local species richness was predicted under a natural landscape scenario, in which environmental variation at headwaters $\sigma_h$ exceeds the degree of local environmental noise $\sigma_l$ (**Figure S1**). This pattern was consistent across ecological scenarios except those with long dispersal distance and high dispersal probability (**Figure S1**). Similarly, we observed a downstream increase of local species richness in scenarios with low habitat diversity ($\sigma_h = \sigma_l = 0.01$) and low dispersal probability ($p_d = 0.01$) (**Figure S3**). However, there were cases where local species richness decreased downstream or showed no longitudinal patterns. For example, when local environmental noise exceeds environmental variation at headwaters ($\sigma_l \ge \sigma_h$), local species richness showed a downstream decrease or a vague longitudinal pattern (**Figure S4**). Therefore, the simulation scenarios were capable of reproducing previously observed patterns, suggesting the appropriateness in the choice of parameter combinations.
 
-## Empirical data
+# Empirical data
 
-### Data selection criteria
+## Data selection criteria
 
 **Hokkaido, Japan.** In Hokkaido, most data were collected from summer to fall. We screened data through the following procedure:
 
@@ -277,7 +132,7 @@ The simulation reproduced diverse patterns of longitudinal gradients in local sp
 2.  We removed records of unidentified species, hybrid species, and commercial species apparently absent in the wild (e.g., goldfish).
 3.  We used the latest observation at each sampling site to minimize variation in sampling efforts among sites.
 
-### Asymptotic species richness
+## Asymptotic species richness
 
 We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with known values of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, presence of species $i$ at site $x$, $J_{ix}$, was drawn from a Bernoulli distribution as $J_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}J_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT' [@hsiehINEXTPackageRarefaction2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
 
@@ -292,7 +147,7 @@ We used the following values for parameters: $S_{true} = 10, 40, 70, 100$ and $N
 
 The number of sampling sites influenced the estimation accuracy of asymptotic species richness. The % bias decreased sharply as the number of sampling sites increased (**Figure S20**). In particular, the estimation bias with a small sample size ($N_{site} = 5$) was substantial when the true species richness $S_{true}$ was low; some estimates showed \> 150% bias (**Figure S20**). Given the simulation results, estimates of asymptotic species richness at watersheds with \< 10 sampling sites may involve substantial statistical uncertainty.
 
-### Average predictive comparison
+## Average predictive comparison
 
 For regression models, standardized regression coefficients (or its variant) are perhaps the most common summary when comparing effect sizes of explanatory variables. These values are useful if they are directly interpretable. For example, in linear regression models without interactions and variable transformations, regression coefficients have direct interpretations as they represent additive effects. However, there are many cases where regression coefficients are difficult to interpret. In our case, we regressed the log-transformed species richness on explanatory variables, so regression coefficients do not have direct interpretations on the original scale of the response variable $y$ (i.e., species richness).
 
@@ -354,9 +209,9 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-## Tables
+# Tables
 
-### Table S1 Simulation parameter (sensitivity analysis)
+## Table S1 Simulation parameter (sensitivity analysis)
 
 **Table S1** Parameter values used in the sensitivity analysis of the metacommunity simulation. See the main text for model details.
 
@@ -369,7 +224,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-### Table S2 Simulation parameter (main analysis)
+## Table S2 Simulation parameter (main analysis)
 
 **Table S2** Values and interpretation of simulation parameters used in the main simulation. See the main text for model details.
 
@@ -382,7 +237,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-### Table S3 Sensitivity analysis for ecosystem size effects
+## Table S3 Sensitivity analysis for ecosystem size effects
 
 **Table S3** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of the number of habitat patches ($N_{p}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See **Tables S1 and S2** for interpretation of the simulation parameters.
 
@@ -394,7 +249,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-### Table S4 Sensitivity analysis for ecosystem complexity effects
+## Table S4 Sensitivity analysis for ecosystem complexity effects
 
 **Table S4** Sensitivity analysis of the metacommunity simulation. Parameter estimates of linear regression models (standard errors in parenthesis) are shown. Response variables are the effects of branching probability ($P_{b}$) on $\alpha$, $\beta$, and $\gamma$ diversity. Explanatory variables (i.e., simulation parameters) were standardized to a mean of zero and a standard deviation of one prior to the analysis. See **Tables S1 and S2** for interpretation of the simulation parameters.
 
@@ -406,7 +261,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-### Table S5 List of fish species in Hokkaido, Japan
+## Table S5 List of fish species in Hokkaido, Japan
 
 **Table S5** List of fish species in Hokkaido, Japan, included in our statistical analysis. `r n_distinct(dat_hkd_site$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy of `r n_distinct(dat_hkd_site$SiteID)` sites.
 
@@ -419,7 +274,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-### Table S6 List of fish species in Midwest, US
+## Table S6 List of fish species in Midwest, US
 
 **Table S6** List of fish species in the Midwest, US, included in our statistical analysis. `r n_distinct(dat_mw_site$Species)` species are ordered alphabetically, along with the number of sites present and % occupancy of `r n_distinct(dat_mw_site$SiteID)` sites.
 
@@ -432,7 +287,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 \newpage
 
-### Table S7 Average predictive comparisons
+## Table S7 Average predictive comparisons
 
 Estimated average predictive comparisons. Regression coefficients were derived from the regression model explaining $\gamma$ diversity (see **Table 1** in the maintext for the estimated regression parameters). The average predictive comparisons (an expected increase in $\gamma$ diversity per a unit difference of the explanatory variable of interest) were estimated based on units of 1000 km^2^ for watershed area and 0.1 for branching probability.
 
@@ -445,7 +300,7 @@ Estimated average predictive comparisons. Regression coefficients were derived f
 
 \newpage
 
-## Figures
+# Figures
 
 ```{r chunk_fig_set1}
 
@@ -470,7 +325,7 @@ for(i in seq_len(nrow(param))){
 figure_alpha_pattern <- NULL
 for(i in seq_len(nrow(param))){
   j <- i
-  knit_chunk <- paste0("### Figure S", j, " Longitudinal gradient of local species richness ($\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+  knit_chunk <- paste0("## Figure S", j, " Longitudinal gradient of local species richness ($\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
                        "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n h[[",i,"]] \n\n```\n",
                        "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
   figure_alpha_pattern <- c(figure_alpha_pattern, knit_chunk)
@@ -503,7 +358,7 @@ for(i in seq_len(nrow(param))){
 figure_size <- NULL
 for(i in seq_len(nrow(param))){
   j <- i + 4
-  knit_chunk <- paste0("### Figure S", j, " Influence of ecosystem size ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+  knit_chunk <- paste0("## Figure S", j, " Influence of ecosystem size ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
                        "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n f[[",i,"]] \n\n```\n",
                        "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
   figure_size <- c(figure_size, knit_chunk)
@@ -536,7 +391,7 @@ for(i in seq_len(nrow(param))){
 figure_complex <- NULL
 for(i in seq_len(nrow(param))){
   j <- i + 11
-  knit_chunk <- paste0("### Figure S", j, " Influence of ecosystem complexity ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
+  knit_chunk <- paste0("## Figure S", j, " Influence of ecosystem complexity ($p_{d} = `r param$p_d[",i,"]`$, $\\sigma_{h} = `r param$sigma_h[",i,"]`$, $\\sigma_{l} = `r param$sigma_l[",i,"]`$)", 
                        "\n```{r fig", j,", fig.width = 8, fig.height = 6}\n\n g[[",i,"]] \n\n```\n",
                        "\n **Figure S", j, "** ", figure_cap[i], "\n\\pagebreak\n")
   figure_complex <- c(figure_complex, knit_chunk)
@@ -546,7 +401,7 @@ for(i in seq_len(nrow(param))){
 
 `r paste(knit(text = figure_complex), collapse = '\n')`
 
-### Figure S19 Correlation structure of explanatory variables
+## Figure S19 Correlation structure of explanatory variables
 
 ```{r fig_s19, fig.height = 10, fig.width = 10}
 
@@ -558,7 +413,7 @@ source(here::here('empirical/figure_correlation.R'))
 
 \newpage
 
-### Figure S20 Sensitivity analysis of asymptotic species richness
+## Figure S20 Sensitivity analysis of asymptotic species richness
 
 ```{r fig_s20, fig.height = 6, fig.width = 6}
 
