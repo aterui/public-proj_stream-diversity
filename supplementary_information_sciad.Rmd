@@ -181,14 +181,14 @@ The summations over $n$ data ($i$ and $j$ are a given data point) and $S$ parame
   w_{ij} = w(v_i, v_j)
 \end{equation}
 ```
-The weight factor should represent the likelihood of $u$ changing from $u_i$ to $u_j$ with a common $v = v_i$ (note that $v_i$ is in general a vector of explanatory variables for data point $i$). We used the following weighting function based on Mahalanobis distances following Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
+The weight factor should represent the likelihood of $u$ changing from $u_i$ to $u_j$ with a common $v = v_i$ ($v_i$ is in general a vector of explanatory variables for data point $i$). We used the following weighting function based on Mahalanobis distances following Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007]:
 
 ```{=tex}
 \begin{equation}
 w(v_i, v_j) = \frac{1}{1 + (v_i - v_j)^T\Omega_v^{-1}(v_i-v_j)}
 \end{equation}
 ```
-where $\Omega_v^{-1}$ is the inverse of the variance-covariance matrix of $v$. The function gives the maximum weight for a pair of $u_i$ and $u_j$ if $v_i = v_j$ ($v=v_i$ when $u = u_i$) while giving a less weight as the Mahalanobis distance between $v_i$ and $v_j$ increases. This property makes sense because our goal is to approximate the probability of transition from $u_i$ to $u_j$ with a common $v$ (i.e., $v_i = v_j$).
+where $\Omega_v^{-1}$ is the inverse of the variance-covariance matrix of $v$. Note that $v=v_i$ when $u = u_i$, and $v=v_j$ when $u = u_j$. The function gives the maximum weight for a pair of $u_i$ and $u_j$ if $v_i = v_j$ while giving a less weight as the Mahalanobis distance between $v_i$ and $v_j$ increases. This property makes sense because our goal is to approximate the probability of transition from $u_i$ to $u_j$ with a common $v$ (i.e., $v_i = v_j$).
 
 We estimated $\hat \Delta_u$ for watershed area and branching probability using the estimated coefficients $\hat \xi_k$ of the regression model explaining $\gamma$ diversity (see **Table 1**). A thousand of vectors of simulated parameters $\Theta_s$ were drawn from normal distributions with means of $\hat \xi_k$ and standard deviations of $\sigma_{\xi, k}$ (the estimated standard errors of parameters $\xi_k$). The estimated average predictive comparisons are $\hat \Delta_{u} = \frac{1}{S} \sum_{s=1}^S \hat \Delta_{u,s}$ where
 
