@@ -158,7 +158,7 @@ The average predictive comparison provides an intuitive yet rigorous way to quan
   \delta_u(u^{(1)} \to u^{(2)}, v, \Theta) = \frac{E(y|u^{(2)}, v, \Theta) - E(y|u^{(1)}, v, \Theta)}{u^{(2)} - u^{(1)}}
 \end{equation}
 ```
-where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of interest (a value for the explanatory variable of interest), $v$ all the other inputs (a vector in general), $\Theta$ a set of parameters in a regression model. In general, $\delta_u$ rests on $u^{(1)}$ and $u^{(2)}$ (the lower and higher points of the hypothesized change in the explanatory variable of interest), $v$, and $\Theta$. Therefore, Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007] defined the *average predictive comparison* $\Delta_u$, the mean value of $\delta_u$ over specified distributions of the inputs and model parameters:
+where $E(\cdot)$ is a known function (e.g., exponential), $u$ the input of interest (a value for the explanatory variable of interest), $v$ all the other inputs (a vector in general), $\Theta$ a set of parameters in a regression model. In general, $\delta_u$ rests on $u^{(1)}$ and $u^{(2)}$ (the lower and higher points of the hypothesized change in the explanatory variable of interest), $v$, and $\Theta$. Therefore, Gelman and Pardoe [@gelmanAveragePredictiveComparisons2007] defined the *average predictive comparison* $\Delta_u$ as "the mean value of $\delta_u$ over some specified distribution of the inputs and parameters":
 
 ```{=tex}
 \begin{equation}
