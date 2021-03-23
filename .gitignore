@@ -8,4 +8,4 @@ document_output
 *.Rproj
 *old
 references.bib
-supplementary_information*
+supplementary_information*.log
