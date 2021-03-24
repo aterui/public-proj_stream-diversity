@@ -1,5 +1,5 @@
 ---
-output: word_document
+output: pdf_document
 knit: (function(inputFile, encoding) {
         rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
       })
@@ -9,18 +9,34 @@ knit: (function(inputFile, encoding) {
 
 Dear *Editor*
 
-We are excited to submit our manuscript entitled 'Emergent dual scaling of riverine biodiversity' to *Proceedings of the National Academy Sciences*.
+We are excited to submit our manuscript entitled '*Emergent dual scaling of riverine biodiversity*' to *Proceedings of the National Academy Sciences*.
 
-In the Anthropocene, it is more imperative than ever to identify ecological factors that underpin diverse ecological communities in nature. Much attention has been paid to the ubiquitous power-law scaling of species richness and area, in which species richness increases with area in a decelerating way. Ecologists have used this ecological *law* to inform many conservation strategies, including marine and terrestrial protected areas that currently encompass \> 30 million km^2^ globally. In spatially complex ecosystems, however, the area may not be the sole dimension to scale biodiversity patterns because 'scale-invariant' complexity of fractal ecosystem structure may drive ecological dynamics in space. Branching river networks are an outstanding example of such complex ecosystems, where geometric ecosystem structure (e.g., branching patterns) remains constant across a wide range of spatial scales.
+In the Anthropocene, it is more imperative than ever to identify ecological factors that underpin diverse ecological communities in nature. Much attention has been paid to the ubiquitous power-law scaling between species richness and area, in which species richness increases with area in a decelerating way. In spatially complex ecosystems, however, the area may not be the sole dimension to scale biodiversity patterns because 'scale-invariant' complexity of fractal ecosystem structure may drive ecological dynamics in space. Branching river networks are an outstanding example of such complex ecosystems, where geometric ecosystem structure (e.g., branching patterns) remains constant across a wide range of spatial scales.
 
-Here, we used theory and analysis of large fish community data to show that **ecosystem complexity of branching networks (measured as the prevalence of branching) plays a crucial role in scaling metacommunity-level biodiversity in rivers (**$\gamma$ **diversity); ecosystem size and other macro-scale drivers (e.g., climates and land use patterns) were insufficient to describe riverine biodiversity patterns.** Our theory predicted that, regardless of simulated species' traits, more branched 'complex' river networks supported greater species richness due to increased habitat heterogeneity. This relationship had a characteristic of power-law, revealing the overlooked scaling relationship in complex branching networks. Importantly, the complexity effect was comparable to the size effect - hence, riverine biodiversity should follow a dual scaling law along the two orthogonal dimensions of ecosystem structure, i.e., size and scale-invariant complexity.
+In this research, we used theory and analysis of extensive fish data to show that the scale-invariant complexity of branching networks is an alternative dimension of ecosystem structure to dictate riverine biodiversity patterns. Theory and empirical analysis agreed that, **regardless of ecological traits of constituent species, riverine biodiversity exhibited a dual scaling law along the two orthogonal dimensions of ecosystem size and scale-invariant complexity.** An elegant consistency of theoretical and empirical results provided strong evidence that the dual scaling of biodiversity is a pervasive yet overlooked feature of complex ecosystems with important implications for biodiversity conservation.
 
-We confirmed the theoretical predictions using extensive fish community data, which included 180 replicates of metacommunities (i.e., watersheds) across two geographic regions (Japan and the US). The dual scaling of riverine fish diversity has consistently emerged across the study regions despite hosting different fish fauna with distinct evolutionary histories. This result agrees elegantly with our theoretical predictions, in which species' traits played a minor role in shaping the dual power-law scaling. Further, the effect of ecosystem complexity was striking in its magnitude. A unit increase of ecosystem complexity (the prevalence of branching) resulted in an increase of species diversity that would require 1911 km^2^ in the areal area.
+Our study distinguishes itself from previous studies in three important ways. (1) Our study is the first to show the *dual* scaling law of biodiversity. Notably, this pattern has emerged irrespective of ecological contexts or geographic regions, emphasizing the generality of our finding. (2) Our empirical analysis used *watershed ecosystems* as individual replicates of statistical analysis; our data set included 180 watersheds with 6605 sites across Japan and the US and this extensive data enabled us to perform the ecosystem-level analysis across different geographic regions. Therefore, unlike most previous studies focused on local biodiversity patterns *within a single watershed*, this study provides crucial insights into how ecological communities are structured *across watersheds*. (3) The present study provides the foundation for complexity-based ecosystem management. While there have been substantial debates as to whether area-based ecosystem management is sufficient to conserve biodiversity at broad spatial scales (e.g., Akasaka et al, Conservation Letters, 10: 539-546), there is, to our knowledge, no conservation scheme that explicitly accounts for ecosystem complexity in the design. Hence, our research provides a novel perspective to spatial planning of protected areas or ecological restoration.
 
-Our study distinguishes itself from other studies in three ways. First, we offer a synthetic framework integrating ecosystem size and complexity influences on biodiversity, which should apply beyond branching ecosystems. Second, unlike most previous studies focused on local biodiversity patterns ($\alpha$ diversity), our empirical analysis used metacommunities as replicates of statistical analysis. Therefore, this study provides crucial insights into how ecological communities are structured *at the metacommunity level*. Lastly, the present study provides the foundation for complexity-based ecosystem management - an important perspective overlooked in current conservation schemes. Hence, we have confidence that our research provides fundamental insights into regulating factors of biodiversity and has far-reaching implications for biodiversity conservation.
+In addition to the significance described above, the connection between network complexity and biodiversity has a broad implication for a truly interdisciplinary audience, including scientists working on fluvial geomorphology, network theory, and biodiversity conservation. Our study is also timely given the unprecedented rate of global biodiversity loss in freshwater ecosystems. Therefore, *Proceedings of the National Academy Sciences* is an ideal outlet for this manuscript.
+
+We suggest the following leading scientists in the field as potential reviewers:
+
+-   Dr. Florian Altermatt (EAWAG; florian.altermatt\@eawag.ch): Lead a number of projects on biodiversity in river networks
+
+-   Dr. Emanuel Fronhofer (Université de Montpellier; emanuel.fronhofer\@umontpellier.fr): Works on theoretical spatial ecology with a focus on complex networks
+
+-   Dr. Jonathan Moore (Simon Fraser University; jwmoore\@sfu.ca): Works on emergent ecological properties of river networks
+
+-   Dr. Justin Yeakel (University of California Merced; jdyeakel\@gmail.com): Develops theoretical models for ecological communities, including species interactions in a spatial context
+
+-   Dr. Jean Gibert (Duke University; jean.gibert\@duke.edu): Develops general theoretical models for ecological communities
+
+-   Dr. Winsor Lowe (University of Montana; winsor.lowe\@umontana.edu): Lead a number of projects on animal movements in stream networks
 
 This work is original and is not under consideration in any other journal. All authors agree with the content and with the submission for publication, and all appropriate ethical and other necessary approvals were obtained for this research. We look forward to your reply and hope that you find our article suitable for publication in your journal.
 
 Sincerely,
 
 Akira Terui, Ph.D. (corresponding author)
+
+University of North Carolina at Greensboro
