@@ -240,7 +240,7 @@ We constructed two models for each of the diversity metrics: global and region-s
   \mu_w = \xi_0 + \xi_1~log_{10}~A_w + \xi_2~log_{10}~P_{b,w} + \xi_3~region_w + \sum_k \xi_k x_{k,w}
 \end{equation}
 ```
-where $\xi_k$ are the intercept and regression coefficients for linear predictors. In an ordinary scale, the global model represents a dual scaling law as $E(y) = cA^{\xi_1}P_b^{\xi_2}$, where $c = 10^{\xi_0 + \xi_3~region + \sum_k \xi_k x_{k}}$. Meanwhile, the region-specific model assumes the effects of watershed area and branching probability differ between regions (i.e., interactions between region and watershed area/branching probability).
+where $\xi_k$ are the intercept and regression coefficients for linear predictors. In an ordinary scale, the global model represents a dual scaling law as $E(y) = cA^{\xi_1}P_b^{\xi_2}$, where $c = 10^{\xi_0 + \xi_3region + \sum_k \xi_k x_{k}}$. Meanwhile, the region-specific model assumes the effects of watershed area and branching probability differ between regions (i.e., interactions between region and watershed area/branching probability).
 
 ```{=tex}
 \begin{equation}
