@@ -56,12 +56,18 @@
 # complexity effect -------------------------------------------------------
 
   g <- dat %>% 
-    ggplot(aes(x = p_branch, y = value, color = metric, fill = metric)) +
+    ggplot(aes(x = p_branch,
+               y = value,
+               color = metric,
+               fill = metric)) +
     geom_smooth(method = "loess", size = 0.5) +
     scale_y_continuous(trans = "log10") +
-    scale_x_continuous(trans = "log10", breaks = c(0.01, 0.1, 0.5, 1.0)) +
+    scale_x_continuous(trans = "log10",
+                       breaks = c(0.01, 0.1, 0.5, 1.0)) +
     scale_color_hue(name = NULL, labels = labels) +
-    facet_grid(rows = vars(competition), cols = vars(dispersal), labeller = label_parsed) +
+    facet_grid(rows = vars(competition),
+               cols = vars(dispersal),
+               labeller = label_parsed) +
     labs(x = "Branching probability",
          y = "Species richness") +
     guides(color = guide_legend(override.aes = list(fill = NA)),
