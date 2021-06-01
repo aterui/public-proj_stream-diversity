@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ```{r, fig.height=6, fig.width=10, fig.cap="(A and B) Theoretical branching networks generated under contrasting landscape scenarios. Branching river networks are depicted as a network of connected habitat patches, in which the number of habitat patches $N_p$ and branching probability $P_{b}$ dictate the ecosystem size and complexity ($N_p = 30$ and $P_{b} = \\{0.2, 0.8\\}$ in this example). Environmental conditions at headwaters (i.e., the most upstream patches) are drawn randomly from a normal distribution and propagate downstream with local environmental noise (Methods). Habitat patches are colored in proportion to environmental values (similar colors have similar environmental values). Panels A and B show distinct landscape scenarios. Environmental variation at headwaters $\\sigma_{h}$ exceeds the degree of local environmental noise $\\sigma_{l}$ in A ($\\sigma_{h} = 1, \\sigma_{l} = 0.01$), while the opposite is true in B ($\\sigma_{h} = 0.01, \\sigma_{l} = 1$). (C) Example of intensively surveyed watersheds in Hokkaido, Japan (the red-colored watershed in D). Red dots indicate sampling sites for fish surveys. (D) Map of study regions (left, Hokkaido, Japan; right, Midwest, US). Watersheds (i.e., metacommunities) are gray-shaded in proportion to the number of sampling sites."}
 
-source(here::here("empirical/figure_map.R"))
+source(here::here("code_empirical/figure_map.R"))
 
 ```
 
@@ -25,20 +25,20 @@ source(here::here("empirical/figure_map.R"))
 
 ```{r, fig.height=6, fig.width=8, fig.cap="Theoretical predictions for ecosystem size influences (the number of habitat patches) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\alpha_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). In this simulation, environmental variability among headwaters (i.e., the most upstream patches), which is expressed as the standard deviation of a normal distribution ($\\sigma_{h} = 1.0$), was greater than that of local environmental noise occurring at each habitat patch ($\\sigma_{l} = 0.01$). Dispersal probability $p_{d}$ was 0.01 for all the scenarios."}
 
-source(here::here("theory/figure_n_patch.R"))
+source(here::here("code_theory/figure_n_patch.R"))
 ```
 
 \newpage
 
 ```{r, fig.height=6, fig.width=8, fig.cap="Theoretical predictions for ecosystem complexity influences (branching probability) on $\\alpha$, $\\beta$, and $\\gamma$ diversity in branching networks. Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. See Figure 2 for details."}
 
-source(here::here("theory/figure_p_branch.R"))
+source(here::here("code_theory/figure_p_branch.R"))
 ```
 
 \newpage
 
 ```{r, fig.height=6, fig.width=8, fig.cap="Influences of ecosystem size (A, watershed area) and complexity (B, branching probability) on $\\alpha$ (left), $\\beta$ (middle), and $\\gamma$ diversity (right) in Hokkaido and Midwest regions. Dots represent watershed replicates (i.e., metacommunities), and lines are predicted values from the robust regression models."}
 
-source(here::here("empirical/figure_diversity.R"))
+source(here::here("code_empirical/figure_diversity.R"))
 ```
 
