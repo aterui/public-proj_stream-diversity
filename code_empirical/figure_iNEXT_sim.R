@@ -3,7 +3,7 @@
 
   rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse)
-  setwd(here::here("empirical"))
+  setwd(here::here("code_empirical"))
 
 
 # plot theme --------------------------------------------------------------
@@ -33,7 +33,7 @@
   
 # plot --------------------------------------------------------------------
 
-  sim_re <- read_csv(here::here("empirical/result/result_sim_inext.csv")) %>% 
+  sim_re <- read_csv(here::here("code_empirical/result/result_sim_inext.csv")) %>% 
     mutate(n_species_lab = recode(n_species,
                                   `10` = sprintf('"S"[true]=="%.0f"', n_species),
                                   `40` = sprintf('"S"[true]=="%.0f"', n_species),

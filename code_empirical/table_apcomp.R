@@ -3,7 +3,7 @@
 
   rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse, knitr, kableExtra)
-  setwd(here::here("empirical"))
+  setwd(here::here("code_empirical"))
 
 
 # average predictive comparison -------------------------------------------

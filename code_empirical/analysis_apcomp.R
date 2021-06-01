@@ -2,7 +2,7 @@
 # setup -------------------------------------------------------------------
 
   pacman::p_load(tidyverse, avpc, foreach)
-  source(here::here('empirical/analysis_rlm_bf.R'))
+  source(here::here('code_empirical/analysis_rlm_bf.R'))
 
 
 # average predictive comparisons ------------------------------------------

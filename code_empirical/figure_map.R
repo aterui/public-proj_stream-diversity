@@ -4,7 +4,7 @@
   
   rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse, sf, patchwork, mcbrnet, igraph, ggraph, foreach)
-  setwd(here::here("empirical"))
+  setwd(here::here("code_empirical"))
   
 
 # set theme ---------------------------------------------------------------

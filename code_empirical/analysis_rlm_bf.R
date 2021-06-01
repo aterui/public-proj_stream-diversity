@@ -5,8 +5,10 @@
 
 # read data ---------------------------------------------------------------
   
-  dat_hkd <- read_csv(here::here("empirical/data_out/data_hkd.csv")) %>% mutate(region = "hokkaido")
-  dat_mw <- read_csv(here::here("empirical/data_out/data_mw.csv")) %>% mutate(region = "midwest")
+  dat_hkd <- read_csv(here::here("code_empirical/data_out/data_hkd.csv")) %>%
+    mutate(region = "hokkaido")
+  dat_mw <- read_csv(here::here("code_empirical/data_out/data_mw.csv")) %>%
+    mutate(region = "midwest")
   
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator,
@@ -26,15 +28,15 @@
     
     mod1 <- MASS::rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
                                           scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
-                       psi = MASS::psi.huber,
-                       method = 'M',
-                       data = data)
+                      psi = MASS::psi.huber,
+                      method = 'M',
+                      data = data)
     
     mod0 <- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
                                           scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
-                       method = 'M',
-                       psi = MASS::psi.huber,
-                       data = data)
+                      method = 'M',
+                      psi = MASS::psi.huber,
+                      data = data)
     
     # bf01: bayes factor in favor of mod0 over mod1
     bf01 <- exp(0.5*(BIC(mod1) - BIC(mod0)))

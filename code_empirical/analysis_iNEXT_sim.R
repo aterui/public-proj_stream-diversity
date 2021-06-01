@@ -4,7 +4,7 @@
   rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse, iNEXT, foreach)
   options(na.action = "na.fail")
-  setwd(here::here("empirical"))
+  setwd(here::here("code_empirical"))
 
 
 # simulation function -----------------------------------------------------

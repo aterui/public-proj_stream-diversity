@@ -5,8 +5,10 @@
 
 # read data ---------------------------------------------------------------
   
-  dat_hkd <- read_csv(here::here("empirical/data_out/data_hkd.csv")) %>% mutate(region = "hokkaido")
-  dat_mw <- read_csv(here::here("empirical/data_out/data_mw.csv")) %>% mutate(region = "midwest")
+  dat_hkd <- read_csv(here::here("code_empirical/data_out/data_hkd.csv")) %>%
+    mutate(region = "hokkaido")
+  dat_mw <- read_csv(here::here("code_empirical/data_out/data_mw.csv")) %>%
+    mutate(region = "midwest")
   
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator,

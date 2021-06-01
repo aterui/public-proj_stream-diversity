@@ -2,11 +2,11 @@
 # setup -------------------------------------------------------------------
 
   pacman::p_load(tidyverse, knitr, kableExtra)
-  dat_mw_site <- read_csv(here::here('empirical/data_out/data_mw_site.csv'))
+  dat_mw_site <- read_csv(here::here('code_empirical/data_out/data_mw_site.csv'))
 
 # table -------------------------------------------------------------------
 
-  sp_mw_latin <- read_csv(here::here('empirical/data_out/data_mw_splist_latin.csv'))
+  sp_mw_latin <- read_csv(here::here('code_empirical/data_out/data_mw_splist_latin.csv'))
   
   table_output <- dat_mw_site %>% 
     mutate(n_site = n_distinct(SiteID)) %>% 
