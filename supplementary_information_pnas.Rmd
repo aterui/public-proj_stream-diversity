@@ -30,14 +30,14 @@ knit: (function(inputFile, encoding) {
   pacman::p_load(tidyverse, sf)
   
   ## read gis files
-  filename <- list.files(path = here::here('empirical/data_gis'), full.names = T)
+  filename <- list.files(path = here::here('code_empirical/data_gis'), full.names = T)
   wsd_subset <- lapply(filename[str_detect(filename, "wsd_subset")], st_read)
   point_subset <- lapply(filename[str_detect(filename, "point_subset")], st_read)
   shape <- lapply(filename[str_detect(filename, "shape")], st_read)
   shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]]))
   
   ## read theory file
-  dat_sim <- read_csv(here::here('theory/result/result_sim2020-11-10.csv'))
+  dat_sim <- read_csv(here::here('code_theory/result/result_sim2020-11-10.csv'))
   
   n_scenario <- dat_sim %>% distinct(n_species,
                        mean_env_source,
@@ -61,18 +61,18 @@ knit: (function(inputFile, encoding) {
     nrow()
   
   # Hokkaido data
-  dat_hkd <- read_csv(here::here("empirical/data_out/data_hkd.csv")) %>% mutate(region = "hokkaido")
-  dat_hkd_site <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
+  dat_hkd <- read_csv(here::here("code_empirical/data_out/data_hkd.csv")) %>% mutate(region = "hokkaido")
+  dat_hkd_site <- read_csv(here::here('code_empirical/data_out/data_hkd_site.csv'))
   
   # Midwest data
-  dat_mw <- read_csv(here::here("empirical/data_out/data_mw.csv")) %>% mutate(region = "midwest")
-  dat_mw_site <- read_csv(here::here('empirical/data_out/data_mw_site.csv')) %>% 
+  dat_mw <- read_csv(here::here("code_empirical/data_out/data_mw.csv")) %>% mutate(region = "midwest")
+  dat_mw_site <- read_csv(here::here('code_empirical/data_out/data_mw_site.csv')) %>% 
     mutate(Year = format(as.Date(Date, format = '%m/%d/%Y'), "%Y"))
   
   # tables
   
   ## sensitivity
-  source(here::here('theory/table_sensitivity_analysis.R'))
+  source(here::here('code_theory/table_sensitivity_analysis.R'))
 
 ```
 
@@ -217,7 +217,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ```{r chunk_table1}
 
-  source(here::here('theory/table_sim_parameter_sensitivity.R'))
+  source(here::here('code_theory/table_sim_parameter_sensitivity.R'))
   table_output
 
 ```
@@ -230,7 +230,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ```{r chunk_table2}
 
-  source(here::here('theory/table_sim_parameter_main.R'))
+  source(here::here('code_theory/table_sim_parameter_main.R'))
   table_output
 
 ```
@@ -267,7 +267,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ```{r chunk_table5}
 
-  source(here::here('empirical/table_splist_hkd.R'))
+  source(here::here('code_empirical/table_splist_hkd.R'))
   table_output
 
 ```
@@ -280,7 +280,7 @@ The estimated average predictive comparisons were summarized in **Table S7**.
 
 ```{r chunk_table6}
 
-  source(here::here('empirical/table_splist_mw.R'))
+  source(here::here('code_empirical/table_splist_mw.R'))
   table_output
   
 ```
@@ -293,7 +293,7 @@ Estimated average predictive comparisons. Regression coefficients were derived f
 
 ```{r chunk_table7}
 
-  source(here::here('empirical/table_apcomp.R'))
+  source(here::here('code_empirical/table_apcomp.R'))
   table_output
 
 ```
@@ -304,7 +304,7 @@ Estimated average predictive comparisons. Regression coefficients were derived f
 
 ```{r chunk_fig_set1}
 
-source(here::here("theory/figure_alpha_pattern.R"))
+source(here::here("code_theory/figure_alpha_pattern.R"))
 
 figure_cap <- conditional_text <- NULL
 
@@ -337,7 +337,7 @@ for(i in seq_len(nrow(param))){
 
 ```{r chunk_fig_set2}
 
-source(here::here("theory/figure_n_patch_si.R"))
+source(here::here("code_theory/figure_n_patch_si.R"))
 
 figure_cap <- conditional_text <- NULL
 
@@ -370,7 +370,7 @@ for(i in seq_len(nrow(param))){
 
 ```{r chunk_fig_set3}
 
-source(here::here("theory/figure_p_branch_si.R"))
+source(here::here("code_theory/figure_p_branch_si.R"))
 
 figure_cap <- conditional_text <- NULL
 
@@ -405,7 +405,7 @@ for(i in seq_len(nrow(param))){
 
 ```{r fig_s19, fig.height = 10, fig.width = 10}
 
-source(here::here('empirical/figure_correlation.R'))
+source(here::here('code_empirical/figure_correlation.R'))
 
 ```
 
@@ -417,7 +417,7 @@ source(here::here('empirical/figure_correlation.R'))
 
 ```{r fig_s20, fig.height = 6, fig.width = 6}
 
-source(here::here('empirical/figure_iNEXT_sim.R'))
+source(here::here('code_empirical/figure_iNEXT_sim.R'))
 
 ```
 
