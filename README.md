@@ -1,22 +1,19 @@
 README
 ================
 
--   [Title](#title)
--   [Author](#author)
+-   [Article information](#article-information)
 -   [File descriptions](#file-descriptions)
     -   [Main directory](#main-directory)
     -   [Directory `theory`](#directory-theory)
     -   [Directory `empirical`](#directory-empirical)
 -   [Session information](#session-information)
 
-# Title
+# Article information
 
-Ecosystem size and complexity dictate riverine biodiversity
+Title: Emergent dual scaling of riverine biodiversity
 
-# Author
-
-Akira Terui, Seoghyun Kim, Christine L. Dolph, Taku Kadoya, Yusuke
-Miyazaki
+Author: Akira Terui, Seoghyun Kim, Christine L. Dolph, Taku Kadoya,
+Yusuke Miyazaki
 
 # File descriptions
 
@@ -24,9 +21,6 @@ See below or `metadata.html` (to view `metadata.html`, clone the
 repository and open `metadata.html` from your local computer).
 
 ## Main directory
-
-Main directory for ‘Ecosystem size and complexity dictate riverine
-biodiversity’
 
 -   `manuscript` - Rmarkdown for main text
 -   `supplementary_information` - Rmarkdown for Supplementary
@@ -131,9 +125,9 @@ Directory for empirical data analysis.
 
 # Session information
 
-    ## R version 4.0.2 (2020-06-22)
+    ## R version 4.1.0 (2021-05-18)
     ## Platform: x86_64-w64-mingw32/x64 (64-bit)
-    ## Running under: Windows 10 x64 (build 19042)
+    ## Running under: Windows 10 x64 (build 18363)
     ## 
     ## Matrix products: default
     ## 
@@ -148,7 +142,7 @@ Directory for empirical data analysis.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] compiler_4.0.2    magrittr_2.0.1    tools_4.0.2       htmltools_0.5.1.1
-    ##  [5] yaml_2.2.1        stringi_1.5.3     rmarkdown_2.6     knitr_1.31       
-    ##  [9] stringr_1.4.0     xfun_0.21         digest_0.6.27     rlang_0.4.10     
+    ##  [1] compiler_4.1.0    magrittr_2.0.1    tools_4.1.0       htmltools_0.5.1.1
+    ##  [5] yaml_2.2.1        stringi_1.5.3     rmarkdown_2.7     knitr_1.31       
+    ##  [9] stringr_1.4.0     xfun_0.21         digest_0.6.27     rlang_0.4.11     
     ## [13] evaluate_0.14
