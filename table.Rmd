@@ -9,14 +9,14 @@ knit: (function(inputFile, encoding) {
 
 ```{r setup, include=FALSE}
   
-  knitr::opts_knit$set(root.dir = here::here("empirical"))
+  knitr::opts_knit$set(root.dir = here::here("code_empirical"))
 
 ```
 
 
 ```{r, echo = FALSE, message=FALSE, results='asis'}
 
-source(here::here("empirical/analysis_rlm_bf.R"))
+source(here::here("code_empirical/analysis_rlm_bf.R"))
 
 stargazer::stargazer(fit$alpha$model, fit$beta$model, fit$gamma$model,
                      header = FALSE,
