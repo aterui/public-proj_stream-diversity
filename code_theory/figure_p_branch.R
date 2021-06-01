@@ -52,12 +52,7 @@
 
 
 # complexity effect -------------------------------------------------------
-  
-  x1 <- 0.2
-  x2 <- 0.3 
-  y1 <- 100 * x1^0.91  
-  y2 <- 100 * x2^0.91  
-  
+
   g <- dat %>% 
     ggplot(aes(x = p_branch,
                y = value,
@@ -74,10 +69,6 @@
     labs(x = "Branching probability",
          y = "Species richness") +
     guides(color = guide_legend(override.aes = list(fill = NA)),
-           fill = FALSE) +
-    geom_segment(aes(x = x1,
-                     xend = x2,
-                     y = y1,
-                     yend = y2))
+           fill = FALSE)
   
   print(g)
