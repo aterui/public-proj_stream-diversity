@@ -187,6 +187,8 @@
 
   network1 <- (ng[[1]] + labs(title = "A")) + ng[[2]]
   network2 <- (ng[[3]] + labs(title = "B")) + ng[[4]]
-  print((network1 | network2) / ((eg + labs(title = "C")) + (hkd + theme(legend.position = "none") + labs(title = "D")) + mw))
+  print((network1 | network2) / ((eg + labs(title = "C")) + 
+        (hkd + theme(legend.position = "none") + 
+        labs(title = "D")) + mw))
   
   

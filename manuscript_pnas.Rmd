@@ -1,8 +1,6 @@
 ---
 title: "Emergent dual scaling of riverine biodiversity"
-output:
-  pdf_document:
-    latex_engine: xelatex
+output: word_document
 csl: pnas.csl
 knit: (function(inputFile, encoding) {
         rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
@@ -21,14 +19,14 @@ header-includes:
   op = function(x, d = 2) sprintf(paste0("%1.",d,"f"), x) 
   
   # read gis files
-  filename <- list.files(path = here::here('empirical/data_gis'), full.names = T)
+  filename <- list.files(path = here::here('code_empirical/data_gis'), full.names = T)
   wsd_subset <- lapply(filename[str_detect(filename, "wsd_subset")], st_read)
   point_subset <- lapply(filename[str_detect(filename, "point_subset")], st_read)
   shape <- lapply(filename[str_detect(filename, "shape")], st_read)
   shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]]))
 
   # read theory file
-  dat_sim <- read_csv(here::here('theory/result/result_sim2020-11-10.csv'))
+  dat_sim <- read_csv(here::here('code_theory/result/result_sim2020-11-10.csv'))
   
   n_scenario <- dat_sim %>% distinct(n_species,
                        mean_env_source,
@@ -52,16 +50,16 @@ header-includes:
     nrow()
 
   # for Bayes factor
-  source(here::here('empirical/analysis_rlm_bf.R'))
+  source(here::here('code_empirical/analysis_rlm_bf.R'))
   
   # for average predictive comparisons
-  source(here::here('empirical/analysis_apcomp.R'))
+  source(here::here('code_empirical/analysis_apcomp.R'))
   
   # Hokkaido data
-  dat_hkd_site <- read_csv(here::here('empirical/data_out/data_hkd_site.csv'))
+  dat_hkd_site <- read_csv(here::here('code_empirical/data_out/data_hkd_site.csv'))
 
   # Midwest data
-  dat_mw_site <- read_csv(here::here('empirical/data_out/data_mw_site.csv')) %>% 
+  dat_mw_site <- read_csv(here::here('code_empirical/data_out/data_mw_site.csv')) %>% 
     mutate(Year = format(as.Date(Date, format = '%m/%d/%Y'), "%Y"))
 
 ```
@@ -128,7 +126,7 @@ While the prevailing evidence supports the importance of ecosystem size in biodi
 
 ### Network generation
 
-We depicted branching ecosystems as a bifurcating network of connected habitat patches [@teruiMetapopulationStabilityBranching2018; @yeakelSynchronisationStabilityRiver2014] (**Figure 1**). Habitat patches, or local communities, can be either non-branching or branching river sections with a unit length $l$, which defines the scale of local species interactions. Two parameters determine the geometric properties of simulated branching networks: the number of habitat patches $N_p$ (ecosystem size) and branching probability $P_b$ (ecosystem complexity). Each habitat patch is assigned to be a branching patch (including upstream terminals) with probability $P_b$ or a non-branching patch with probability $1-P_b$. In this framework, an individual branch is a consecutive series of non-branching patches terminated at a branching patch; therefore, the number of habitat patches in branch $q$, $n_{p,q}$, is a realization of a random variable drawn from a geometric distribution $n_{p,q} \sim Ge(P_{b})$ [@teruiMetapopulationStabilityBranching2018] but conditional on $\sum_{q=1}^{N_b}n_{p,q} = N_p$ ($N_b$ is the number of branches in a network). The number of branches $N_b$ is identical to the number of branching habitat patches in a network, or the number of 'success' out of $N_p$ trials. This leads to an assumption that $N_b$ is a realization of a random variable drawn from a binomial distribution as $N_b \sim Binomial(N_p, P_b)$. This framework has two merits. First, it reflects observed patterns of branch length distribution, which is known to follow an exponential distribution (a continuous version of a geometric distribution) [@rodriguez-iturbeFractalRiverBasins2001]. Second, it preserves the fractal nature of branching patterns [@peckhamReformulationHortonLaws1999]. An alternative approach is the use of optimal channel networks [@carraroGenerationApplicationRiver2020a]. However, we employed our framework because branching probability $P_b$ is quantifiable in natural river networks, enabling us to compare theoretical predictions with empirical observations.
+We depicted branching ecosystems as a bifurcating network of connected habitat patches [@teruiMetapopulationStabilityBranching2018; @yeakelSynchronisationStabilityRiver2014] (**Figure 1**). Habitat patches, or local communities, can be either non-branching or branching river sections with a unit length $l$, which defines the scale of local species interactions. Two parameters determine the geometric properties of simulated branching networks: the number of habitat patches $N_p$ (ecosystem size) and branching probability $P_b$ (ecosystem complexity). Each habitat patch is assigned to be a branching patch (including upstream terminals) with probability $P_b$ or a non-branching patch with probability $1-P_b$. In this framework, an individual branch is a consecutive series of non-branching patches terminated at a branching patch; therefore, the number of habitat patches in branch $q$, $n_{p,q}$, is a realization of a random variable drawn from a geometric distribution $n_{p,q} \sim Ge(P_{b})$ [@teruiMetapopulationStabilityBranching2018] but conditional on $\sum_{q=1}^{N_b}n_{p,q} = N_p$ ($N_b$ is the number of branches in a network). The number of branches $N_b$ is identical to the number of branching habitat patches in a network, or the number of 'success' out of $N_p$ trials. This leads to an assumption that $N_b$ is a realization of a random variable drawn from a binomial distribution as $N_b \sim Binomial(N_p, P_b)$. This framework has two merits. First, it reflects observed patterns of branch length distribution, which is known to follow an exponential distribution (a continuous version of a geometric distribution) [@rodriguez-iturbeFractalRiverBasins2001]. Second, it preserves the fractal nature of branching patterns [@peckhamReformulationHortonLaws1999]. An alternative approach is the use of optimal channel networks [@carraroGenerationApplicationRiver2020]. However, we employed our framework because branching probability $P_b$ is quantifiable in natural river networks, enabling us to compare theoretical predictions with empirical observations.
 
 In our network generation, we first drew $N_b$ from the binomial distribution but selected an odd number to constitute a bifurcating branching network. We then determined $n_{p,q}$ as random draws from the geometric distribution with the constraint of $\sum_{q=1}^{N_b}n_{p,q} = N_p$. The generated branches were organized randomly into a bifurcating branching network.
 
