@@ -57,7 +57,8 @@
           plot = FALSE)
   }
   
-  v_env <- unlist(lapply(seq_len(length(net)), FUN = function(x) net[[x]]$df_patch$environment))
+  v_env <- unlist(lapply(seq_len(length(net)),
+                         FUN = function(x) net[[x]]$df_patch$environment))
   
   colvalue <- data.frame(color = viridis::viridis(length(v_env)),
                          value = sort(v_env))
@@ -68,7 +69,9 @@
     V(adj)$env <- net[[i]]$df_patch$environment
     
     adj %>% 
-      ggraph(layout = layout_as_tree(., flip.y = FALSE, root = 1)) +
+      ggraph(layout = layout_as_tree(.,
+                                     flip.y = FALSE,
+                                     root = 1)) +
       geom_edge_link(color = alpha("steelblue", 0.5)) +
       geom_node_point(shape = 21,
                       fill = colvalue$color[match(V(adj)$env, colvalue$value)],
@@ -82,18 +85,27 @@
 
   ## read data
   filename <- list.files(path = 'data_gis', full.names = T)
-  wsd_subset <- lapply(filename[str_detect(filename, "wsd_subset")], st_read, quiet = TRUE)
-  point_subset <- lapply(filename[str_detect(filename, "point_subset")], st_read, quiet = TRUE)
-  channel_hkd <- st_read("data_gis/albers_channel_hkd.gpkg", quiet = TRUE)
-  shape <- lapply(filename[str_detect(filename, "shape")], st_read, quiet = TRUE)
-  shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]])) %>% 
+  wsd_subset <- lapply(filename[str_detect(filename, "wsd_subset")],
+                       st_read,
+                       quiet = TRUE)
+  point_subset <- lapply(filename[str_detect(filename, "point_subset")],
+                         st_read,
+                         quiet = TRUE)
+  channel_hkd <- st_read("data_gis/albers_channel_hkd.gpkg",
+                         quiet = TRUE)
+  shape <- lapply(filename[str_detect(filename, "shape")],
+                  st_read,
+                  quiet = TRUE)
+  shape[[1]] <- st_set_crs(shape[[1]],
+                           st_crs(wsd_subset[[1]])) %>% 
     st_cast("POLYGON") %>% 
     mutate(area = st_area(.)) %>% 
     filter(area == max(.$area))
   
   ## join number of sampling sites
   wsd_subset <- foreach(i = seq_len(length(wsd_subset))) %do% {
-    n_site <- st_join(point_subset[[i]], wsd_subset[[i]]) %>% 
+    n_site <- st_join(point_subset[[i]],
+                      wsd_subset[[i]]) %>% 
       group_by(watershed_id) %>% 
       mutate(n_site = n_distinct(SiteID)) %>% 
       summarise(n_site = unique(n_site)) %>% 
@@ -106,7 +118,10 @@
                                   between(n_site, 51, 100) ~ "51 to 100",
                                   n_site > 100 ~ "> 100",
                                   TRUE ~ as.character(n_site))) %>% 
-      mutate(category = factor(category, levels = c("> 100", "51 to 100", "10 to 50")))
+      mutate(category = factor(category,
+                               levels = c("> 100",
+                                          "51 to 100",
+                                          "10 to 50")))
     return(re)
   }
   
@@ -117,37 +132,54 @@
   polygon_eg <- wsd_subset[[1]] %>% 
     filter(watershed_id == 1009)
   
-  point_eg <- st_join(point_subset[[1]], wsd_subset[[1]]) %>% 
+  point_eg <- st_join(point_subset[[1]],
+                      wsd_subset[[1]]) %>% 
     filter(watershed_id == 1009)
   
   eg <- ggplot() +
-    geom_sf(data = polygon_eg, fill = grey(0.99)) +
-    geom_sf(data = channel_eg, size = 0.05) +
-    geom_sf(data = point_eg, color = alpha("salmon", 0.8), size = 0.001) +
-    theme(axis.text = element_blank(), axis.ticks = element_blank())
+    geom_sf(data = polygon_eg,
+            fill = grey(0.99)) +
+    geom_sf(data = channel_eg,
+            size = 0.05) +
+    geom_sf(data = point_eg,
+            color = alpha("salmon", 0.8),
+            size = 0.001) +
+    theme(axis.text = element_blank(),
+          axis.ticks = element_blank())
   
   ## hokkaido
   hkd <- ggplot() +
-    geom_sf(data = shape[[1]], fill = grey(0.99), size = 0.1) +
+    geom_sf(data = shape[[1]],
+            fill = grey(0.99),
+            size = 0.1) +
     geom_sf(data = wsd_subset[[1]],
             aes(fill = category),
             color = grey(0.65),
             size = 0.1) +
-    geom_sf(data = polygon_eg, color = "salmon", fill = alpha("white", 0), size = 0.3) +
+    geom_sf(data = polygon_eg,
+            color = "salmon",
+            fill = alpha("white", 0),
+            size = 0.3) +
     scale_fill_manual(values = c(grey(0.2), grey(0.5), grey(0.8))) +
-    labs(subtitle = paste0("Hokkaido, Japan\n", eval(nrow(wsd_subset[[1]])), " watersheds"),
+    labs(subtitle = paste0("Hokkaido, Japan\n",
+                           eval(nrow(wsd_subset[[1]])),
+                           " watersheds"),
          fill = "Number of sites") +
     theme_bw() + theme(axis.text = element_text(size = 7))
   
   ## midwest
   mw <- ggplot() +
-    geom_sf(data = shape[[2]], fill = grey(0.99), size = 0.1) +
+    geom_sf(data = shape[[2]],
+            fill = grey(0.99),
+            size = 0.1) +
     geom_sf(data = wsd_subset[[2]],
             aes(fill = category),
             color = grey(0.65),
             size = 0.1) +
     scale_fill_manual(values = c(grey(0.2), grey(0.5), grey(0.8))) +
-    labs(subtitle = paste0("Midwest, US\n", eval(nrow(wsd_subset[[2]])), " watersheds"),
+    labs(subtitle = paste0("Midwest, US\n",
+                           eval(nrow(wsd_subset[[2]])),
+                           " watersheds"),
          fill = "Number of sites") +
     theme_bw() + theme(axis.text = element_text(size = 7))
   

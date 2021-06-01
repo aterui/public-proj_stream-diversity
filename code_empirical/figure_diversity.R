@@ -37,8 +37,10 @@
   source("analysis_rlm_bf.R")
   
   ## redefine data.frame
-  dat_hkd <- read_csv("data_out/data_hkd.csv") %>% mutate(region = "hokkaido")
-  dat_mw <- read_csv("data_out/data_mw.csv") %>% mutate(region = "midwest")
+  dat_hkd <- read_csv("data_out/data_hkd.csv") %>%
+    mutate(region = "hokkaido")
+  dat_mw <- read_csv("data_out/data_mw.csv") %>%
+    mutate(region = "midwest")
   
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator, alpha = mu_alpha) %>% 

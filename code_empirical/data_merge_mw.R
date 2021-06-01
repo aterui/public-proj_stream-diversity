@@ -124,7 +124,9 @@
   albers_wsd_subset <- watershed %>% 
     filter(watershed_id %in% wsd_subset)
   
-  st_write(albers_wsd_subset, "data_gis/albers_wsd_subset_mw.gpkg", append = FALSE)
+  st_write(albers_wsd_subset,
+           "data_gis/albers_wsd_subset_mw.gpkg",
+           append = FALSE)
   
   ## export point data
   albers_point <- d0 %>% 
@@ -132,5 +134,7 @@
     group_by(SiteID) %>% 
     distinct(SiteID)
   
-  st_write(albers_point, "data_gis/albers_point_subset_mw.gpkg", append = FALSE)
+  st_write(albers_point,
+           "data_gis/albers_point_subset_mw.gpkg",
+           append = FALSE)
   
