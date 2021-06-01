@@ -12,7 +12,7 @@ for(i in seq_len(nrow(param))){
 
 # data --------------------------------------------------------------------
 
-  dat <- read_csv(here::here("theory/result/result_sim_alpha_pattern2021-05-28.csv")) %>% 
+  dat <- read_csv(here::here("code_theory/result/result_sim_alpha_pattern2021-05-28.csv")) %>% 
     filter(sd_env_source == param$sigma_h[i],
            sd_env_lon == param$sigma_l[i]) %>%
     mutate(competition = recode(max_alpha,

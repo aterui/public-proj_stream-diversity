@@ -6,7 +6,7 @@
 
 # data --------------------------------------------------------------------
 
-  dat_slope <- read_csv(here::here('theory/result/result_sensitivity.csv')) %>% 
+  dat_slope <- read_csv(here::here('code_theory/result/result_sensitivity.csv')) %>% 
       filter(gamma_div > 0 & alpha_div > 0) %>% 
       mutate(beta_div = gamma_div/alpha_div) %>% 
       mutate(group_id = group_indices(., sd_env_source)) %>% 
@@ -19,7 +19,7 @@
          slope_gamma_bp = c(coef(lm(log(gamma_div, 10) ~ log(n_patch, 10) + log(p_branch, 10), data = .))[3])) %>% 
       summarize(across(everything(), as.numeric))
     
-  dat_para <- read_csv(here::here('theory/result/result_sensitivity.csv')) %>% 
+  dat_para <- read_csv(here::here('code_theory/result/result_sensitivity.csv')) %>% 
     mutate(group_id = group_indices(., sd_env_source)) %>% 
     group_by(group_id) %>% 
     summarize(sigma_h = unique(sd_env_source),

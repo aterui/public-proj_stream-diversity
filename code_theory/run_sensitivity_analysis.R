@@ -108,4 +108,4 @@
 # return ------------------------------------------------------------------
 
   stopCluster(cl)
-  write.csv(result, file = paste0(here("theory/result/result_sensitivity"), ".csv"))
+  write.csv(result, file = paste0(here("code_theory/result/result_sensitivity"), ".csv"))

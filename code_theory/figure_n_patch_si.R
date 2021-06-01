@@ -12,13 +12,11 @@ for(i in seq_len(nrow(param))){
   
 # read data ---------------------------------------------------------------
 
-  dat <- read_csv(here::here("theory/result/result_sim2020-11-10.csv")) %>% 
-    select(-beta_div) %>% 
+  dat <- read_csv(here::here("code_theory/result/result_sim2021-05-28.csv")) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
            p_dispersal == param$p_d[i],
            sd_env_source == param$sigma_h[i],
            sd_env_lon == param$sigma_l[i]) %>%
-    mutate(beta_div = gamma_div/alpha_div) %>% 
     pivot_longer(cols = c("alpha_div", "beta_div", "gamma_div"),
                  names_to = "metric") %>% 
     mutate(competition = recode(max_alpha,
