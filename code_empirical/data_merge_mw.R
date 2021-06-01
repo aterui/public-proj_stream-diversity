@@ -2,7 +2,7 @@
 # setup -------------------------------------------------------------------
   
   rm(list = ls(all.names = TRUE))
-  setwd(here::here("empirical"))
+  setwd(here::here("code_empirical"))
   pacman::p_load(tidyverse, sf, iNEXT, foreach, tmap)  
 
 # read gis data -----------------------------------------------------------
@@ -77,7 +77,7 @@
     left_join(dat_freq, by = "watershed_id")
   
   list_freq <- foreach(i = seq_len(nrow(dat_freq))) %do% {
-    x <- as.vector(sort(dat_freq[i,-which(colnames(dat_freq) == 'watershed_id')],
+    x <- as.vector(sort(unlist(dat_freq[i,-which(colnames(dat_freq) == 'watershed_id')]),
                         decreasing = T))
     return(x[x > 0])
   }
