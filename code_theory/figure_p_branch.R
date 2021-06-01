@@ -6,7 +6,7 @@
 
 # read data ---------------------------------------------------------------
   
-  dat <- read_csv(here::here("code_theory/result/result_sim2020-11-10.csv")) %>% 
+  dat <- read_csv(here::here("code_theory/result/result_sim2021-05-28.csv")) %>% 
     select(-beta_div) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
            p_dispersal == 0.01,

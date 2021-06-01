@@ -6,13 +6,11 @@
 
 # read data ---------------------------------------------------------------
 
-  dat <- read_csv(here::here("code_theory/result/result_sim2020-11-10.csv")) %>% 
-    select(-beta_div) %>% 
+  dat <- read_csv(here::here("code_theory/result/result_sim2021-05-28.csv")) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
            p_dispersal == 0.01,
            sd_env_source == 1,
            sd_env_lon == 0.01) %>% 
-    mutate(beta_div = gamma_div / alpha_div) %>% 
     pivot_longer(cols = c("alpha_div", "beta_div", "gamma_div"),
                  names_to = "metric") %>% 
     mutate(competition = recode(max_alpha,
