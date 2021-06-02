@@ -88,21 +88,42 @@
   
 # fig ---------------------------------------------------------------------
   
-  g1 <- ggplot(dat, aes(x = area, y = value, color = region)) +
-    facet_wrap(facets = ~metric, labeller = label_parsed) +
+  region_label <- c("Hokkaido", "Midwest")
+  names(region_label) <- c("hokkaido", "midwest")
+  
+  g1 <- ggplot(dat, aes(x = area,
+                        y = value,
+                        color = metric)) +
+    facet_wrap(facets = ~ region,
+               labeller = labeller(region = region_label)) +
     geom_point(alpha = 0.25) +
-    geom_line(data = dat_area, aes(x = area, y = value)) +
-    scale_color_hue(name = "Region", labels = c("Hokkaido", "Midwest")) +
+    geom_line(data = dat_area,
+              aes(x = area,
+                  y = value)) +
+    scale_color_hue(name = NULL,
+                    labels = c(expression(alpha~"diversity"),
+                               expression(beta~"diversity"),
+                               expression(gamma~"diversity"))) +
     xlab(expression("Watershed area ("~km^2~")")) +
     scale_y_continuous(trans='log10') +
     scale_x_continuous(trans='log10')
     
-  g2 <- ggplot(dat, aes(x = p_branch, y = value, color = region)) +
-    facet_wrap(facets = ~metric, labeller = label_parsed) +
+  g2 <- ggplot(dat, aes(x = p_branch,
+                        y = value,
+                        color = metric)) +
+    facet_wrap(facets = ~ region,
+               labeller = labeller(region = region_label)) +
     geom_point(alpha = 0.25) +
-    geom_line(data = dat_bp, aes(x = p_branch, y = value, linetype = metric)) +
-    scale_linetype_manual(values = c('blank', 'solid', 'solid'), guide = "none") +
-    scale_color_hue(name = "Region", labels = c("Hokkaido", "Midwest")) +
+    geom_line(data = dat_bp,
+              aes(x = p_branch,
+                  y = value,
+                  linetype = metric)) +
+    scale_color_hue(name = NULL,
+                    labels = c(expression(alpha~"diversity"),
+                               expression(beta~"diversity"),
+                               expression(gamma~"diversity"))) +
+    scale_linetype_manual(values = c("dashed", "solid", "solid"),
+                          guide = "none") +
     xlab("Branching probability") +
     scale_y_continuous(trans='log10') +
     scale_x_continuous(trans='log10')
