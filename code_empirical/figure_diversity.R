@@ -95,7 +95,8 @@
                         y = value,
                         color = metric)) +
     facet_wrap(facets = ~ region,
-               labeller = labeller(region = region_label)) +
+               labeller = labeller(region = region_label),
+               ncol = 1) +
     geom_point(alpha = 0.25) +
     geom_line(data = dat_area,
               aes(x = area,
@@ -106,13 +107,16 @@
                                expression(gamma~"diversity"))) +
     xlab(expression("Watershed area ("~km^2~")")) +
     scale_y_continuous(trans='log10') +
-    scale_x_continuous(trans='log10')
-    
+    scale_x_continuous(trans='log10') +
+    ylab("Species richness") +
+    theme(legend.position = "none")
+  
   g2 <- ggplot(dat, aes(x = p_branch,
                         y = value,
                         color = metric)) +
     facet_wrap(facets = ~ region,
-               labeller = labeller(region = region_label)) +
+               labeller = labeller(region = region_label),
+               ncol = 1) +
     geom_point(alpha = 0.25) +
     geom_line(data = dat_bp,
               aes(x = p_branch,
@@ -126,10 +130,12 @@
                           guide = "none") +
     xlab("Branching probability") +
     scale_y_continuous(trans='log10') +
-    scale_x_continuous(trans='log10')
-  
-  print(  
-    (g1 + theme(legend.position = "none") + ylab("Species richness"))/
-    (g2 + ylab("Species richness")) + plot_layout(guides = "collect") +
-    plot_annotation(tag_levels = 'A')
-  )  
+    scale_x_continuous(trans='log10') +
+    ylab("Species richness") +
+    theme(legend.position = "none")
+    
+  #print(  
+  #  (g1 + theme(legend.position = "none") + ylab("Species richness"))/
+  #  (g2 + ylab("Species richness")) + plot_layout(guides = "collect") +
+  #  plot_annotation(tag_levels = 'A')
+  #)  

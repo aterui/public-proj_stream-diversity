@@ -3,8 +3,14 @@
 
   rm(list = ls(all.names = TRUE))
   pacman::p_load(tidyverse)
+  pacman::p_load(tidyverse, patchwork)
+  
+# empirical data ----------------------------------------------------------
+  
+  source(here::here("code_empirical/figure_diversity.R"))
 
-# read data ---------------------------------------------------------------
+
+# theoretical data --------------------------------------------------------
 
   dat <- read_csv(here::here("code_theory/result/result_sim2021-05-28.csv")) %>% 
     filter(alpha_div > 0 & gamma_div > 0,
@@ -14,8 +20,8 @@
     pivot_longer(cols = c("alpha_div", "beta_div", "gamma_div"),
                  names_to = "metric") %>% 
     mutate(competition = recode(max_alpha,
-                                `0.75` = sprintf('"Weak competition"~(alpha[max]=="%.2f")', max_alpha),
-                                `1.5` = sprintf('"Strong competition"~(alpha[max]=="%.2f")', max_alpha)),
+                                `0.75` = sprintf('"Weak competition"~(eta[max]=="%.2f")', max_alpha),
+                                `1.5` = sprintf('"Strong competition"~(eta[max]=="%.2f")', max_alpha)),
            dispersal = recode(theta,
                               `0.1` = sprintf('"Long-distance dispersal"~(theta=="%.2f")', theta),
                               `1.0` = sprintf('"Short-distance dispersal"~(theta=="%.2f")', theta)))
@@ -65,4 +71,7 @@
     guides(color = guide_legend(override.aes = list(fill = NA)),
            fill = FALSE)
   
-  print(g)
+  print(g + ggtitle("Theory") +
+        g1 + ggtitle("Empirical") +
+        plot_annotation(tag_levels = 'A') + 
+        plot_layout(guides = "collect", width = c(2,1)))
