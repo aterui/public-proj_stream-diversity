@@ -1,9 +1,12 @@
 ---
 title: "Figures"
 output:
-  pdf_document: default
+  pdf_document:
+    latex_engine: xelatex
 knit: (function(inputFile, encoding) {
-        rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
+        rmarkdown::render(inputFile,
+                          encoding = encoding,
+                          output_dir = "document_output")
       })
 ---
 
@@ -23,14 +26,14 @@ source(here::here("code_empirical/figure_map.R"))
 
 \newpage
 
-```{r, fig.height=6, fig.width=10, fig.cap="Qualitative match between theoretical predictions and empirical patterns in power law scaling of biodiversity. (A) Theory predicts that ecosystem size (the number of habitat patches) scales $\\gamma$ diversity through increased $\\alpha$ or $\\beta$ diversity across ecological scenarios. Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competitive coefficients ($\\eta_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). In this simulation, environmental variability among headwaters (i.e., the most upstream patches), which is expressed as the standard deviation of a normal distribution ($\\sigma_{h} = 1.0$), was greater than that of local environmental noise occurring at each habitat patch ($\\sigma_{l} = 0.01$). Dispersal probability $p_{d}$ was 0.01 for all the scenarios. (B) Empirical biodiversity patterns match theoretical predictions of power law scaling along the axis of ecosystem size. Dots represent watershed replicates (i.e., metacommunities), and lines are predicted values from the robust regression models. Observed patterns were consistent across geographically distant regions with distinct fish fauna (top: Hokkaido, Japan; bottom: Midwest, US)."}
+```{r, fig.height=6, fig.width=10, fig.cap="Qualitative match between theoretical predictions and empirical patterns in power law scaling of biodiversity. (A) Theoretical predictions. Ecosystem size (the number of habitat patches) scales $\\gamma$ diversity through increased $\\alpha$ or $\\beta$ diversity across ecological scenarios. Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. Rows represent different competition strength. Competition coefficients ($b_{ij}$) were varied randomly from 0 to 1.5 (top, strong competition) or 0.75 (bottom, weak competition). Columns represent different dispersal scenarios. Two dispersal parameters were chosen to simulate scenarios with long-distance (the rate parameter of an exponential dispersal kernel $\\theta = 0.10$) and short-distance dispersal ($\\theta = 1.0$). In this simulation, environmental variability among headwaters (i.e., the most upstream patches), which is expressed as the standard deviation of a normal distribution ($\\sigma_{h} = 1.0$), was greater than that of local environmental noise occurring at each habitat patch ($\\sigma_{l} = 0.01$). Dispersal probability $p_{d}$ was 0.01 for all the scenarios. (B) Empirical observations. Observed biodiversity patterns match theoretical predictions of power law scaling along the axis of ecosystem size. Dots represent watershed replicates (i.e., metacommunities), and lines are predicted values from the robust regression models. The estimated slopes (i.e., the scaling exponents) were consistent across geographically distant regions with distinct fish fauna (top: Hokkaido, Japan; bottom: Midwest, US)."}
 
 source(here::here("code_theory/figure_n_patch.R"))
 ```
 
 \newpage
 
-```{r, fig.height=6, fig.width=10, fig.cap="Qualitative match between theoretical predictions and empirical patterns in power law scaling of biodiversity. (A) Theory predicts that ecosystem complexity (branching probability) scales $\\gamma$ diversity through increased $\\alpha$ or $\\beta$ diversity across ecological scenarios. Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. See Figure 2 for details. (B) Empirical biodiversity patterns match theoretical predictions of power law scaling along the axis of ecosystem complexity. Dots represent watershed replicates (i.e., metacommunities), and lines are predicted values from the robust regression models (solid: siginificant relationships; dashed: insignificant). Observed patterns were consistent across geographically distant regions with distinct fish fauna (top: Hokkaido, Japan; bottom: Midwest, US)."}
+```{r, fig.height=6, fig.width=10, fig.cap="Qualitative match between theoretical predictions and empirical patterns in power law scaling of biodiversity. (A) Theoretical predictions. Ecosystem complexity (branching probability) scales $\\gamma$ diversity through increased $\\alpha$ or $\\beta$ diversity across ecological scenarios. Lines and shades are loess curves fitted to simulated data and their 95% confidence intervals. Each panel represents different ecological scenarios under which metacommunity dynamics were simulated. See Figure 2 for details. (B) Empirical observations. Observed biodiversity patterns match theoretical predictions of power law scaling along the axis of ecosystem complexity. Dots represent watershed replicates (i.e., metacommunities), and lines are predicted values from the robust regression models (solid: siginificant relationships; dashed: insignificant). The estimated slopes (i.e., the scaling exponents) were consistent across geographically distant regions with distinct fish fauna (top: Hokkaido, Japan; bottom: Midwest, US)."}
 
 source(here::here("code_theory/figure_p_branch.R"))
 ```
