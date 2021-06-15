@@ -5,6 +5,9 @@
 README.Rmd
 metadata.Rmd
 document_output
+data_org_hkd
+data_org_mw
+data_out
 *.Rproj
 *old
 references.bib
