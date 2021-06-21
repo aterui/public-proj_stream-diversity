@@ -9,7 +9,7 @@ knit: (function(inputFile, encoding) {
 
 Dear *Editor*
 
-We are excited to submit our manuscript entitled '*Emergent dual scaling of riverine biodiversity*' to *Proceedings of the National Academy Sciences*.
+We are excited to submit our manuscript entitled '*Emergent dual scaling of riverine biodiversity*' to *Proceedings of the National Academy of Sciences*.
 
 Despite the inherent complexity of nature, some ecological patterns follow surprisingly simple rules with far-reaching implications for biodiversity conservation. Much attention has been paid to the ubiquitous power-law scaling between species richness and area, in which species richness increases with area in a decelerating way. In spatially complex ecosystems, however, there may be an overlooked scaling law of biodiversity because 'scale-invariant' complexity of fractal ecosystem structure drives ecological dynamics in space. Branching river networks are an outstanding example of such complex ecosystems, where geometric ecosystem structure (e.g., branching patterns) remains constant across a wide range of spatial scales.
 
@@ -17,7 +17,7 @@ In this research, we used theory and analysis of extensive fish data to show tha
 
 Our study distinguishes itself from previous studies in three important ways. (1) Our study is the first to show the *dual* scaling law of biodiversity. Notably, this pattern has emerged irrespective of ecological contexts or geographic regions, emphasizing the generality of our findings. (2) Our empirical analysis used *watershed ecosystems* as individual replicates of statistical analysis; our data set included 180 watersheds with 6605 sites across Japan and the US and this extensive data enabled us to perform the ecosystem-level analysis. Therefore, unlike most previous studies focused on local biodiversity patterns *within a single watershed*, this study provides crucial insights into how ecological communities are structured *across watersheds*. (3) The present study provides the foundation for complexity-based ecosystem management. While area-based ecosystem management spearheads global conservation efforts (e.g., protected areas), we are unaware of any conservation scheme that explicitly accounts for ecosystem complexity in the design. Hence, our research provides a novel perspective to spatial planning of protected areas or ecological restoration.
 
-In addition to the significance described above, the connection between network complexity and biodiversity has a broad implication for a truly interdisciplinary audience, including scientists working on fluvial geomorphology, network theory, and biodiversity. Our study is also timely given the unprecedented rate of global biodiversity loss in freshwater ecosystems. Therefore, *Proceedings of the National Academy Sciences* is an ideal outlet for this manuscript.
+In addition to the significance described above, the connection between network complexity and biodiversity has a broad implication for a truly interdisciplinary audience, including scientists working on fluvial geomorphology, network theory, and biodiversity. Our study is also timely given the unprecedented rate of global biodiversity loss in freshwater ecosystems. Therefore, *Proceedings of the National Academy of Sciences* is an ideal outlet for this manuscript.
 
 We suggest the following leading scientists in the field as potential reviewers:
 
