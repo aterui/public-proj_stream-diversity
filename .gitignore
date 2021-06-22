@@ -8,9 +8,10 @@ document_output
 data_org_hkd
 data_org_mw
 data_out
-*.Rproj
-*old
-references.bib
 supplementary_information*.log
-*.bib
 coverletter.Rmd
+*.Rproj
+*.bib
+*.csl
+*old
+
