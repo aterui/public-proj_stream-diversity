@@ -17,7 +17,7 @@ Yusuke Miyazaki
 See `metadata.html` (to view `metadata.html`, clone the repository and
 open `metadata.html` from your local computer). **Note that the raw
 empirical data are not available in this repository due to licensing
-issues**.
+issues.**
 
 # Session information
 
