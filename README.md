@@ -3,6 +3,7 @@ README
 
 -   [Article information](#article-information)
 -   [File descriptions](#file-descriptions)
+-   [License](#license)
 -   [Session information](#session-information)
 
 # Article information
@@ -18,6 +19,18 @@ See `metadata.html` (to view `metadata.html`, clone the repository and
 open `metadata.html` from your local computer). **Note that the raw
 empirical data are not available in this repository due to licensing
 issues.**
+
+# License
+
+-   Code - MIT license
+-   GIS layers adapted from the following materials are licensed under:
+    -   Copernicus Global Land Service: [Creative Commons Attribution
+        4.0 International](https://creativecommons.org/licenses/by/4.0/)
+    -   WorldClim 1.4: [Creative Commons Attribution-ShareAlike 4.0
+        International
+        License](https://creativecommons.org/licenses/by-sa/4.0/)
+    -   MERIT Hydro: [Attribution-NonCommercial 4.0
+        International](https://creativecommons.org/licenses/by-nc/4.0/)
 
 # Session information
 
