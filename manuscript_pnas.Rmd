@@ -74,6 +74,8 @@ bibliography: references.bib
 
 **Key words:** metacommunity, species diversity, scaling law, network theory, freshwater
 
+\newpage
+
 ## Introduction
 
 Ecologists have long sought to understand the general drivers of biodiversity. One of the most robust empirical generalizations in ecology is the positive relationship between species richness and area, i.e., the species-area relationship (the SAR) [@lomolinoEcologyMostGeneral2000]. In 1921, Arrhenius @arrheniusSpeciesArea1921 formulated the SAR as a power law $S = cA^z$, an equation currently known as the Arrhenius species-area relationship ($S$ is the number of species observed in a given geographic area $A$, $c$ the constant, and $z$ the scaling exponent). Since then, the spatial scaling of species richness has been observed in many taxonomic groups [@triantisIslandSpeciesareaRelationship2012]. The SAR is ubiquitous because multiple mechanisms produce an apparently similar pattern. Larger ecosystems typically support more diverse metacommunities due to increased habitat diversity [@kallimanisHowDoesHabitat2008], larger metacommunity size [@hubbellUnifiedNeutralTheory2001], and/or enhanced colonization dynamics [@lososTheoryIslandBiogeography2009]. Importantly, the SAR provides the foundation for global conservation efforts [@neigelSpeciesareaRelationshipsMarine2003; @desmetUsingSpeciesareaRelationship2004; @myersBiodiversityHotspotsConservation2000]. For example, conservation ecologists have used SAR estimates to design marine and terrestrial protected areas [@neigelSpeciesareaRelationshipsMarine2003; @desmetUsingSpeciesareaRelationship2004], which currently encompass more than 30 million km^2^ globally [@deguignet2014UnitedNations2014].
