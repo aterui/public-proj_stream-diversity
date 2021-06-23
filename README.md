@@ -22,7 +22,7 @@ issues.**
 
 # License
 
--   Code - MIT license
+-   Code - MIT License
 -   GIS layers adapted from the following materials are licensed under:
     -   Copernicus Global Land Service: [Creative Commons Attribution
         4.0 International](https://creativecommons.org/licenses/by/4.0/)
