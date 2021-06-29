@@ -191,4 +191,6 @@
         (hkd + theme(legend.position = "none") + 
         labs(title = "D")) + mw))
   
-  
+  ggsave(normalizePath("../document_output/figure_01.pdf"),
+         width = 10,
+         height = 6)

@@ -80,3 +80,7 @@
         g2 + ggtitle("Empirical observation") +
         plot_annotation(tag_levels = 'A') + 
         plot_layout(guides = "collect", width = c(2,1)))
+  
+  ggsave(normalizePath("../document_output/figure_03.pdf"),
+         width = 10,
+         height = 6)
