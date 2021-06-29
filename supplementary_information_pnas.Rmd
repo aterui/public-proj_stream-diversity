@@ -13,7 +13,7 @@ output:
     latex_engine: xelatex
     toc: yes
     toc_depth: 3
-bibliography: references.bib
+bibliography: reference.bib
 csl: pnas.csl
 knit: (function(inputFile, encoding) {
         rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
@@ -37,7 +37,7 @@ knit: (function(inputFile, encoding) {
   shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]]))
   
   ## read theory file
-  dat_sim <- read_csv(here::here('code_theory/result/result_sim2020-05-28.csv'))
+  dat_sim <- read_csv(here::here('code_theory/result/result_sim2021-05-28.csv'))
   
   n_scenario <- dat_sim %>% distinct(n_species,
                        mean_env_source,
