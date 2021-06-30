@@ -78,7 +78,7 @@
   
   print(g + ggtitle("Theoretical prediction") +
         g2 + ggtitle("Empirical observation") +
-        plot_annotation(tag_levels = 'A') + 
+        plot_annotation(tag_levels = 'A', title = "Figure 3") + 
         plot_layout(guides = "collect", width = c(2,1)))
   
   ggsave(normalizePath("../document_output/figure_03.pdf"),
