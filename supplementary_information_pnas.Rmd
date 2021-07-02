@@ -12,6 +12,8 @@ csl: pnas.csl
 knit: (function(inputFile, encoding) {
         rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
       })
+header-includes:
+  \pagenumbering{gobble}
 ---
 
 ```{r setup, include=FALSE}
@@ -71,6 +73,7 @@ knit: (function(inputFile, encoding) {
 ```
 
 \newpage
+\pagenumbering{arabic}
 
 # Theory
 
