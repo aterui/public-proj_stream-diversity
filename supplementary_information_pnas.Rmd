@@ -1,27 +1,23 @@
 ---
 title: |
-  | Supporting Information for:
-  | Emergent dual scaling of riverine biodiversity
-author:
-- Akira Terui^[Department of Biology, University of North Carolina at Greensboro, Greensboro, NC 27412, USA]
-- Seoghyun Kim\footnotemark[1]
-- Christine L. Dolph^[Department of Ecology, Evolution and Behavior, University of Minnesota, St. Paul, MN 55108, USA]
-- Taku Kadoya^[National Institute for Environmental Studies, Tsukuba, Ibaraki 305-8506, Japan]
-- Yusuke Miyazaki^[Shiraume Gakuen College, Kodaira, Tokyo 187-8570, Japan]
+  ![](image/logo.png){width=4in}  
 output:
   pdf_document:
     latex_engine: xelatex
-    toc: yes
-    toc_depth: 3
-bibliography: references.bib
+    toc: true
+    includes:
+        before_body: title.tex
+bibliography: reference.bib
 csl: pnas.csl
 knit: (function(inputFile, encoding) {
         rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
       })
+header-includes:
+  \pagenumbering{gobble}
 ---
 
 ```{r setup, include=FALSE}
-
+  
   pacman::p_load(tidyverse, knitr, kableExtra)
   knitr::opts_chunk$set(echo = FALSE,
                         message = FALSE,
@@ -37,7 +33,7 @@ knit: (function(inputFile, encoding) {
   shape[[1]] <- st_set_crs(shape[[1]], st_crs(wsd_subset[[1]]))
   
   ## read theory file
-  dat_sim <- read_csv(here::here('code_theory/result/result_sim2020-11-10.csv'))
+  dat_sim <- read_csv(here::here('code_theory/result/result_sim2021-05-28.csv'))
   
   n_scenario <- dat_sim %>% distinct(n_species,
                        mean_env_source,
@@ -75,6 +71,9 @@ knit: (function(inputFile, encoding) {
   source(here::here('code_theory/table_sensitivity_analysis.R'))
 
 ```
+
+\newpage
+\pagenumbering{arabic}
 
 # Theory
 
@@ -134,7 +133,7 @@ The simulation reproduced diverse patterns of longitudinal gradients in local sp
 
 ## Asymptotic species richness
 
-We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with known values of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, presence of species $i$ at site $x$, $J_{ix}$, was drawn from a Bernoulli distribution as $J_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}J_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT' [@hsiehINEXTPackageRarefaction2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
+We evaluated sensitivity of asymptotic species richness (Chao 2 estimator) to sample size (i.e., the number of sampling sites in a watershed). We simulated presence-absence data of species with known values of true species richness $S_{true}$ and the number of sampling sites $N_{site}$. In this simulation, the presence of species $i$ at site $x$, $J_{ix}$, was drawn from a Bernoulli distribution as $J_{ix} \sim Bernoulli(p_{i}\kappa_{ix})$ where $p_i$ is the detection probability for species $i$ and $\kappa_{ix}$ is the presence probability of species $i$ at site $x$. Based on the incidence frequency of simulated species $F_i = \sum_{x = 1}^{N_{site}}J_{ix}$, we estimated asymptotic species richness using the iNEXT function in the R package 'iNEXT' [@hsiehINEXTPackageRarefaction2016]. We calculated % bias of estimated asymptotic species richness $S_{est}$:
 
 ```{=tex}
 \begin{equation}

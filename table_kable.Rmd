@@ -1,0 +1,64 @@
+---
+title: "Table"
+output:
+  word_document:
+    reference_docx: word_format.docx
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE)
+
+source(here::here("code_empirical/analysis_rlm_bf.R"))
+op = function(x, d = 2) sprintf(paste0("%1.", d, "f"), x) 
+
+x  <-  lapply(fit, function(x) {
+  
+  conf <- confint.default(x$model)
+  ci_test <- conf[,1] * conf[,2]
+  
+  paste0(op(coef(summary(x$model))[,1]),
+         " (",
+         op(coef(summary(x$model))[,2]),
+         ")",
+         ifelse(ci_test < 0, "", "*"))
+})
+
+Parameter <- c("$\\xi_0$",
+              "$\\xi_1$", 
+              "$\\xi_2$",    
+              "$\\xi_3$",                             
+              "$\\xi_4$",                                         
+              "$\\xi_5$",
+              "$\\xi_6$",
+              "$\\xi_7$")
+
+Effect <- c("Intercept",
+            "$log_{10}$ Watershed area", 
+            "$log_{10}$ Branching probability",    
+            "Region (Midwest vs. Hokkaido)",                             
+            "Air temperature",                                         
+            "Precipitation",
+            "Logit fraction of agriculture",
+            "Dam density")
+
+output <- tibble::as_tibble(do.call(cbind, x)) %>% 
+  rename("$\\alpha$ diversity" = alpha,
+         "$\\beta$ diversity" = beta,
+         "$\\gamma$ diversity" = gamma) %>% 
+  mutate(Effect,
+         Parameter) %>% 
+  relocate(Parameter,
+           Effect)
+
+```
+
+**Table 1** Estimated parameters of robust regression models explaining fish species richness in Hokkaido (Japan) and the Midwest (US). The standard errors (SE) are shown in parenthesis. Response variables were log-10 transformed. Climate and land use variables (air temperature, precipitation, logit fraction of agriculture, dam density) are deviations from the regional averages and were standardized to a mean of zero and a standard deviation of one prior to the analysis.
+
+```{r table1}
+
+knitr::kable(output)
+
+```
+
+Note: * parameter estimates whose 95% confidence intervals (approximately $\xi_k \pm 2SE$) do not include zero
