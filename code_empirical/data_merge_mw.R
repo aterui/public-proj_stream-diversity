@@ -65,7 +65,7 @@
   ## convert data to frequency
   dat_freq <- dat_fish %>% 
     group_by(watershed_id, Species) %>% 
-    summarise(freq = n()) %>% 
+    summarise(freq = n_distinct(SiteID)) %>% 
     pivot_wider(id_cols = watershed_id,
                 names_from = Species,
                 values_from = freq,
@@ -131,8 +131,8 @@
   ## export point data
   albers_point <- d0 %>% 
     filter(watershed_id %in% wsd_subset) %>% 
-    group_by(SiteID) %>% 
-    distinct(SiteID)
+    select(SiteID, geometry) %>% 
+    distinct()
   
   st_write(albers_point,
            "data_gis/albers_point_subset_mw.gpkg",
