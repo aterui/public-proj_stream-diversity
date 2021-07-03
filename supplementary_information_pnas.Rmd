@@ -72,9 +72,10 @@ header-includes:
 
 ```
 
+```{=tex}
 \newpage
 \pagenumbering{arabic}
-
+```
 # Theory
 
 ## Sensitivity analysis
