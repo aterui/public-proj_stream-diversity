@@ -34,8 +34,8 @@
     
     mod0 <- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
                                           scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
-                      method = 'M',
                       psi = MASS::psi.huber,
+                      method = 'M',
                       data = data)
     
     # bf01: bayes factor in favor of mod0 over mod1
