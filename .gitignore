@@ -16,3 +16,5 @@ coverletter.Rmd
 *old
 
 *.log
+code_empirical/data_gis/albers_point_subset_hkd.gpkg
+code_empirical/data_gis/albers_point_subset_mw.gpkg
