@@ -16,9 +16,9 @@ for(i in seq_len(nrow(param))){
     filter(sd_env_source == param$sigma_h[i],
            sd_env_lon == param$sigma_l[i]) %>%
     mutate(competition = recode(max_alpha,
-                                `0.75` = sprintf('"Weak competition"~(alpha[max]=="%.2f")',
+                                `0.75` = sprintf('"Weak competition"~(b[max]=="%.2f")',
                                                  max_alpha),
-                                `1.5` = sprintf('"Strong competition"~(alpha[max]=="%.2f")',
+                                `1.5` = sprintf('"Strong competition"~(b[max]=="%.2f")',
                                                 max_alpha)),
            dispersal = recode(theta,
                               `0.1` = sprintf('"Long-distance dispersal"~(theta=="%.2f")',

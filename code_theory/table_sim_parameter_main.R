@@ -52,7 +52,7 @@
                                  Parameter == 'rho' ~ '$\\rho$',
                                  Parameter == 'phi' ~ '$\\phi$',
                                  Parameter == 'niche_cost' ~ '$\\nu$',
-                                 Parameter == 'max_alpha' ~ '$\\alpha_{max}$',
+                                 Parameter == 'max_alpha' ~ '$b_{max}$',
                                  Parameter == 'theta' ~ '$\\theta$',
                                  Parameter == 'p_dispersal' ~ '$p_{d}$',
                                  Parameter == 'r0' ~ '$r_{0,i}$',
