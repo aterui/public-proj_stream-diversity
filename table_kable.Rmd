@@ -25,13 +25,13 @@ x  <-  lapply(fit, function(x) {
 })
 
 Parameter <- c("$\\xi_0$",
-              "$\\xi_1$", 
-              "$\\xi_2$",    
-              "$\\xi_3$",                             
-              "$\\xi_4$",                                         
-              "$\\xi_5$",
-              "$\\xi_6$",
-              "$\\xi_7$")
+               "$\\xi_1$", 
+               "$\\xi_2$",    
+               "$\\xi_3$",                             
+               "$\\xi_4$",                                         
+               "$\\xi_5$",
+               "$\\xi_6$",
+               "$\\xi_7$")
 
 Effect <- c("Intercept",
             "$log_{10}$ Watershed area", 
