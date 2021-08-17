@@ -13,27 +13,28 @@
   dat <- bind_rows(dat_hkd, dat_mw) %>% 
     rename(gamma = Estimator,
            alpha = mu_alpha) %>% 
-    mutate(beta = gamma/alpha,
+    mutate(beta = gamma / alpha,
            logit_agri = log(frac_agri) - log(1 - frac_agri),
-           dam_density = n_dam/area) %>% 
-    mutate(resid_agri = resid(lm(logit_agri ~ region, data = .)),
-           resid_temp = resid(lm(mean_temp ~ region, data = .)),
-           resid_ppt = resid(lm(mean_ppt ~ region, data = .)),
-           resid_dam = resid(lm(dam_density ~ region, data = .)))
+           dam_density = n_dam / area) %>% 
+    mutate(scl_resid_agri = c(scale(resid(lm(logit_agri ~ region, data = .)))),
+           scl_resid_temp = c(scale(resid(lm(mean_temp ~ region, data = .)))),
+           scl_resid_ppt = c(scale(resid(lm(mean_ppt ~ region, data = .)))),
+           scl_resid_dam = c(scale(resid(lm(dam_density ~ region, data = .))))
+           )
   
 
 # model selection ---------------------------------------------------------
 
   m_compare <- function(response, data) {
     
-    mod1 <- MASS::rlm(log(response, 10) ~ log(area, 10)*region + log(p_branch, 10)*region + region +
-                                          scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
+    mod1 <- MASS::rlm(log(response, 10) ~ log(area, 10) * region + log(p_branch, 10) * region + region +
+                                          scl_resid_temp + scl_resid_ppt + scl_resid_agri + scl_resid_dam,
                       psi = MASS::psi.huber,
                       method = 'M',
                       data = data)
     
     mod0 <- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
-                                          scale(resid_temp) + scale(resid_ppt) + scale(resid_agri) + scale(resid_dam),
+                                          scl_resid_temp + scl_resid_ppt + scl_resid_agri + scl_resid_dam,
                       psi = MASS::psi.huber,
                       method = 'M',
                       data = data)

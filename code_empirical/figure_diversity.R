@@ -49,10 +49,10 @@
                  names_to = "metric")
   
   dat_base <- data.frame(region = factor(rep(c("hokkaido", "midwest"), each = 100)),
-                         resid_temp = 0,
-                         resid_ppt = 0,
-                         resid_agri = 0,
-                         resid_dam = 0)
+                         scl_resid_temp = 0,
+                         scl_resid_ppt = 0,
+                         scl_resid_agri = 0,
+                         scl_resid_dam = 0)
 
 # data frame for prediction -----------------------------------------------
   
