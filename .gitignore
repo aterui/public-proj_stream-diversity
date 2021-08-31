@@ -13,8 +13,7 @@ coverletter.Rmd
 *.Rproj
 *.bib
 *.csl
-*old
-
 *.log
+old*
 code_empirical/data_gis/albers_point_subset_hkd.gpkg
 code_empirical/data_gis/albers_point_subset_mw.gpkg
