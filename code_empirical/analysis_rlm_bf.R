@@ -25,14 +25,26 @@ dat <- bind_rows(dat_hkd, dat_mw) %>%
 
 m_compare <- function(response, data) {
   
-  mod1 <- MASS::rlm(log(response, 10) ~ log(area, 10) * region + log(p_branch, 10) * region + region +
-                      scl_resid_temp + scl_resid_ppt + scl_resid_agri + scl_resid_dam,
+  mod1 <- MASS::rlm(log(response, 10) ~ 
+                      log(area, 10) * region + 
+                      log(p_branch, 10) * region + 
+                      region +
+                      scl_resid_temp + 
+                      scl_resid_ppt + 
+                      scl_resid_agri + 
+                      scl_resid_dam,
                     psi = MASS::psi.huber,
                     method = 'M',
                     data = data)
   
-  mod0 <- MASS::rlm(log(response, 10) ~ log(area, 10) + log(p_branch, 10) + region +
-                      scl_resid_temp + scl_resid_ppt + scl_resid_agri + scl_resid_dam,
+  mod0 <- MASS::rlm(log(response, 10) ~ 
+                      log(area, 10) + 
+                      log(p_branch, 10) + 
+                      region +
+                      scl_resid_temp + 
+                      scl_resid_ppt + 
+                      scl_resid_agri + 
+                      scl_resid_dam,
                     psi = MASS::psi.huber,
                     method = 'M',
                     data = data)
