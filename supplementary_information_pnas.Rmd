@@ -409,7 +409,7 @@ source(here::here('code_empirical/figure_correlation.R'))
 
 ```
 
-**Figure S19** Correlation structure of potential explanatory variables for riverine diversity metrics. Numeric values in each cell are the Pearson's correlation coefficients. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, logit fraction of forest, logit fraction of urban, logit fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
+**Figure S19** Correlation structure of potential explanatory variables for riverine diversity metrics. Numeric values in each cell are the Pearson's correlation coefficients. Positive and negative correlations were colored in blue and red, respectively, and darker colors indicate stronger correlations. Environmental variables (temperature, precipitation, elevation, fraction of forest, fraction of urban, fraction of agriculture, and dam density) were expressed as deviations from the regional averages to remove any regional effects.
 
 \newpage
 

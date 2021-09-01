@@ -39,7 +39,7 @@ Effect <- c("Intercept",
             "Region (Midwest vs. Hokkaido)",                             
             "Air temperature",                                         
             "Precipitation",
-            "Logit fraction of agriculture",
+            "Fraction of agriculture",
             "Dam density")
 
 output <- tibble::as_tibble(do.call(cbind, x)) %>% 
@@ -53,7 +53,7 @@ output <- tibble::as_tibble(do.call(cbind, x)) %>%
 
 ```
 
-**Table 1** Estimated parameters of robust regression models explaining fish species richness in Hokkaido (Japan) and the Midwest (US). The standard errors (SE) are shown in parenthesis. Response variables were log-10 transformed. Climate and land use variables (air temperature, precipitation, logit fraction of agriculture, dam density) are deviations from the regional averages and were standardized to a mean of zero and a standard deviation of one prior to the analysis.
+**Table 1** Estimated parameters of robust regression models explaining fish species richness in Hokkaido (Japan) and the Midwest (US). The standard errors (SE) are shown in parenthesis. Response variables were log-10 transformed. Climate and land use variables (air temperature, precipitation, fraction of agriculture, dam density) are deviations from the regional averages and were standardized to a mean of zero and a standard deviation of one prior to the analysis.
 
 ```{r table1}
 
