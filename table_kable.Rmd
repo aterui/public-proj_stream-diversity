@@ -3,6 +3,9 @@ title: "Table"
 output:
   word_document:
     reference_docx: word_format.docx
+knit: (function(inputFile, encoding) {
+        rmarkdown::render(inputFile, encoding = encoding, output_dir = "document_output")
+      })
 ---
 
 ```{r setup, include=FALSE}
