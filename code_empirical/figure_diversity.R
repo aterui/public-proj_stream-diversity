@@ -50,11 +50,6 @@ dat <- bind_rows(dat_hkd, dat_mw) %>%
   pivot_longer(cols = c(alpha, beta, gamma),
                names_to = "metric")
 
-dat_base <- data.frame(region = factor(rep(c("hokkaido", "midwest"), each = 100)),
-                       scl_resid_temp = 0,
-                       scl_resid_ppt = 0,
-                       scl_resid_agri = 0,
-                       scl_resid_dam = 0)
 
 # data frame for prediction -----------------------------------------------
 

@@ -20,11 +20,15 @@
     pivot_longer(cols = c("alpha_div", "beta_div", "gamma_div"),
                  names_to = "metric") %>% 
     mutate(competition = recode(max_alpha,
-                                `0.75` = sprintf('"Weak competition"~(b[max]=="%.2f")', max_alpha),
-                                `1.5` = sprintf('"Strong competition"~(b[max]=="%.2f")', max_alpha)),
+                                `0.75` = sprintf('"Weak competition"~(b[max]=="%.2f")',
+                                                 max_alpha),
+                                `1.5` = sprintf('"Strong competition"~(b[max]=="%.2f")',
+                                                max_alpha)),
            dispersal = recode(theta,
-                              `0.1` = sprintf('"Long-distance dispersal"~(theta=="%.2f")', theta),
-                              `1.0` = sprintf('"Short-distance dispersal"~(theta=="%.2f")', theta)))
+                              `0.1` = sprintf('"Long-distance dispersal"~(theta=="%.2f")',
+                                              theta),
+                              `1.0` = sprintf('"Short-distance dispersal"~(theta=="%.2f")',
+                                              theta)))
   
   labels <- c(expression(alpha~"diversity"),
               expression(beta~"diversity"),
