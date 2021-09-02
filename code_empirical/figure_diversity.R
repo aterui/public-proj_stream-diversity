@@ -67,38 +67,44 @@ dat_area <- dat %>%
   summarise(area = seq(min(area), 
                        max(area),
                        length = 100)) %>% 
-  left_join(dat_base, 
-            by = "region") %>% 
-  mutate(p_branch = f_p_branch)
+  mutate(p_branch = f_p_branch,
+         scl_resid_temp = 0,
+         scl_resid_ppt = 0,
+         scl_resid_agri = 0,
+         scl_resid_dam = 0) %>% 
+  ungroup()
 
 dat_bp <- dat %>% 
   group_by(region) %>% 
   summarise(p_branch = seq(min(p_branch), 
                            max(p_branch), 
                            length = 100)) %>% 
-  left_join(dat_base, 
-            by = "region") %>% 
-  mutate(area = f_area)
+  mutate(area = f_area,
+         scl_resid_temp = 0,
+         scl_resid_ppt = 0,
+         scl_resid_agri = 0,
+         scl_resid_dam = 0) %>% 
+  ungroup()
 
 ### area
-dat_area$alpha <- 10^predict(fit$alpha$model, 
-                             newdata = dat_area)
-dat_area$beta <- 10^predict(fit$beta$model, 
-                            dat_area)
-dat_area$gamma <- 10^predict(fit$gamma$model,
-                             dat_area)
-dat_area <- dat_area %>%  
+dat_area <- dat_area %>% 
+  mutate(alpha = 10 ^ predict(fit$alpha$model, 
+                              newdata = .),
+         beta = 10 ^ predict(fit$beta$model, 
+                             newdata = .),
+         gamma = 10 ^ predict(fit$gamma$model, 
+                              newdata = .)) %>%  
   pivot_longer(cols = c(alpha, beta, gamma), 
                names_to = "metric")
 
 ### p_branch
-dat_bp$alpha <- 10^predict(fit$alpha$model, 
-                           dat_bp)
-dat_bp$beta <- 10^predict(fit$beta$model,
-                          dat_bp)
-dat_bp$gamma <- 10^predict(fit$gamma$model, 
-                           dat_bp)
-dat_bp <- dat_bp %>%  
+dat_bp <- dat_bp %>% 
+  mutate(alpha = 10 ^ predict(fit$alpha$model, 
+                              newdata = .),
+         beta = 10 ^ predict(fit$beta$model, 
+                             newdata = .),
+         gamma = 10 ^ predict(fit$gamma$model, 
+                              newdata = .)) %>%  
   pivot_longer(cols = c(alpha, beta, gamma),
                names_to = "metric")
 
