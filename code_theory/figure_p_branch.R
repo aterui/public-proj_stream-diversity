@@ -78,11 +78,11 @@ g <- dat %>%
   labs(x = "Branching probability",
        y = "Species richness") +
   guides(color = guide_legend(override.aes = list(fill = NA)),
-         fill = FALSE)
+         fill = "none")
 
 print(g + ggtitle("Theoretical prediction") +
         g2 + ggtitle("Empirical observation") +
-        plot_annotation(tag_levels = 'A', title = "Figure 3") + 
+        plot_annotation(tag_levels = 'A') + 
         plot_layout(guides = "collect", width = c(2,1)))
 
 ggsave(normalizePath("../document_output/figure_03.pdf"),

@@ -73,11 +73,11 @@ g <- dat %>%
   labs(x = "Number of habitat patches",
        y = "Species richness") +
   guides(color = guide_legend(override.aes = list(fill = NA)),
-         fill = FALSE)
+         fill = "none")
 
 print(g + ggtitle("Theoretical prediction") +
         g1 + ggtitle("Empirical observation") +
-        plot_annotation(tag_levels = 'A', title = "Figure 2") + 
+        plot_annotation(tag_levels = 'A') + 
         plot_layout(guides = "collect", width = c(2,1)))
 
 ggsave(normalizePath("../document_output/figure_02.pdf"),
