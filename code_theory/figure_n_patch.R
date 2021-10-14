@@ -2,7 +2,6 @@
 # setup -------------------------------------------------------------------
 
 rm(list = ls(all.names = TRUE))
-pacman::p_load(tidyverse)
 pacman::p_load(tidyverse, patchwork)
 
 # empirical data ----------------------------------------------------------
