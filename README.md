@@ -1,6 +1,5 @@
 README
 ================
-[![DOI](https://zenodo.org/badge/278634401.svg)](https://zenodo.org/badge/latestdoi/278634401)
 
 -   [Article information](#article-information)
 -   [File descriptions](#file-descriptions)
@@ -13,6 +12,8 @@ Title: Emergent dual scaling of riverine biodiversity
 
 Author: Akira Terui, Seoghyun Kim, Christine L. Dolph, Taku Kadoya,
 Yusuke Miyazaki
+
+[![DOI](https://zenodo.org/badge/278634401.svg)](https://zenodo.org/badge/latestdoi/278634401)
 
 # File descriptions
 
