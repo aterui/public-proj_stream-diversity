@@ -78,7 +78,7 @@ ng <- foreach(i = seq_len(length(net))) %do% {
     ggraph(layout = layout_as_tree(.,
                                    flip.y = FALSE,
                                    root = 1)) +
-    geom_edge_link(color = alpha("steelblue", 0.5)) +
+    geom_edge_link(color = "steelblue") +
     geom_node_point(shape = 21,
                     fill = colvalue$color[match(V(adj)$env, colvalue$value)],
                     color = grey(0.5),
@@ -153,7 +153,7 @@ eg <- ggplot() +
   geom_sf(data = channel_eg,
           size = 0.05) +
   geom_sf(data = point_eg,
-          color = alpha("salmon", 0.8),
+          color = "salmon",
           size = 0.001) +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank())

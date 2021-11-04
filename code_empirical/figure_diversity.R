@@ -127,7 +127,15 @@ g1 <- ggplot(dat, aes(x = area,
   facet_wrap(facets = ~ region,
              labeller = labeller(region = region_label),
              ncol = 1) +
-  geom_point(alpha = 0.25) +
+  geom_point(data = filter(dat, metric == "alpha"),
+             color = "pink",
+             size = 0.5) +
+  geom_point(data = filter(dat, metric == "beta"),
+             color = "palegreen2",
+             size = 0.5) +
+  geom_point(data = filter(dat, metric == "gamma"),
+             color = "skyblue1",
+             size = 0.5) +
   geom_line(data = dat_area,
             aes(x = area,
                 y = value,
@@ -151,7 +159,15 @@ g2 <- ggplot(dat, aes(x = p_branch,
   facet_wrap(facets = ~ region,
              labeller = labeller(region = region_label),
              ncol = 1) +
-  geom_point(alpha = 0.25) +
+  geom_point(data = filter(dat, metric == "alpha"),
+             color = "pink",
+             size = 0.5) +
+  geom_point(data = filter(dat, metric == "beta"),
+             color = "palegreen2",
+             size = 0.5) +
+  geom_point(data = filter(dat, metric == "gamma"),
+             color = "skyblue1",
+             size = 0.5) +
   geom_line(data = dat_bp,
             aes(x = p_branch,
                 y = value,
