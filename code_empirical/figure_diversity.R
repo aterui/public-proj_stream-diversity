@@ -129,13 +129,13 @@ g1 <- ggplot(dat, aes(x = area,
              ncol = 1) +
   geom_point(data = filter(dat, metric == "alpha"),
              color = "pink",
-             size = 0.5) +
+             size = 0.75) +
   geom_point(data = filter(dat, metric == "beta"),
-             color = "palegreen2",
-             size = 0.5) +
+             color = "darkseagreen2",
+             size = 0.75) +
   geom_point(data = filter(dat, metric == "gamma"),
-             color = "skyblue1",
-             size = 0.5) +
+             color = "lightskyblue2",
+             size = 0.75) +
   geom_line(data = dat_area,
             aes(x = area,
                 y = value,
@@ -161,13 +161,13 @@ g2 <- ggplot(dat, aes(x = p_branch,
              ncol = 1) +
   geom_point(data = filter(dat, metric == "alpha"),
              color = "pink",
-             size = 0.5) +
+             size = 0.75) +
   geom_point(data = filter(dat, metric == "beta"),
-             color = "palegreen2",
-             size = 0.5) +
+             color = "darkseagreen2",
+             size = 0.75) +
   geom_point(data = filter(dat, metric == "gamma"),
-             color = "skyblue1",
-             size = 0.5) +
+             color = "lightskyblue2",
+             size = 0.75) +
   geom_line(data = dat_bp,
             aes(x = p_branch,
                 y = value,
