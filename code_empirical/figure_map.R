@@ -202,6 +202,6 @@ print((network1 | network2) / ((eg + labs(title = "C")) +
                                  (hkd + theme(legend.position = "none") + 
                                     labs(title = "D")) + mw))
 
-ggsave(normalizePath("../document_output/figure_01.pdf"),
+ggsave(normalizePath("../rmd/document_output/figure_01.pdf"),
        width = 10,
        height = 6)

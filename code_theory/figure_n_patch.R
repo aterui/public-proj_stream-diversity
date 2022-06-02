@@ -79,6 +79,6 @@ print(g + ggtitle("Theoretical prediction") +
         plot_annotation(tag_levels = 'A') + 
         plot_layout(guides = "collect", width = c(2,1)))
 
-ggsave(normalizePath("../document_output/figure_02.pdf"),
+ggsave(normalizePath("../rmd/document_output/figure_02.pdf"),
        width = 10,
        height = 6)
